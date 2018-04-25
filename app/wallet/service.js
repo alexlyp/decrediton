@@ -1,6 +1,7 @@
 import Promise from "promise";
 import * as client from "middleware/grpc/client";
 import { reverseHash } from "../helpers/byteActions";
+import Uint64LE, { Uint64BE } from "int64-buffer";
 import {
   NextAddressRequest,
   ValidateAddressRequest,
@@ -304,6 +305,28 @@ const decodeRawTransaction = (rawTx, cb) => {
 
   for (var j = 0; j < tx.numOutputs; j++) {
     var output;
+    output.value = Uint64LE(rawTx.slice(position, position+8)).toNumber();
+    position += 8;
+    output.version = rawTx.readUInt16LE(position);
+    position += 2;
+    // check length of scripts
+    var scriptLen;
+    first = rawTx.readUInt8(position);
+    position += 1;
+    switch (first) {
+    case 0xFD:
+      scriptLen = rawTx.readUInt16LE(position);
+      position += 2;
+      break;
+    case 0xFE:
+      scriptLen = rawTx.readUInt32LE(position);
+      position += 4;
+      break;
+    default:
+      scriptLen = first;
+    }
+    output.script = rawTx.slice(position, position+scriptLen);
+    position += scriptLen;
     tx.outputs.push(output);
   }
 
