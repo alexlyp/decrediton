@@ -1,7 +1,7 @@
 import Promise from "promise";
 import * as client from "middleware/grpc/client";
 import { reverseHash } from "../helpers/byteActions";
-import Uint64LE, { Uint64BE } from "int64-buffer";
+import { Uint64LE } from "int64-buffer";
 import {
   NextAddressRequest,
   ValidateAddressRequest,
