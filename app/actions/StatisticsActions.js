@@ -318,9 +318,9 @@ export const balancesStats = (opts) => (dispatch, getState) => {
     case wallet.TRANSACTION_TYPE_VOTE:
     case wallet.TRANSACTION_TYPE_REVOCATION:
       var isVote = tx.txType === wallet.TRANSACTION_TYPE_VOTE;
-      var decodedSpender = await wallet.decodeTransaction(decodeMessageService, tx.tx.getTransaction());
-      var spenderInputs = decodedSpender.getTransaction().getInputsList();
-      var ticketHash = reverseRawHash(spenderInputs[spenderInputs.length-1].getPreviousTransactionHash());
+      var decodedSpender = await wallet.decodeTransactionLocal(decodeMessageService, tx.tx.getTransaction());
+      var spenderInputs = decodedSpender.inputs;
+      var ticketHash = reverseRawHash(spenderInputs[spenderInputs.length-1].prevTxId);
       var ticket = liveTickets[ticketHash];
       if (!ticket) {
         throw "Previous live ticket not found: " + ticketHash;
