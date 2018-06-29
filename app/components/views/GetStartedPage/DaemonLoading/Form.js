@@ -8,6 +8,7 @@ import "style/GetStarted.less";
 export default ({
   Form,
   text,
+  isTestNet,
   barText,
   isInputRequest,
   getCurrentBlockCount,
@@ -26,7 +27,7 @@ export default ({
   isDaemonRemote,
   ...props,
 }) => (
-  <div className="page-body getstarted">
+  <div className={isTestNet ? "page-body getstarted istestnet" : "page-body getstarted"}>
     <div className="getstarted loader">
       <Aux>
         <div className="content-title">

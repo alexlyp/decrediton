@@ -5,7 +5,7 @@ class CreateWallet extends React.Component {
 
   render() {
     return (
-      <div className="page-body getstarted">
+      <div className={this.props.isTestNet ? "page-body getstarted istestnet" : "page-body getstarted"}>
         <CreateForm {...{ ...this.props }}/>
       </div>);
   }

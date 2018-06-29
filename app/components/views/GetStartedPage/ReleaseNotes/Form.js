@@ -14,8 +14,9 @@ export default ({
   getWalletReady,
   getDaemonStarted,
   isDaemonRemote,
+  isTestNet,
 }) => (
-  <div className="page-body getstarted">
+  <div className={isTestNet ? "page-body getstarted istestnet" : "page-body getstarted"}>
     <div className="getstarted loader logs">
       <div className="content-title">
         <div className="loader-settings-logs">

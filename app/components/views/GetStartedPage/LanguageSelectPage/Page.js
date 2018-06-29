@@ -3,9 +3,9 @@ import "style/LanguageSelect.less";
 import { LanguageSelect } from "inputs";
 import { FormattedMessage as T } from "react-intl";
 
-const LanguageSelectPage = ({ availableLanguages, selectedLang, onChangeSelectedLang, onSelectLang }) => {
+const LanguageSelectPage = ({ availableLanguages, selectedLang, onChangeSelectedLang, onSelectLang, isTestNet }) => {
   return (
-    <div className="page-body getstarted">
+    <div className={isTestNet ? "page-body getstarted istestnet" : "page-body getstarted"}>
       <div className="getstarted-logo">
       </div>
       <div className="getstarted-new">
