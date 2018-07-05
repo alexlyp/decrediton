@@ -10,6 +10,7 @@ import axios from "axios";
 import { semverCompatible } from "./VersionActions";
 import { STANDARD_EXTERNAL_REQUESTS } from "main_dev/externalRequests";
 import { saveSettings, updateStateSettingsChanged } from "./SettingsActions";
+import { modalHidden } from "./ControlActions";
 
 export const DECREDITON_VERSION = "DECREDITON_VERSION";
 export const SELECT_LANGUAGE = "SELECT_LANGUAGE";
@@ -40,6 +41,7 @@ export const WALLET_LOADER_SETTINGS = "WALLET_LOADER_SETTINGS";
 export const DELETE_DCRD_ATTEMPT = "DELETE_DCRD_ATTEMPT";
 export const DELETE_DCRD_FAILED = "DELETE_DCRD_FAILED";
 export const DELETE_DCRD_SUCCESS = "DELETE_DCRD_SUCCESS";
+export const SHOW_ABOUT_MODAL = "SHOW_ABOUT_MODAL";
 
 export const checkDecreditonVersion = () => (dispatch, getState) =>{
   const detectedVersion = getState().daemon.appVersion;
@@ -151,7 +153,8 @@ export const registerForErrors = () => (dispatch) => {
     dispatch(pushHistory("/error"));
   });
   ipcRenderer.on("show-about-modal", () => {
-    console.log("show about modal");
+    dispatch(modalHidden());
+    //dispatch({ type: SHOW_ABOUT_MODAL });
   });
 };
 

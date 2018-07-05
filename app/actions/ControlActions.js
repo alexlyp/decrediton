@@ -532,5 +532,8 @@ export const publishUnminedTransactionsAttempt = () => (dispatch, getState) => {
 
 export const MODAL_SHOWN = "MODAL_SHOWN";
 export const MODAL_HIDDEN = "MODAL_HIDDEN";
+export const ABOUT_MODAL_HIDDEN = "ABOUT_MODAL_HIDDEN";
+
 export const modalShown = () => (dispatch) => dispatch({ type: MODAL_SHOWN });
 export const modalHidden = () => (dispatch) => dispatch({ type: MODAL_HIDDEN });
+export const aboutModalHidden = () => (dispatch) => dispatch({ type: ABOUT_MODAL_HIDDEN });

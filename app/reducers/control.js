@@ -19,9 +19,9 @@ import { GETNEXTADDRESS_ATTEMPT, GETNEXTADDRESS_FAILED, GETNEXTADDRESS_SUCCESS,
   CONSTRUCTTX_ATTEMPT, CONSTRUCTTX_FAILED, CONSTRUCTTX_SUCCESS, CONSTRUCTTX_FAILED_LOW_BALANCE,
   SETBALANCETOMAINTAIN, SETMAXFEE, SETMAXPRICEABSOLUTE, SETMAXPRICERELATIVE, SETMAXPERBLOCK,
   VALIDATEADDRESS_ATTEMPT, VALIDATEADDRESS_SUCCESS, VALIDATEADDRESS_FAILED, VALIDATEADDRESS_CLEANSTORE,
-  MODAL_SHOWN, MODAL_HIDDEN, VALIDATEMASTERPUBKEY_SUCCESS, VALIDATEMASTERPUBKEY_FAILED,
+  MODAL_SHOWN, MODAL_HIDDEN, ABOUT_MODAL_HIDDEN, VALIDATEMASTERPUBKEY_SUCCESS, VALIDATEMASTERPUBKEY_FAILED,
 } from "../actions/ControlActions";
-import { WALLET_AUTOBUYER_SETTINGS } from "actions/DaemonActions";
+import { WALLET_AUTOBUYER_SETTINGS, SHOW_ABOUT_MODAL } from "actions/DaemonActions";
 
 import {
   EXPORT_STARTED, EXPORT_COMPLETED, EXPORT_ERROR
@@ -433,11 +433,21 @@ export default function control(state = {}, action) {
     };
   case MODAL_SHOWN:
     return { ...state,
-      modalVisible: true
+      modalVisible: true,
     };
   case MODAL_HIDDEN:
     return { ...state,
-      modalVisible: false
+      modalVisible: false,
+    };
+  case SHOW_ABOUT_MODAL:
+    return { ...state,
+      modalVisible: true,
+      showAboutModal: true,
+    };
+  case ABOUT_MODAL_HIDDEN:
+    return { ...state,
+      modalVisible: false,
+      showAboutModal: false,
     };
   default:
     return state;
