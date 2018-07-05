@@ -1,5 +1,5 @@
-import { app, shell, BrowserWindow } from "electron";
-import { cleanShutdown, GetDcrdPID, GetDcrwPID, readExesVersion, showAboutModal } from "./launch";
+import { app, shell } from "electron";
+import { cleanShutdown, GetDcrdPID, GetDcrwPID, showAboutModal } from "./launch";
 import { getDirectoryLogs, getDcrwalletPath, getDcrdPath } from "./paths";
 import { getReactIPC } from "../main.development.js";
 
