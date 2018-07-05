@@ -150,6 +150,9 @@ export const registerForErrors = () => (dispatch) => {
     }
     dispatch(pushHistory("/error"));
   });
+  ipcRenderer.on("show-about-modal", () => {
+    console.log("show about modal");
+  });
 };
 
 export const deleteDaemonData = () => (dispatch, getState) => {

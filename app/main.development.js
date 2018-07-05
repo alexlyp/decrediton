@@ -162,6 +162,10 @@ ipcMain.on("register-for-errors", function(event){
   event.returnValue = true;
 });
 
+export const getReactIPC = () => {
+  return reactIPC;
+};
+
 ipcMain.on("app-reload-ui", () => {
   mainWindow.reload();
 });

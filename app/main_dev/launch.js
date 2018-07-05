@@ -48,6 +48,10 @@ export const closeDCRW = () => {
   }
 };
 
+export const showAboutModal = (reactIPC) => {
+  reactIPC.send("show-about-modal");
+};
+
 export async function cleanShutdown(mainWindow, app) {
   // Attempt a clean shutdown.
   return new Promise(resolve => {
