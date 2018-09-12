@@ -26,7 +26,7 @@ function closeClis() {
     closeDCRW(dcrwPID);
 }
 
-function closeDCRD() {
+export function closeDCRD() {
   if (require("is-running")(dcrdPID) && os.platform() != "win32") {
     logger.log("info", "Sending SIGINT to dcrd at pid:" + dcrdPID);
     process.kill(dcrdPID, "SIGINT");
