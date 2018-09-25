@@ -1,9 +1,9 @@
 import fs from "fs";
-import parseArgs from "minimist";
 import Store from "electron-store";
 import ini from "ini";
 import { stakePoolInfo } from "./middleware/stakepoolapi";
-import { OPTIONS } from "./main_dev/constants";
+import parseArgs from "minimist";
+import { OPTIONS } from "./main_dev/launch";
 import { appDataDirectory, getGlobalCfgPath, dcrdCfg, getWalletPath, dcrwalletCfg, getDcrdRpcCert } from "./main_dev/paths";
 
 export function getArguments() {

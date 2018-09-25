@@ -6,7 +6,21 @@ import fs from "fs-extra";
 import stringArgv from "string-argv";
 import { concat, isString } from "lodash";
 
-const argv = getArguments();
+function unknownFn(arg) {
+  console.log("%s is not a valid option!", arg);
+  return;
+}
+
+// Allowed cmd line options are defined here.
+export const OPTIONS = {
+  boolean: [ "debug", "testnet", "mainnet", "help", "version", "advanced", "spv" ],
+  string: [ "extrawalletargs", "customBinPath", "rpcuser", "rpcpass", "rpccert", "rpcconnect" ],
+  default: { debug: false },
+  alias: { d: "debug" },
+  unknown: unknownFn
+};
+
+const argv = getArguments();//parseArgs(process.argv.slice(1), OPTIONS);
 
 
 const debug = argv.debug || process.env.NODE_ENV === "development";
