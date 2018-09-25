@@ -1,14 +1,12 @@
 import { dcrwalletCfg, getWalletPath, getExecutablePath, dcrdCfg, getDcrdRpcCert } from "./paths";
-import { getWalletCfg, readDcrdConfig, getArgugments } from "../config";
+import { getWalletCfg, readDcrdConfig, getArguments } from "../config";
 import { createLogger, AddToDcrdLog, AddToDcrwalletLog, GetDcrdLogs, GetDcrwalletLogs, lastErrorLine } from "./logging";
-import parseArgs from "minimist";
-import { OPTIONS } from "./constants";
 import os from "os";
 import fs from "fs-extra";
 import stringArgv from "string-argv";
 import { concat, isString } from "lodash";
 
-const argv = getArgugments();
+const argv = getArguments();
 
 
 const debug = argv.debug || process.env.NODE_ENV === "development";
