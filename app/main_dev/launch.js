@@ -1,5 +1,5 @@
 import { dcrwalletCfg, getWalletPath, getExecutablePath, dcrdCfg, getDcrdRpcCert } from "./paths";
-import { getWalletCfg, readDcrdConfig } from "../config";
+import { getWalletCfg, readDcrdConfig, getArgugments } from "../config";
 import { createLogger, AddToDcrdLog, AddToDcrwalletLog, GetDcrdLogs, GetDcrwalletLogs, lastErrorLine } from "./logging";
 import parseArgs from "minimist";
 import { OPTIONS } from "./constants";
@@ -8,7 +8,9 @@ import fs from "fs-extra";
 import stringArgv from "string-argv";
 import { concat, isString } from "lodash";
 
-const argv = parseArgs(process.argv.slice(1), OPTIONS);
+const argv = getArgugments();
+
+
 const debug = argv.debug || process.env.NODE_ENV === "development";
 const logger = createLogger(debug);
 

@@ -1,8 +1,14 @@
 import fs from "fs";
+import parseArgs from "minimist";
 import Store from "electron-store";
 import ini from "ini";
 import { stakePoolInfo } from "./middleware/stakepoolapi";
+import { OPTIONS } from "./main_dev/constants";
 import { appDataDirectory, getGlobalCfgPath, dcrdCfg, getWalletPath, dcrwalletCfg, getDcrdRpcCert } from "./main_dev/paths";
+
+export function getArguments() {
+  return parseArgs(process.argv.slice(1), OPTIONS);
+}
 
 export function getGlobalCfg() {
   const config = new Store();

@@ -7,7 +7,7 @@ import { Switch, Route } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { App } from "containers";
 import configureStore from "./store/configureStore";
-import { getGlobalCfg } from "./config";
+import { getGlobalCfg, getArguments } from "./config";
 import locales from "./i18n/locales";
 import "./style/main.less";
 import "./style/Global.less";
@@ -15,6 +15,7 @@ import "./style/ReactSelectGlobal.less";
 import pkg from "./package.json";
 import { log } from "./wallet";
 
+var argv = getArguments();
 var globalCfg = getGlobalCfg();
 const locale = globalCfg.get("locale");
 
@@ -24,21 +25,21 @@ var initialState = {
   settings: {
     currentSettings: {
       locale: locale,
-      daemonStartAdvanced: globalCfg.get("daemon_start_advanced"),
+      daemonStartAdvanced: argv.advanced || globalCfg.get("daemon_start_advanced"),
       allowedExternalRequests: globalCfg.get("allowed_external_requests"),
       proxyType: globalCfg.get("proxy_type"),
       proxyLocation: globalCfg.get("proxy_location"),
-      spvMode: globalCfg.get("spv_mode"),
+      spvMode: argv.spv || globalCfg.get("spv_mode"),
       timezone: globalCfg.get("timezone"),
       currencyDisplay: "DCR",
     },
     tempSettings: {
       locale: locale,
-      daemonStartAdvanced: globalCfg.get("daemon_start_advanced"),
+      daemonStartAdvanced: argv.advanced || globalCfg.get("daemon_start_advanced"),
       allowedExternalRequests: globalCfg.get("allowed_external_requests"),
       proxyType: globalCfg.get("proxy_type"),
       proxyLocation: globalCfg.get("proxy_location"),
-      spvMode: globalCfg.get("spv_mode"),
+      spvMode: argv.spv || globalCfg.get("spv_mode"),
       timezone: globalCfg.get("timezone"),
       currencyDisplay: "DCR",
     },
@@ -58,7 +59,7 @@ var initialState = {
   daemon: {
     appVersion: pkg.version,
     daemonRemote: false,
-    network: globalCfg.get("network"),
+    network: argv.mainnet ? "mainnet" : argv.testnet ? "testnet" : globalCfg.get("network"),
     locale: locale,
     tutorial: globalCfg.get("show_tutorial"),
     showPrivacy: globalCfg.get("show_privacy"),
@@ -71,7 +72,7 @@ var initialState = {
     timeLeftEstimate: null,
     timeStart: 0,
     blockStart: 0,
-    daemonAdvanced: globalCfg.get("daemon_start_advanced"),
+    daemonAdvanced: argv.advanced || globalCfg.get("daemon_start_advanced"),
     credentials: null,
     appData: null,
     shutdownRequested: false,

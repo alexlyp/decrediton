@@ -1,10 +1,9 @@
 import fs from "fs-extra";
-import parseArgs from "minimist";
 import { app, BrowserWindow, Menu, dialog } from "electron";
-import { initGlobalCfg, validateGlobalCfgFile, setMustOpenForm } from "./config";
+import { initGlobalCfg, validateGlobalCfgFile, setMustOpenForm, getArguments } from "./config";
 import { appLocaleFromElectronLocale, default as locales } from "./i18n/locales";
 import { createLogger, lastLogLine, GetDcrdLogs, GetDcrwalletLogs } from "./main_dev/logging";
-import { OPTIONS, USAGE_MESSAGE, VERSION_MESSAGE, BOTH_CONNECTION_ERR_MESSAGE } from "./main_dev/constants";
+import { USAGE_MESSAGE, VERSION_MESSAGE, BOTH_CONNECTION_ERR_MESSAGE } from "./main_dev/constants";
 import { getWalletsDirectoryPath, getWalletsDirectoryPathNetwork, appDataDirectory } from "./main_dev/paths";
 import { getGlobalCfgPath, checkAndInitWalletCfg } from "./main_dev/paths";
 import { installSessionHandlers, reloadAllowedExternalRequests, allowStakepoolRequests } from "./main_dev/externalRequests";
@@ -16,7 +15,7 @@ import { initTemplate, getVersionWin, setGrpcVersions, getGrpcVersions, inputMen
 // setPath as decrediton
 app.setPath("userData", appDataDirectory());
 
-const argv = parseArgs(process.argv.slice(1), OPTIONS);
+const argv = getArguments();
 const debug = argv.debug || process.env.NODE_ENV === "development";
 const logger = createLogger(debug);
 
@@ -35,7 +34,7 @@ let previousWallet = null;
 let primaryInstance;
 
 const globalCfg = initGlobalCfg();
-const daemonIsAdvanced = globalCfg.get("daemon_start_advanced");
+const daemonIsAdvanced = argv.advanced || globalCfg.get("daemon_start_advanced");
 const walletsDirectory = getWalletsDirectoryPath();
 const mainnetWalletsPath = getWalletsDirectoryPathNetwork(false);
 const testnetWalletsPath = getWalletsDirectoryPathNetwork(true);
