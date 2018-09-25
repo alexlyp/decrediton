@@ -3,8 +3,21 @@ import Store from "electron-store";
 import ini from "ini";
 import { stakePoolInfo } from "./middleware/stakepoolapi";
 import parseArgs from "minimist";
-import { OPTIONS } from "./main_dev/launch";
 import { appDataDirectory, getGlobalCfgPath, dcrdCfg, getWalletPath, dcrwalletCfg, getDcrdRpcCert } from "./main_dev/paths";
+
+function unknownFn(arg) {
+  console.log("%s is not a valid option!", arg);
+  return;
+}
+
+// Allowed cmd line options are defined here.
+const OPTIONS = {
+  boolean: [ "debug", "testnet", "mainnet", "help", "version", "advanced", "spv" ],
+  string: [ "extrawalletargs", "customBinPath", "rpcuser", "rpcpass", "rpccert", "rpcconnect" ],
+  default: { debug: false },
+  alias: { d: "debug" },
+  unknown: unknownFn
+};
 
 export function getArguments() {
   return parseArgs(process.argv.slice(1), OPTIONS);
