@@ -9,7 +9,8 @@ const mapStateToProps = selectorMap({
   configuredStakePools: sel.configuredStakePools,
   defaultStakePool: sel.defaultStakePool,
   stakePool: sel.selectedStakePool,
-  agendas: sel.agendas
+  agendas: sel.agendas,
+  updatingStakePoolChoices: sel.updatingStakePoolChoices,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

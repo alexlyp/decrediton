@@ -155,8 +155,8 @@ export const setStakePoolVoteChoices = (stakePool, voteChoices) => (dispatch) =>
   })
     .then(response => {
       if (response.data.status == "success") {
-        dispatch(updateStakePoolVoteChoicesConfig(stakePool, voteChoices));
         dispatch({ type: SETSTAKEPOOLVOTECHOICES_SUCCESS });
+        dispatch(updateStakePoolVoteChoicesConfig(stakePool, voteChoices));
       } else if (response.data.status == "error") {
         dispatch({ error: response.data.message, type: SETSTAKEPOOLVOTECHOICES_FAILED });
       } else {

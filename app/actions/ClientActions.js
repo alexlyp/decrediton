@@ -964,10 +964,10 @@ export const setVoteChoicesAttempt = (agendaId, choiceId) => (dispatch, getState
   const stakePools = sel.configuredStakePools(getState());
   wallet.setAgendaVote(sel.votingService(getState()), agendaId, choiceId)
     .then(response => {
-      dispatch({ response, type: SETVOTECHOICES_SUCCESS });
       for( var i = 0; i < stakePools.length; i++) {
         dispatch(getVoteChoicesAttempt(stakePools[i]));
       }
+      dispatch({ response, type: SETVOTECHOICES_SUCCESS });
     })
     .catch(error => dispatch({ error, type: SETVOTECHOICES_FAILED }));
 };

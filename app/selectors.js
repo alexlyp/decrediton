@@ -731,7 +731,7 @@ export const agendas = createSelector(
 );
 
 const requiredStakepoolAPIVersion = get([ "grpc", "requiredStakepoolAPIVersion" ]);
-
+export const updatingStakePoolChoices = get([ "grpc", "updatingStakePoolChoices" ]);
 export const currentStakePoolConfigError = get([ "stakepool", "currentStakePoolConfigError" ]);
 export const currentStakePoolConfigSuccessMessage = get([ "stakepool", "currentStakePoolConfigSuccessMessage" ]);
 export const purchaseTicketsError = get([ "control", "purchaseTicketsError" ]);

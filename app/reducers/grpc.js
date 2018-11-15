@@ -36,6 +36,7 @@ import { VERIFYMESSAGE_ATTEMPT, VERIFYMESSAGE_SUCCESS, VERIFYMESSAGE_FAILED, VER
 import {
   CLOSEWALLET_SUCCESS,
 } from "actions/WalletLoaderActions";
+import { UPDATESTAKEPOOLCONFIG_SUCCESS, UPDATESTAKEPOOLCONFIG_FAILED } from "actions/StakePoolActions";
 
 export default function grpc(state = {}, action) {
   switch (action.type) {
@@ -564,12 +565,14 @@ export default function grpc(state = {}, action) {
   case SETVOTECHOICES_ATTEMPT:
     return {
       ...state,
+      updatingStakePoolChoices: true,
       setVoteChoicesError: null,
       setVoteChoicesRequestAttempt: true,
     };
   case SETVOTECHOICES_FAILED:
     return {
       ...state,
+      updatingStakePoolChoices: false,
       setVoteChoicesError: String(action.error),
       setVoteChoicesRequestAttempt: false,
     };
@@ -578,6 +581,7 @@ export default function grpc(state = {}, action) {
       ...state,
       setVoteChoicesRequestAttempt: false,
       setVoteChoicesResponse: action.voteChoices,
+      updatingStakePoolChoices: false,
     };
   case GETDECODEMESSAGESERVICE_ATTEMPT:
     return {

@@ -12,7 +12,8 @@ const Overview = ({
   closeCurrentAgenda,
   setSelecedChoiceId,
   updatePreferences,
-  disabled
+  disabled,
+  loading,
 }) => (
   <div className="agenda">
     <div className="agenda-overview">
@@ -66,6 +67,7 @@ const Overview = ({
       </div>
       <div className="agenda-bottom-options">
         <KeyBlueButton
+          loading={loading}
           disabled={!hasModifiedChoice || disabled}
           className="agenda-update-preferences-button"
           onClick={updatePreferences}

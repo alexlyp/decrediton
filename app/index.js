@@ -194,6 +194,7 @@ var initialState = {
     // Agenda/VoteChoices
     getAgendasResponse: null,
     getVoteChoicesResponse: null,
+    updatingStakePoolChoices: false,
 
     // GetMessageDecodeService
     decodeMessageService: null,

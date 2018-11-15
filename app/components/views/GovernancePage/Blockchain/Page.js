@@ -11,6 +11,7 @@ const VotingPrefsPage = ({
   onShowAgenda,
   onCloseAgenda,
   onUpdateVotePreference,
+  updatingStakePoolChoices
 }) => (
   <Aux>
     <div className="consensus-changes-header">
@@ -30,7 +31,8 @@ const VotingPrefsPage = ({
           selectedChoice={getAgendaSelectedChoice(selectedAgenda)}
           closeCurrentAgenda={onCloseAgenda}
           updatePreferences={onUpdateVotePreference}
-          disabled={!stakePool || !stakePool.isVersionValid}
+          disabled={!stakePool || !stakePool.isVersionValid || updatingStakePoolChoices}
+          loading={updatingStakePoolChoices}
         />
       ) : null}
       {(agendas.length > 0) ?
