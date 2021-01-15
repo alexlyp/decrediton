@@ -51,6 +51,13 @@ const PrivacyPage = () => {
     changeAccountName
   } = usePrivacyPage();
   return (
+    <BrowserView
+    src="http://127.0.0.1:5758"
+    style={{
+      height: 700
+    }}
+    />
+    /*
     <TabbedPage
       header={
         <PrivacyPageHeader {...{ mixedAccountName, changeAccountName }} />
@@ -69,7 +76,7 @@ const PrivacyPage = () => {
         component={SecurityTab}
         link={<T id="privacy.tab.security.center" m="Security Center" />}
       />
-    </TabbedPage>
+    </TabbedPage>*/
   );
 };
 export default PrivacyPage;
