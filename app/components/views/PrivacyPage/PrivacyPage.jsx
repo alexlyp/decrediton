@@ -5,6 +5,7 @@ import SecurityTab from "./SecurityPage/SecurityPage";
 import PrivacyTab from "./Privacy/Privacy";
 import { usePrivacyPage } from "./hooks";
 import style from "./Privacy/Privacy.module.css";
+import BrowserView from "react-electron-browser-view";
 
 const PrivacyPageHeader = React.memo(
   ({ mixedAccountName, changeAccountName }) => {
@@ -48,6 +49,13 @@ const PrivacyPage = () => {
     changeAccountName
   } = usePrivacyPage();
   return (
+    <BrowserView
+    src="http://127.0.0.1:5758"
+    style={{
+      height: 700
+    }}
+    />
+    /*
     <TabbedPage
       header={
         <PrivacyPageHeader {...{ mixedAccountName, changeAccountName }} />
@@ -66,7 +74,7 @@ const PrivacyPage = () => {
         component={SecurityTab}
         link={<T id="privacy.tab.security.center" m="Security Center" />}
       />
-    </TabbedPage>
+    </TabbedPage>*/
   );
 };
 export default PrivacyPage;

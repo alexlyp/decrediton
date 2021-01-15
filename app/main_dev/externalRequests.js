@@ -120,7 +120,7 @@ export const allowExternalRequest = (externalReqType) => {
       addAllowedURL("https://api.github.com/repos/decred/decrediton/releases");
       break;
     case EXTERNALREQUEST_POLITEIA:
-      addAllowedURL(POLITEIA_URL_TESTNET);
+      addAllowedURL("http://127.0.0.1:5758");
       addAllowedURL(POLITEIA_URL_MAINNET);
       break;
     case EXTERNALREQUEST_DCRDATA:
