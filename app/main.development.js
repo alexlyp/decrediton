@@ -43,6 +43,8 @@ import {
   getSelectedWallet,
   GetDcrlndPID,
   GetDcrlndCreds,
+  GetDexcPID,
+  GetDexcCreds,
   dropDCRDSocket,
   getDcrwalletGrpcKeyCert
 } from "./main_dev/launch";
@@ -59,6 +61,8 @@ import {
   getWatchingOnlyWallet,
   startDcrlnd,
   stopDcrlnd,
+  startDexc,
+  stopDexc,
   removeDcrlnd,
   lnScbInfo,
   updateTrezorFirmware
@@ -392,6 +396,48 @@ ipcMain.on("ln-remove-dir", (event, walletName, testnet) => {
     } else {
       event.returnValue = error;
     }
+  }
+});
+
+ipcMain.on(
+  "start-dexc",
+  async (
+    event,
+    walletAccount,
+    walletPort,
+    rpcCreds,
+    walletPath,
+    testnet,
+    autopilotEnabled
+  ) => {
+    try {
+      event.returnValue = await startDexc(
+        walletAccount,
+        walletPort,
+        rpcCreds,
+        walletPath,
+        testnet,
+        autopilotEnabled
+      );
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on("stop-dexc", async (event) => {
+  event.returnValue = await stopDexc();
+});
+
+ipcMain.on("dexc-creds", (event) => {
+  if (GetDexcPID() && GetDexcPID() !== -1) {
+    event.returnValue = GetDexcCreds();
+  } else {
+    event.returnValue = null;
   }
 });
 

@@ -4,6 +4,7 @@ import { createLogger } from "./logging";
 import { getWalletPath, getWalletDb, getDcrdPath } from "./paths";
 import { initWalletCfg, newWalletConfigCreation, getWalletCfg } from "config";
 import {
+  launchDexc,
   launchDCRD,
   launchDCRWallet,
   GetDcrwPID,
@@ -13,7 +14,10 @@ import {
   launchDCRLnd,
   GetDcrlndPID,
   GetDcrlndCreds,
+  GetDexcPID,
+  GetDexcCreds,
   closeDcrlnd,
+  closeDexc,
   setDcrdRpcCredentials
 } from "./launch";
 import { MAINNET } from "constants";
@@ -266,6 +270,10 @@ export const stopDcrlnd = () => {
   return closeDcrlnd();
 };
 
+export const stopDexc = () => {
+  return closeDexc();
+};
+
 export const removeDcrlnd = (walletName, testnet) => {
   const walletPath = getWalletPath(testnet, walletName);
   const dcrlndRoot = path.join(walletPath, "dcrlnd");
@@ -296,3 +304,34 @@ export const setWatchingOnlyWallet = (isWatchingOnly) => {
 };
 
 export const getWatchingOnlyWallet = () => watchingOnlyWallet;
+
+export const startDexc = async (
+  walletAccount,
+  walletPort,
+  walletPath,
+  testnet,
+  autopilotEnabled
+) => {
+  if (GetDexcPID() && GetDexcPID() !== -1) {
+    logger.log(
+      "info",
+      "Skipping restart of dexc as it is already running " + GetDcrlndPID()
+    );
+    const creds = GetDexcCreds();
+    return { wasRunning: true, ...creds };
+  }
+
+  try {
+    const started = await launchDexc(
+      walletAccount,
+      walletPort,
+      walletPath,
+      testnet,
+      autopilotEnabled
+    );
+    return started;
+  } catch (e) {
+    logger.log("error", "error launching dexc: " + e);
+    return e;
+  }
+};

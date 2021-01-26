@@ -40,15 +40,16 @@ const argv = parseArgs(process.argv.slice(1), OPTIONS);
 const debug = argv.debug || process.env.NODE_ENV === "development";
 const logger = createLogger(debug);
 
-let dcrdPID, dcrwPID, dcrlndPID;
+let dcrdPID, dcrwPID, dcrlndPID, dexcPID;
 
 // windows-only stuff
-let dcrwPipeRx, dcrwPipeTx, dcrwTxStream, dcrdPipeRx, dcrlndPipeRx;
+let dcrwPipeRx, dcrwPipeTx, dcrwTxStream, dcrdPipeRx, dcrlndPipeRx, dexcPipeRx;
 
 // general data that needs to keep consistency while decrediton is running.
 let dcrwPort;
 let rpcuser, rpcpass, rpccert, rpchost, rpcport;
 let dcrlndCreds;
+let dexcCreds;
 let dcrwalletGrpcKeyCert;
 
 let dcrdSocket,
@@ -61,6 +62,7 @@ function closeClis() {
   if (dcrdPID && dcrdPID !== -1) closeDCRD();
   if (dcrwPID && dcrwPID !== -1) closeDCRW();
   if (dcrlndPID && dcrlndPID !== -1) closeDcrlnd();
+  if (dexcPID && dexcPID !== -1) closeDexc();
 }
 
 export const setHeightSynced = (isSynced) => {
@@ -184,6 +186,32 @@ export const closeDcrlnd = () => {
     }
     dcrlndPID = null;
     dcrlndCreds = null;
+  }
+  return true;
+};
+
+export const closeDexc = () => {
+  if (dexcPID === -1) {
+    // process is not started by decrediton
+    return true;
+  }
+  if (isRunning(dexcPID) && os.platform() != "win32") {
+    logger.log("info", "Sending SIGINT to dexc at pid:" + dexcPID);
+    process.kill(dexcPID, "SIGINT");
+    dexcPID = null;
+    dexcCreds = null;
+  } else if (require("is-running")(dexcPID)) {
+    try {
+      const win32ipc = require("../node_modules/win32ipc/build/Release/win32ipc.node");
+      win32ipc.closePipe(dexcPipeRx);
+      dexcPID = null;
+      dexcCreds = null;
+    } catch (e) {
+      logger.log("error", "Error closing dexc piperx: " + e);
+      return false;
+    }
+    dexcPID = null;
+    dexcCreds = null;
   }
   return true;
 };
@@ -788,6 +816,106 @@ export const launchDCRLnd = (
     return resolve(dcrlndCreds);
   });
 
+export const launchDexc = (
+    walletAccount,
+    walletPort,
+    rpcCreds,
+    walletPath,
+    testnet
+  ) =>
+    new Promise((resolve, reject) => {
+      if (dexcPID === -1) {
+        resolve();
+      }
+
+      const dexcRoot = path.join(walletPath, "dexc");
+      const tlsCertPath = path.join(dexcRoot, "tls.cert");
+
+      const args = [
+        "--nolisten",
+        "--norest",
+        "--logdir=" + path.join(dexcRoot, "logs"),
+        "--datadir=" + path.join(dexcRoot, "data"),
+        "--tlscertpath=" + tlsCertPath,
+        "--tlskeypath=" + path.join(dexcRoot, "tls.key"),
+        "--configfile=" + path.join(dexcRoot, "dexc.conf")
+      ];
+
+      if (testnet) {
+        args.push("--testnet");
+      }
+
+
+      const dexcExe = getExecutablePath("dexc", argv.custombinpath);
+      if (!fs.existsSync(dexcExe)) {
+        logger.log(
+          "error",
+          "The dexc executable does not exist. Expected to find it at " +
+          dexcExe
+        );
+        reject("The dexc executable does not exist at " + dexcExe);
+      }
+
+      if (os.platform() == "win32") {
+        try {
+          const win32ipc = require("../node_modules/win32ipc/build/Release/win32ipc.node");
+          dexcPipeRx = win32ipc.createPipe("out");
+          args.push(util.format("--piperx=%d", dexcPipeRx.readEnd));
+        } catch (e) {
+          logger.log("error", "can't find proper module to launch dexc: " + e);
+        }
+      }
+
+      const fullArgs = args.join(" ");
+      logger.log("info", `Starting ${dexcExe} with ${fullArgs}`);
+
+      const dexc = spawn(dexcExe, args, {
+        detached: os.platform() === "win32",
+        stdio: ["ignore", "pipe", "pipe"]
+      });
+
+      dexc.on("error", function (err) {
+        reject(err);
+      });
+
+      dexc.on("close", (code) => {
+        /*
+      if (code !== 0) {
+        let lastDcrdErr = lastErrorLine(GetDcrdLogs());
+        if (!lastDcrdErr || lastDcrdErr === "") {
+          lastDcrdErr = lastPanicLine(GetDcrdLogs());
+        }
+        logger.log("error", "dcrd closed due to an error: ", lastDcrdErr);
+        return reject(lastDcrdErr);
+      }
+      */
+
+        logger.log("info", `dcrlnd exited with code ${code}`);
+      });
+
+      dexc.stdout.on("data", (data) => {
+        AddToDcrlndLog(process.stdout, data, debug);
+        resolve(data.toString("utf-8"));
+      });
+
+      dexc.stderr.on("data", (data) => {
+        AddToDcrlndLog(process.stderr, data, debug);
+        reject(data.toString("utf-8"));
+      });
+
+      dexcPID = dexc.pid;
+      logger.log("info", "dexc started with pid:" + dexcPID);
+
+      dexcPID.unref();
+
+      dexcCreds = {
+        address: "localhost",
+        port: 10009,
+        certPath: tlsCertPath
+      };
+      return resolve(dexcCreds);
+    });
+
 export const GetDcrwPort = () => dcrwPort;
 
 export const GetDcrdPID = () => dcrdPID;
@@ -796,6 +924,9 @@ export const GetDcrwPID = () => dcrwPID;
 
 export const GetDcrlndPID = () => dcrlndPID;
 export const GetDcrlndCreds = () => dcrlndCreds;
+
+export const GetDexcPID = () => dexcPID;
+export const GetDexcCreds = () => dexcCreds;
 
 export const readExesVersion = (app, grpcVersions) => {
   const args = ["--version"];
