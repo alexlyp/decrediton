@@ -77,6 +77,7 @@ export const LAST_ACCESS = "lastaccess";
 export const STAKEPOOLS = "stakepools";
 export const LN_WALLET_EXISTS = "ln_wallet_exists";
 export const USED_VSPS = "used_vsps";
+export const DEX_ACCOUNT = "dex_account";
 
 export const WALLET_INITIAL_VALUE = {
   [ENABLE_TICKET_BUYER]: false,
@@ -109,6 +110,7 @@ export const WALLET_INITIAL_VALUE = {
   [LAST_ACCESS]: 0,
   [USED_VSPS]: [],
   [LN_WALLET_EXISTS]: false,
+  [DEX_ACCOUNT]: null,
   // STAKEPOOLS is a legacy code which can be deleted after stopping giving
   // support for old vsp versions.
   [STAKEPOOLS]: []
