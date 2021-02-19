@@ -5,3 +5,4 @@ export * from "./Messages";
 export * from "./config";
 export * from "./opcode";
 export * from "./governance";
+export * from "./dex";
