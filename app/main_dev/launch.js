@@ -13,6 +13,7 @@ import {
   AddToDcrdLog,
   AddToDcrwalletLog,
   AddToDcrlndLog,
+  AddToDexcLog,
   GetDcrdLogs,
   GetDcrwalletLogs,
   lastErrorLine,
@@ -852,12 +853,12 @@ export const launchDCRLnd = (
       });
 
       dexc.stdout.on("data", (data) => {
-        //AddToDcrlndLog(process.stdout, data, debug);
+        AddToDexcLog(process.stdout, data, debug);
         resolve(data.toString("utf-8"));
       });
 
       dexc.stderr.on("data", (data) => {
-        AddToDcrlndLog(process.stderr, data, debug);
+        AddToDexcLog(process.stderr, data, debug);
         reject(data.toString("utf-8"));
       });
 

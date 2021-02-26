@@ -7,6 +7,7 @@ import os from "os";
 let dcrdLogs = Buffer.from("");
 let dcrwalletLogs = Buffer.from("");
 let dcrlndLogs = Buffer.from("");
+let dexcLogs = Buffer.from("");
 let privacyLogs = Buffer.from("");
 
 let logger;
@@ -106,6 +107,10 @@ export const AddToDcrlndLog = (destIO, data, debug) => {
   dcrlndLogs = AddToLog(destIO, dcrlndLogs, data, debug);
 };
 
+export const AddToDexcLog = (destIO, data, debug) => {
+  dexcLogs = AddToLog(destIO, dexcLogs, data, debug);
+};
+
 export const AddToPrivacyLog = (destIO, data, debug) => {
   // if log contains any of those messages we consider it a privacy log.
   const privacyLogsArray = [
@@ -129,6 +134,8 @@ export const GetDcrdLogs = () => dcrdLogs;
 export const GetDcrwalletLogs = () => dcrwalletLogs;
 
 export const GetDcrlndLogs = () => dcrlndLogs;
+
+export const GetDexcLogs = () => dexcLogs;
 
 export const getPrivacyLogs = () => privacyLogs.toString("utf-8");
 
@@ -161,6 +168,7 @@ export function lastPanicLine(log) {
 export function ClearDcrwalletLogs() {
   dcrwalletLogs = Buffer.from("");
   dcrlndLogs = Buffer.from("");
+  dexcLogs = Buffer.from("");
 }
 
 // dcrd upgrades warning.
