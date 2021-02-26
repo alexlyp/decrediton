@@ -20,7 +20,8 @@ import { decodeVoteScript } from "./helpers/tickets";
 import {
   EXTERNALREQUEST_STAKEPOOL_LISTING,
   EXTERNALREQUEST_POLITEIA,
-  EXTERNALREQUEST_DCRDATA
+  EXTERNALREQUEST_DCRDATA,
+  EXTERNALREQUEST_DEXC
 } from "main_dev/externalRequests";
 import {
   POLITEIA_URL_TESTNET,
@@ -1577,6 +1578,11 @@ export const politeiaURL = createSelector([isTestNet], (isTestNet) =>
 
 export const dcrdataURL = createSelector([isTestNet], (isTestNet) =>
   isTestNet ? DCRDATA_URL_TESTNET : DCRDATA_URL_MAINNET
+);
+
+export const dexcEnabled = compose(
+  (l) => l.indexOf(EXTERNALREQUEST_DEXC) > -1,
+  allowedExternalRequests
 );
 
 export const politeiaEnabled = compose(

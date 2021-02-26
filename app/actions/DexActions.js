@@ -23,6 +23,7 @@ export const startDexc = () => (dispatch, getState) => {
     if (typeof res === "string" || res instanceof Error) {
       throw res;
     }
+    dispatch({ type: DEXC_STARTUP_SUCCESS });
   } catch (error) {
     dispatch({ type: DEXC_STARTUP_FAILED });
     return;

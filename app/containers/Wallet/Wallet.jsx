@@ -16,7 +16,7 @@ import GovernancePage from "components/views/GovernancePage/GovernancePage";
 import ProposalDetailsPage from "components/views/ProposalDetailsPage/ProposalDetailsPage";
 import TrezorPage from "components/views/TrezorPage";
 import LNPage from "components/views/LNPage";
-import DexPage from "components/views/DexPage";
+import DexPage from "components/views/DexPage/DexPage";
 import SideBar from "components/SideBar/SideBar";
 import { BlurableContainer } from "layout";
 import { useWallet } from "../hooks";

@@ -18,6 +18,7 @@ import {
 } from "../middleware/dcrdataapi";
 import * as cfgConstants from "constants/config";
 
+export const EXTERNALREQUEST_DEXC = "EXTERNALREQUEST_DEXC";
 export const EXTERNALREQUEST_NETWORK_STATUS = "EXTERNALREQUEST_NETWORK_STATUS";
 export const EXTERNALREQUEST_STAKEPOOL_LISTING =
   "EXTERNALREQUEST_STAKEPOOL_LISTING";
@@ -108,6 +109,10 @@ export const allowExternalRequest = (externalReqType) => {
   if (allowedExternalRequests[externalReqType]) return;
 
   switch (externalReqType) {
+    case EXTERNALREQUEST_DEXC:
+      addAllowedURL("http://127.0.0.1:5758");
+      //addAllowedURL("ws://127.0.0.1:5758/");
+      break;
     case EXTERNALREQUEST_NETWORK_STATUS:
       addAllowedURL("https://testnet.decred.org/api/status");
       addAllowedURL("https://mainnet.decred.org/api/status");
@@ -120,7 +125,7 @@ export const allowExternalRequest = (externalReqType) => {
       addAllowedURL("https://api.github.com/repos/decred/decrediton/releases");
       break;
     case EXTERNALREQUEST_POLITEIA:
-      addAllowedURL("http://127.0.0.1:5758");
+      addAllowedURL(POLITEIA_URL_TESTNET);
       addAllowedURL(POLITEIA_URL_MAINNET);
       break;
     case EXTERNALREQUEST_DCRDATA:
