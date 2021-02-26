@@ -804,12 +804,11 @@ export const launchDCRLnd = (
       if (dexcPID === -1) {
         resolve();
       }
-
       const dexcRoot = path.join(walletPath, "dexc");
 
       const args = [
-        "--appdata=" + dexcRoot,
-        "--dbpath=" + path.join(dexcRoot, "db")
+        "--appdata=" + path.join(walletPath, "dexc"),
+        "--db=" + path.join(dexcRoot, "db")
       ];
 
       if (testnet) {
@@ -823,7 +822,7 @@ export const launchDCRLnd = (
           "The dexc executable does not exist. Expected to find it at " +
           dexcExe
         );
-        reject("The dcrlnd executable does not exist at " + dexcExe);
+        reject("The dexc executable does not exist at " + dexcExe);
       }
 
       if (os.platform() == "win32") {

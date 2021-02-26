@@ -1,17 +1,23 @@
 import * as sel from "selectors";
 import { ipcRenderer } from "electron";
+import { getWalletPath } from "main_dev/paths";
 
 export const DEXC_STARTUP_ATTEMPT = "DEXC_STARTUP_ATTEMPT";
 export const DEXC_STARTUP_FAILED = "DEXC_STARTUP_FAILED";
 export const DEXC_STARTUP_SUCCESS = "DEXC_STARTUP_SUCCESS";
 
 export const startDexc = () => (dispatch, getState) => {
-  dispatch({ type: DEXC_STARTUP_FAILED });
+  dispatch({ type: DEXC_STARTUP_ATTEMPT });
   const isTestnet = sel.isTestNet(getState());
+  const {
+    daemon: { walletName }
+  } = getState();
+  const walletPath = getWalletPath(isTestnet, walletName);
 
   try {
     const res = ipcRenderer.sendSync(
-      "start-dex",
+      "start-dexc",
+      walletPath,
       isTestnet
     );
     if (typeof res === "string" || res instanceof Error) {

@@ -374,10 +374,12 @@ ipcMain.on(
   "start-dexc",
   async (
     event,
+    walletPath,
     testnet
   ) => {
     try {
       event.returnValue = await startDexc(
+        walletPath,
         testnet
       );
     } catch (error) {

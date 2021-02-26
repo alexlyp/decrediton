@@ -261,6 +261,7 @@ export const startDcrlnd = async (
 };
 
 export const startDexc = async (
+  walletPath,
   testnet
 ) => {
   if (GetDexcPID() && GetDexcPID() !== -1) {
@@ -274,6 +275,7 @@ export const startDexc = async (
 
   try {
     const started = await launchDexc(
+      walletPath,
       testnet
     );
     return started;

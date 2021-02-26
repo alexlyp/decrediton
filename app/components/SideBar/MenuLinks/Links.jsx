@@ -55,7 +55,7 @@ export const linkList = [
     icon: TREZOR_KEY,
     key: TREZOR_KEY,
     ariaLabel: "Trezor"
-  },ou
+  },
   {
     path: "/dex",
     link: <T id="sidebar.link.dex" m="DEX" />,
