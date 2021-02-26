@@ -40,15 +40,15 @@ const argv = parseArgs(process.argv.slice(1), OPTIONS);
 const debug = argv.debug || process.env.NODE_ENV === "development";
 const logger = createLogger(debug);
 
-let dcrdPID, dcrwPID, dcrlndPID;
+let dcrdPID, dcrwPID, dcrlndPID, dexcPID;
 
 // windows-only stuff
-let dcrwPipeRx, dcrwPipeTx, dcrwTxStream, dcrdPipeRx, dcrlndPipeRx;
+let dcrwPipeRx, dcrwPipeTx, dcrwTxStream, dcrdPipeRx, dcrlndPipeRx, dexcPipeRx;
 
 // general data that needs to keep consistency while decrediton is running.
 let dcrwPort;
 let rpcuser, rpcpass, rpccert, rpchost, rpcport;
-let dcrlndCreds;
+let dcrlndCreds, dexcCreds;
 let dcrwalletGrpcKeyCert;
 
 let dcrdSocket,
@@ -796,6 +796,84 @@ export const launchDCRLnd = (
     return resolve(dcrlndCreds);
   });
 
+  export const launchDexc = (
+    walletPath,
+    testnet
+  ) =>
+    new Promise((resolve, reject) => {
+      if (dexcPID === -1) {
+        resolve();
+      }
+
+      const dexcRoot = path.join(walletPath, "dexc");
+
+      const args = [
+        "--appdata=" + dexcRoot,
+        "--dbpath=" + path.join(dexcRoot, "db")
+      ];
+
+      if (testnet) {
+        args.push("--testnet");
+      }
+
+      const dexcExe = getExecutablePath("dexc", argv.custombinpath);
+      if (!fs.existsSync(dexcExe)) {
+        logger.log(
+          "error",
+          "The dexc executable does not exist. Expected to find it at " +
+          dexcExe
+        );
+        reject("The dcrlnd executable does not exist at " + dexcExe);
+      }
+
+      if (os.platform() == "win32") {
+        try {
+          const win32ipc = require("../node_modules/win32ipc/build/Release/win32ipc.node");
+          dexcPipeRx = win32ipc.createPipe("out");
+          args.push(util.format("--piperx=%d", dexcPipeRx.readEnd));
+        } catch (e) {
+          logger.log("error", "can't find proper module to launch dexc: " + e);
+        }
+      }
+
+      const fullArgs = args.join(" ");
+      logger.log("info", `Starting ${dexcExe} with ${fullArgs}`);
+
+      const dexc = spawn(dexcExe, args, {
+        detached: os.platform() === "win32",
+        stdio: ["ignore", "pipe", "pipe"]
+      });
+
+      dexc.on("error", function (err) {
+        reject(err);
+      });
+
+      dexc.on("close", (code) => {
+        logger.log("info", `dexc exited with code ${code}`);
+      });
+
+      dexc.stdout.on("data", (data) => {
+        //AddToDcrlndLog(process.stdout, data, debug);
+        resolve(data.toString("utf-8"));
+      });
+
+      dexc.stderr.on("data", (data) => {
+        AddToDcrlndLog(process.stderr, data, debug);
+        reject(data.toString("utf-8"));
+      });
+
+      dexcPID = dexc.pid;
+      logger.log("info", "dexc started with pid:" + dexcPID);
+
+      dexc.unref();
+
+      dexcCreds = {
+        address: "localhost",
+        port: 5758
+      };
+      return resolve(dexcCreds);
+    });
+
 export const GetDcrwPort = () => dcrwPort;
 
 export const GetDcrdPID = () => dcrdPID;
@@ -804,6 +882,9 @@ export const GetDcrwPID = () => dcrwPID;
 
 export const GetDcrlndPID = () => dcrlndPID;
 export const GetDcrlndCreds = () => dcrlndCreds;
+
+export const GetDexcPID = () => dexcPID;
+export const GetDexcCreds = () => dexcCreds;
 
 export const readExesVersion = (app, grpcVersions) => {
   const args = ["--version"];

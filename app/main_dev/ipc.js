@@ -13,8 +13,12 @@ import {
   launchDCRLnd,
   GetDcrlndPID,
   GetDcrlndCreds,
+  launchDexc,
+  GetDexcPID,
   closeDcrlnd,
-  setDcrdRpcCredentials
+  closeDexc,
+  setDcrdRpcCredentials,
+  GetDexcCreds
 } from "./launch";
 import { MAINNET } from "constants";
 import * as cfgConstants from "constants/config";
@@ -256,6 +260,29 @@ export const startDcrlnd = async (
   }
 };
 
+export const startDexc = async (
+  testnet
+) => {
+  if (GetDexcPID() && GetDexcPID() !== -1) {
+    logger.log(
+      "info",
+      "Skipping restart of dcrlnd as it is already running " + GetDexcPID()
+    );
+    const creds = GetDexcCreds();
+    return { wasRunning: true, ...creds };
+  }
+
+  try {
+    const started = await launchDexc(
+      testnet
+    );
+    return started;
+  } catch (e) {
+    logger.log("error", "error launching dexc: " + e);
+    return e;
+  }
+};
+
 export const stopDaemon = () => {
   return closeDCRD();
 };
@@ -266,6 +293,10 @@ export const stopWallet = () => {
 
 export const stopDcrlnd = () => {
   return closeDcrlnd();
+};
+
+export const stopDexc = () => {
+  return closeDexc();
 };
 
 export const removeDcrlnd = (walletName, testnet) => {

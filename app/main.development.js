@@ -61,7 +61,9 @@ import {
   stopDcrlnd,
   removeDcrlnd,
   lnScbInfo,
-  updateTrezorFirmware
+  updateTrezorFirmware,
+  startDexc,
+  stopDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,
@@ -366,6 +368,30 @@ ipcMain.on(
 
 ipcMain.on("stop-dcrlnd", async (event) => {
   event.returnValue = await stopDcrlnd();
+});
+
+ipcMain.on(
+  "start-dexc",
+  async (
+    event,
+    testnet
+  ) => {
+    try {
+      event.returnValue = await startDexc(
+        testnet
+      );
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on("stop-dexc", async (event) => {
+  event.returnValue = await stopDexc();
 });
 
 ipcMain.on("dcrlnd-creds", (event) => {
