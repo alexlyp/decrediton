@@ -32,7 +32,7 @@ export const startDexc = () => (dispatch, getState) => {
 
 export const DEXC_STOPPED = "DEXC_STOPPED";
 
-export const stopDcrlnd = () => (dispatch, getState) => {
+export const stopDexc = () => (dispatch, getState) => {
   if (!sel.dexAction(getState())) {
     return;
   }

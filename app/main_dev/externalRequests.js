@@ -111,7 +111,7 @@ export const allowExternalRequest = (externalReqType) => {
   switch (externalReqType) {
     case EXTERNALREQUEST_DEXC:
       addAllowedURL("http://127.0.0.1:5758");
-      //addAllowedURL("ws://127.0.0.1:5758/");
+      addAllowedURL("ws://127.0.0.1:5758/");
       break;
     case EXTERNALREQUEST_NETWORK_STATUS:
       addAllowedURL("https://testnet.decred.org/api/status");

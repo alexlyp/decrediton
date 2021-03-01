@@ -62,6 +62,7 @@ function closeClis() {
   if (dcrdPID && dcrdPID !== -1) closeDCRD();
   if (dcrwPID && dcrwPID !== -1) closeDCRW();
   if (dcrlndPID && dcrlndPID !== -1) closeDcrlnd();
+  if (dexcPID && dexcPID !== -1) closeDexc();
 }
 
 export const setHeightSynced = (isSynced) => {
@@ -189,6 +190,32 @@ export const closeDcrlnd = () => {
     }
     dcrlndPID = null;
     dcrlndCreds = null;
+  }
+  return true;
+};
+
+export const closeDexc = () => {
+  if (dexcPID === -1) {
+    // process is not started by decrediton
+    return true;
+  }
+  if (isRunning(dexcPID) && os.platform() != "win32") {
+    logger.log("info", "Sending SIGINT to dcrlnd at pid:" + dcrlndPID);
+    process.kill(dexcPID, "SIGINT");
+    dexcPID = null;
+    dexcCreds = null;
+  } else if (require("is-running")(dexcPID)) {
+    try {
+      const win32ipc = require("../node_modules/win32ipc/build/Release/win32ipc.node");
+      win32ipc.closePipe(dexcPipeRx);
+      dexcPID = null;
+      dexcCreds = null;
+    } catch (e) {
+      logger.log("error", "Error closing dexc piperx: " + e);
+      return false;
+    }
+    dexcPID = null;
+    dexcCreds = null;
   }
   return true;
 };

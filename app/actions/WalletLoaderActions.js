@@ -26,6 +26,7 @@ import {
 } from "../middleware/walletrpc/api_pb";
 import { push as pushHistory } from "connected-react-router";
 import { stopNotifcations } from "./NotificationActions";
+import { stopDexc } from "./DexActions";
 import { stopDcrlnd } from "./LNActions";
 import { TESTNET } from "constants";
 import * as cfgConstants from "constants/config";
@@ -259,6 +260,7 @@ export const closeWalletRequest = () => async (dispatch, getState) => {
     await dispatch(syncCancel());
     await dispatch(rescanCancel());
     await dispatch(stopDcrlnd());
+    await dispatch(stopDexc());
     await dispatch(ticketBuyerCancel());
     await dispatch(stopAccountMixer(true));
     await dispatch(setSelectedWallet(null));
