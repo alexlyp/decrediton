@@ -25,7 +25,7 @@ export const startDexc = () => (dispatch, getState) => {
     }
     dispatch({ type: DEXC_STARTUP_SUCCESS });
   } catch (error) {
-    dispatch({ type: DEXC_STARTUP_FAILED });
+    dispatch({ type: DEXC_STARTUP_FAILED, error });
     return;
   }
 };
@@ -33,7 +33,7 @@ export const startDexc = () => (dispatch, getState) => {
 export const DEXC_STOPPED = "DEXC_STOPPED";
 
 export const stopDexc = () => (dispatch, getState) => {
-  if (!sel.dexAction(getState())) {
+  if (!sel.dexActive(getState())) {
     return;
   }
 
@@ -41,21 +41,58 @@ export const stopDexc = () => (dispatch, getState) => {
   dispatch({ type: DEXC_STOPPED });
 };
 
-/*
-const waitForDexcSynced = (lnClient) => async () => {
-  const sleepMs = 3000;
-  const sleepCount = 60 / (sleepMs / 1000);
-  const sleep = () => new Promise((resolve) => setTimeout(resolve, sleepMs));
+export const DEXC_INIT_ATTEMPT = "DEXC_INIT_ATTEMPT";
+export const DEXC_INIT_SUCCESS = "DEXC_INIT_SUCCESS";
+export const DEXC_INIT_FAILED = "DEXC_INIT_FAILED";
 
-  for (let i = 0; i < sleepCount; i++) {
-    const info = await ln.getInfo(lnClient);
-    if (info.serverActive) {
-      await sleep(); // Final sleep to let subsystems catch up.
-      return;
-    }
-    await sleep();
+export const initDexc = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_INIT_ATTEMPT });
+  if (!sel.dexActive(getState())) {
+    dispatch({ type: DEXC_INIT_FAILED, error: "Dexc isn't active" });
+    return;
   }
 
-  throw new Error("dcrlnd wallet not synced after 60 seconds");
+  dispatch({ type: DEXC_INIT_SUCCESS });
 };
-*/
+
+export const DEXC_LOGIN_ATTEMPT = "DEXC_LOGIN_ATTEMPT";
+export const DEXC_LOGIN_SUCCESS = "DEXC_LOGIN_SUCCESS";
+export const DEXC_LOGIN_FAILED = "DEXC_LOGIN_FAILED";
+
+export const loginDexc = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_LOGIN_ATTEMPT });
+  if (!sel.dexActive(getState())) {
+    dispatch({ type: DEXC_LOGIN_FAILED, error: "Dexc isn't active" });
+    return;
+  }
+
+  dispatch({ type: DEXC_LOGIN_SUCCESS });
+};
+
+export const DEXC_REGISTER_ATTEMPT = "DEXC_REGISTER_ATTEMPT";
+export const DEXC_REGISTER_SUCCESS = "DEXC_REGISTER_SUCCESS";
+export const DEXC_REGISTER_FAILED = "DEXC_REGISTER_FAILED";
+
+export const registerDexc = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_REGISTER_ATTEMPT });
+  if (!sel.dexActive(getState())) {
+    dispatch({ type: DEXC_REGISTER_FAILED, error: "Dexc isn't active" });
+    return;
+  }
+
+  dispatch({ type: DEXC_REGISTER_SUCCESS });
+};
+
+export const DEXC_LAUNCH_WINDOW_ATTEMPT = "DEXC_LAUNCH_WINDOW_ATTEMPT";
+export const DEXC_LAUNCH_WINDOW_SUCCESS = "DEXC_LAUNCH_WINDOW_SUCCESS";
+export const DEXC_LAUNCH_WINDOW_FAILED = "DEXC_LAUNCH_WINDOW_FAILED";
+
+export const launchDexcWindow = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_LAUNCH_WINDOW_ATTEMPT });
+  if (!sel.dexActive(getState())) {
+    dispatch({ type: DEXC_LAUNCH_WINDOW_FAILED, error: "Dexc isn't active" });
+    return;
+  }
+
+  dispatch({ type: DEXC_LAUNCH_WINDOW_SUCCESS });
+};

@@ -1776,3 +1776,8 @@ export const lnSCBUpdatedTime = get(["ln", "scbUpdatedTime"]);
 export const lnTowersList = get(["ln", "towersList"]);
 
 // end of ln selectors
+
+// start of dex selectors
+
+//export const dexEnabled = bool(and(not(isWatchingOnly), not(isTrezor)));
+export const dexcActive = bool(get(["dex", "active"]));
