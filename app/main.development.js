@@ -1,7 +1,9 @@
 import fs from "fs-extra";
 import parseArgs from "minimist";
+import { callDex } from "dex";
 import { app, BrowserWindow, Menu, dialog } from "electron";
 import { initGlobalCfg, validateGlobalCfgFile } from "./config";
+import path from "path";
 import {
   appLocaleFromElectronLocale,
   default as locales
@@ -62,7 +64,6 @@ import {
   removeDcrlnd,
   lnScbInfo,
   updateTrezorFirmware,
-  startDexc,
   stopDexc
 } from "./main_dev/ipc";
 import {
@@ -370,18 +371,22 @@ ipcMain.on("stop-dcrlnd", async (event) => {
   event.returnValue = await stopDcrlnd();
 });
 
+const Mainnet = 0;
+const Testnet = 1;
+
 ipcMain.on(
   "start-dexc",
-  async (
+ (
     event,
     walletPath,
     testnet
   ) => {
     try {
-      event.returnValue = await startDexc(
-        walletPath,
-        testnet
-      );
+          const dbPath = path.join(walletPath, "dexc", "db.db");
+          event.returnValue = callDEX("startCore", {
+              dbPath: dbPath,
+              net: !testnet ? Mainnet : Testnet
+          });
     } catch (error) {
       if (!(error instanceof Error)) {
         event.returnValue = new Error(error);
