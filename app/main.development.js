@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import parseArgs from "minimist";
-import { callDex } from "dex";
+import dexc from "dex";
 import { app, BrowserWindow, Menu, dialog } from "electron";
 import { initGlobalCfg, validateGlobalCfgFile } from "./config";
 import path from "path";
@@ -382,8 +382,9 @@ ipcMain.on(
     testnet
   ) => {
     try {
+      console.log("starting dexc!");
           const dbPath = path.join(walletPath, "dexc", "db.db");
-          event.returnValue = callDEX("startCore", {
+          event.returnValue = dexc.callDEX("startCore", {
               dbPath: dbPath,
               net: !testnet ? Mainnet : Testnet
           });

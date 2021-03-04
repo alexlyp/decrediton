@@ -2,16 +2,14 @@
   "name": "electron-demo",
   "version": "1.0.0",
   "description": "Demo of Electron App using with DEX Core Library",
-  "main": "./main.js",
+  "main": "main.js",
   "scripts": {
-    "install": "npm install make build",
-    "install-electron": "node-gyp rebuild --target=8.5.2 --arch=x64 --dist-url=https://electronjs.org/headers"
+    "post-install": "make"
   },
   "keywords": [],
   "author": "Brian Stafford",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^12.0.0",
     "electron-rebuild": "^2.3.5",
     "node-gyp": "^7.1.2"
   }
