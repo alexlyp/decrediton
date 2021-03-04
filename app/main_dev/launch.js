@@ -7,6 +7,7 @@ import {
   getDcrdPath,
   getCertsPath
 } from "./paths";
+import dexc from "dex";
 import { getWalletCfg, getGlobalCfg } from "config";
 import {
   createLogger,
@@ -41,10 +42,12 @@ const argv = parseArgs(process.argv.slice(1), OPTIONS);
 const debug = argv.debug || process.env.NODE_ENV === "development";
 const logger = createLogger(debug);
 
-let dcrdPID, dcrwPID, dcrlndPID, dexcPID;
+let dex;
+
+let dcrdPID, dcrwPID, dcrlndPID;
 
 // windows-only stuff
-let dcrwPipeRx, dcrwPipeTx, dcrwTxStream, dcrdPipeRx, dcrlndPipeRx, dexcPipeRx;
+let dcrwPipeRx, dcrwPipeTx, dcrwTxStream, dcrdPipeRx, dcrlndPipeRx;
 
 // general data that needs to keep consistency while decrediton is running.
 let dcrwPort;
@@ -62,7 +65,7 @@ function closeClis() {
   if (dcrdPID && dcrdPID !== -1) closeDCRD();
   if (dcrwPID && dcrwPID !== -1) closeDCRW();
   if (dcrlndPID && dcrlndPID !== -1) closeDcrlnd();
-  if (dexcPID && dexcPID !== -1) closeDexc();
+  if (dex) closeDexc();
 }
 
 export const setHeightSynced = (isSynced) => {
@@ -195,28 +198,13 @@ export const closeDcrlnd = () => {
 };
 
 export const closeDexc = () => {
-  if (dexcPID === -1) {
+  logger.log("info", "closing dexc" + dex);
+  if (dex === null) {
     // process is not started by decrediton
     return true;
   }
-  if (isRunning(dexcPID) && os.platform() != "win32") {
-    logger.log("info", "Sending SIGINT to dcrlnd at pid:" + dcrlndPID);
-    process.kill(dexcPID, "SIGINT");
-    dexcPID = null;
-    dexcCreds = null;
-  } else if (require("is-running")(dexcPID)) {
-    try {
-      const win32ipc = require("../node_modules/win32ipc/build/Release/win32ipc.node");
-      win32ipc.closePipe(dexcPipeRx);
-      dexcPID = null;
-      dexcCreds = null;
-    } catch (e) {
-      logger.log("error", "Error closing dexc piperx: " + e);
-      return false;
-    }
-    dexcPID = null;
-    dexcCreds = null;
-  }
+  dexc.callDEX("shutdown", {});
+  dex = null;
   return true;
 };
 
@@ -824,75 +812,41 @@ export const launchDCRLnd = (
     return resolve(dcrlndCreds);
   });
 
+  const Mainnet = 0;
+  const Testnet = 1;
+
   export const launchDexc = (
     walletPath,
     testnet
   ) =>
     new Promise((resolve, reject) => {
-      if (dexcPID === -1) {
+      if (dex !== null) {
         resolve();
       }
       const dexcRoot = path.join(walletPath, "dexc");
-
-      const args = [
-        "--appdata=" + path.join(walletPath, "dexc"),
-        "--db=" + path.join(dexcRoot, "db")
-      ];
-
-      if (testnet) {
-        args.push("--testnet");
-      }
-
-      const dexcExe = getExecutablePath("dexc", argv.custombinpath);
-      if (!fs.existsSync(dexcExe)) {
-        logger.log(
-          "error",
-          "The dexc executable does not exist. Expected to find it at " +
-          dexcExe
-        );
-        reject("The dexc executable does not exist at " + dexcExe);
-      }
-
-      if (os.platform() == "win32") {
-        try {
-          const win32ipc = require("../node_modules/win32ipc/build/Release/win32ipc.node");
-          dexcPipeRx = win32ipc.createPipe("out");
-          args.push(util.format("--piperx=%d", dexcPipeRx.readEnd));
-        } catch (e) {
-          logger.log("error", "can't find proper module to launch dexc: " + e);
-        }
-      }
-
-      const fullArgs = args.join(" ");
-      logger.log("info", `Starting ${dexcExe} with ${fullArgs}`);
-
-      const dexc = spawn(dexcExe, args, {
-        detached: os.platform() === "win32",
-        stdio: ["ignore", "pipe", "pipe"]
+      const dbPath = path.join(dexcRoot, "db");
+      dex = dexc.callDEX("startCore", {
+          dbPath: dbPath,
+          net: !testnet ? Mainnet : Testnet
       });
 
-      dexc.on("error", function (err) {
+      dex.on("error", function (err) {
         reject(err);
       });
 
-      dexc.on("close", (code) => {
+      dex.on("close", (code) => {
         logger.log("info", `dexc exited with code ${code}`);
       });
 
-      dexc.stdout.on("data", (data) => {
+      dex.stdout.on("data", (data) => {
         AddToDexcLog(process.stdout, data, debug);
         resolve(data.toString("utf-8"));
       });
 
-      dexc.stderr.on("data", (data) => {
+      dex.stderr.on("data", (data) => {
         AddToDexcLog(process.stderr, data, debug);
         reject(data.toString("utf-8"));
       });
-
-      dexcPID = dexc.pid;
-      logger.log("info", "dexc started with pid:" + dexcPID);
-
-      dexc.unref();
 
       dexcCreds = {
         address: "localhost",
@@ -910,7 +864,7 @@ export const GetDcrwPID = () => dcrwPID;
 export const GetDcrlndPID = () => dcrlndPID;
 export const GetDcrlndCreds = () => dcrlndCreds;
 
-export const GetDexcPID = () => dexcPID;
+export const GetDexcPID = () => dex;
 export const GetDexcCreds = () => dexcCreds;
 
 export const readExesVersion = (app, grpcVersions) => {

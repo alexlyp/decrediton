@@ -264,10 +264,10 @@ export const startDexc = async (
   walletPath,
   testnet
 ) => {
-  if (GetDexcPID() && GetDexcPID() !== -1) {
+  if (GetDexcPID()) {
     logger.log(
       "info",
-      "Skipping restart of dcrlnd as it is already running " + GetDexcPID()
+      "Skipping restart of dexc as it is already running " + GetDexcPID()
     );
     const creds = GetDexcCreds();
     return { wasRunning: true, ...creds };
