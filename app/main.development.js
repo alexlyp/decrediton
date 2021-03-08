@@ -64,7 +64,8 @@ import {
   updateTrezorFirmware,
   startDexc,
   stopDexc,
-  checkInitDexc
+  checkInitDexc,
+  initDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,
@@ -378,6 +379,24 @@ ipcMain.on(
   ) => {
     try {
       event.returnValue = await checkInitDexc();
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on(
+  "init-dexc",
+ async (
+    event,
+    passphrase
+  ) => {
+    try {
+      event.returnValue = await initDexc(passphrase);
     } catch (error) {
       if (!(error instanceof Error)) {
         event.returnValue = new Error(error);

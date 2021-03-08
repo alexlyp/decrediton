@@ -1782,3 +1782,5 @@ export const lnTowersList = get(["ln", "towersList"]);
 //export const dexEnabled = bool(and(not(isWatchingOnly), not(isTrezor)));
 export const dexcActive = bool(get(["dex", "active"]));
 export const dexcInit = bool(get(["dex", "dexcInit"]));
+export const initDexcAttempt =  bool(get(["dex", "initAttempt"]));
+export const checkInitDexcAttempt =  bool(get(["dex", "dexcCheckInitAttempt"]));

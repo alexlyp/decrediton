@@ -847,15 +847,31 @@ export const launchDCRLnd = (
         resolve();
       }
       try {
-        const dexc = GetDexcPID();
+      const dexc = GetDexcPID();
 
       const init = dexc.callDEX("IsInitialized", {})
       return resolve(init);
     } catch(error) {
-      console.log("launch error", error);
+      console.log("check init error", error);
       return reject(error);
     }
     });
+
+  export const initDexcCall = (passphrase) =>
+      new Promise((resolve, reject) => {
+        if (!dex) {
+          resolve();
+        }
+        try {
+        const dexc = GetDexcPID();
+  
+        const init = dexc.callDEX("Init", {})
+        return resolve(init);
+      } catch(error) {
+        console.log("init error", error);
+        return reject(error);
+      }
+      });
 
 export const GetDcrwPort = () => dcrwPort;
 

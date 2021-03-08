@@ -88,21 +88,18 @@ export default function ln(state = {}, action) {
       return {
         ...state,
         initAttempt: true,
-        init: false,
         registerError: null
       };
     case DEXC_INIT_FAILED:
       return {
         ...state,
         initAttempt: false,
-        init: false,
         initError: action.error
       };
     case DEXC_INIT_SUCCESS:
       return {
         ...state,
         initAttempt: false,
-        init: true,
         registerError: null
       };
     case DEXC_LAUNCH_WINDOW_ATTEMPT:
@@ -129,20 +126,20 @@ export default function ln(state = {}, action) {
     case DEXC_CHECKINIT_ATTEMPT:
       return {
         ...state,
-        dexcInitAttempt: true,
+        dexcCheckInitAttempt: true,
         dexcInitError: null
       };
     case DEXC_CHECKINIT_FAILED:
       return {
         ...state,
-        dexcInitAttempt: false,
+        dexcCheckInitAttempt: false,
         dexcInit: false,
         dexcInitError: action.error
       };
     case DEXC_CHECKINIT_SUCCESS:
       return {
         ...state,
-        dexcInitAttempt: false,
+        dexcCheckInitAttempt: false,
         dexcInit: action.res,
         dexcInitError: null
       };

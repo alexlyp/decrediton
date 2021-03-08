@@ -69,15 +69,25 @@ export const DEXC_INIT_ATTEMPT = "DEXC_INIT_ATTEMPT";
 export const DEXC_INIT_SUCCESS = "DEXC_INIT_SUCCESS";
 export const DEXC_INIT_FAILED = "DEXC_INIT_FAILED";
 
-export const initDexc = () => (dispatch, getState) => {
+export const initDexc = (passphrase) => (dispatch, getState) => {
   dispatch({ type: DEXC_INIT_ATTEMPT });
   dispatch(addAllowedExternalRequest(EXTERNALREQUEST_DEXC));
   if (!sel.dexActive(getState())) {
     dispatch({ type: DEXC_INIT_FAILED, error: "Dexc isn't active" });
     return;
   }
-
-  dispatch({ type: DEXC_INIT_SUCCESS });
+  try {
+    const res = ipcRenderer.sendSync("init-dexc",
+      passphrase
+    );
+    if (res instanceof Error) {
+      throw res;
+    }  
+    dispatch({ type: DEXC_INIT_SUCCESS });
+  } catch (error) {
+    dispatch({ type: DEXC_INIT_FAILED, error });
+    return;
+  }
 };
 
 export const DEXC_LOGIN_ATTEMPT = "DEXC_LOGIN_ATTEMPT";

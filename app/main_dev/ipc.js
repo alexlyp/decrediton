@@ -15,6 +15,7 @@ import {
   GetDcrlndCreds,
   launchDexc,
   initCheckDexc,
+  initDexcCall,
   GetDexcPID,
   closeDcrlnd,
   closeDexc,
@@ -300,6 +301,24 @@ export const checkInitDexc = async () => {
     return init;
   } catch (e) {
     logger.log("error", "error checking init dexc: " + e);
+    return e;
+  }
+};
+
+export const initDexc = async (passphrase) => {
+  if (!GetDexcPID()) {
+    logger.log(
+      "info",
+      "Skipping init since dexc is not runnning"
+    );
+    return false;
+  }
+
+  try {
+    const init = await initDexcCall(passphrase);
+    return init;
+  } catch (e) {
+    logger.log("error", "error init dexc: " + e);
     return e;
   }
 };
