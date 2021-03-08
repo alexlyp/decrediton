@@ -1,21 +1,23 @@
 import DexConnectPage from "./ConnectPage";
-import DexPage from "./DexPage";
+import DexView from "./DexView";
 import { useDex } from "./hooks";
+import { StandalonePage } from "layout";
 
 
-const Dex = () => {
+const DexPage = () => {
   const { dexcActive, dexcInit } = useDex();
+  console.log(dexcActive, dexcInit);
   return (
-    <StandalonePageBody>
+    <StandalonePage>
       {dexcActive && dexcInit ? 
-        <DexPage/> : (
+        <DexView/> : (
           dexcActive ?
           <DexConnectPage/> :
           dfasdfsdf
         )
       }
-    </StandalonePageBody>
+    </StandalonePage>
   );
 };
 
-export default Dex;
+export default DexPage;

@@ -46,6 +46,9 @@ export const dexcCheckInit = () => (dispatch, getState) => {
     if (res instanceof Error) {
       throw res;
     }
+    if ( typeof res === "string" ) {
+      res = res == "true" ? true : false;
+    }
     dispatch({ type: DEXC_CHECKINIT_SUCCESS, res });
   } catch (error) {
     dispatch({ type: DEXC_CHECKINIT_FAILED, error });

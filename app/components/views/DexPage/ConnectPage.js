@@ -1,4 +1,6 @@
 import { onInitDexc, initDexcAttempt } from "./hooks";
+import { PassphraseModalButton } from "buttons";
+import { FormattedMessage as T } from "react-intl";
 
 const DexConnectPage = () => {
   return (

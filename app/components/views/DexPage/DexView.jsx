@@ -1,7 +1,6 @@
 import BrowserView from "react-electron-browser-view";
-import { StandalonePage } from "layout";
 
-const DexPage = () => {
+const DexView = () => {
   return (
       <BrowserView
         src="http://127.0.0.1:5758"
@@ -11,4 +10,4 @@ const DexPage = () => {
       />
   );
 };
-export default DexPage;
+export default DexView;
