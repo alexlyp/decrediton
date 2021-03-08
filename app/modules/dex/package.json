@@ -6,7 +6,7 @@
   "gypfile": true,
   "scripts": {
     "install": "go build -buildmode=c-shared -o ./libdexc/libdexc.so ./libdexc/... && node-gyp configure && node-gyp build && electron-rebuild",
-    "postinstall": "cp -r ../../../../dcrdex/client/webserver/site/src/ ./site/ && cp -r ../../../../dcrdex/client/webserver/site/dist/ ./site/"
+    "postinstall": "rm -rf ./site/ && mkdir -p site && cp -r ../../../../dcrdex/client/webserver/site/src/ ./site/ && cp -r ../../../../dcrdex/client/webserver/site/dist/ ./site/"
   },
   "keywords": [],
   "author": "Brian Stafford",

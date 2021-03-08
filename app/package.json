@@ -4,6 +4,9 @@
   "version": "1.6.1",
   "description": "Cross-platform decred gui based on Electron and React",
   "main": "./main.js",
+  "scripts": {
+    "postinstall": "cp -r ./node_modules/dex/site ../site"
+  },
   "author": {
     "name": "Decred Team",
     "email": "info@decred.org",
