@@ -1,0 +1,97 @@
+/* icons */
+
+[class^="ico-"],
+[class*=" ico-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon', monospace !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ico-spinner::before {
+  content: "\e97b";
+}
+
+.ico-settings::before {
+  content: "\e995";
+}
+
+.ico-plus::before {
+  content: "\ea0a";
+}
+
+.ico-minus::before {
+  content: "\ea0b";
+}
+
+.ico-check::before {
+  content: "\ea10";
+}
+
+.ico-bell::before {
+  content: "\e900";
+}
+
+.ico-locked::before {
+  content: "\e98f";
+}
+
+.ico-unlocked::before {
+  content: "\e990";
+}
+
+.ico-sleeping::before {
+  content: "\e901";
+}
+
+.ico-cross::before {
+  content: "\e902";
+}
+
+.ico-profile::before {
+  content: "\e903";
+}
+
+.ico-disconnected::before {
+  content: "\e904";
+}
+
+.ico-search::before {
+  content: "\e905";
+}
+
+.ico-expired::before {
+  content: "\e906";
+}
+
+.ico-info::before {
+  content: "\e907";
+}
+
+.ico-textfile::before {
+  content: "\e908";
+}
+
+.ico-open::before {
+  content: "\e909";
+}
+
+.ico-sync::before {
+  content: "\e90a";
+}
+
+.ico-target::before {
+  content: "\e90b";
+}
+
+.ico-arrowdown::before {
+  content: "\e90c";
+}

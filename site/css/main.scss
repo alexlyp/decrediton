@@ -1,0 +1,444 @@
+/* elements */
+html {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-font-smoothing: antialiased !important;
+  text-rendering: optimizeLegibility !important;
+  height: 100%;
+}
+
+html,
+button {
+  color: $font-color-light;
+}
+
+body {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #e0e0e0;
+  font-family: $sans;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+// bootstrap override
+.form-check-input {
+  margin-top: 0.4em;
+}
+
+// Hide number arrows.
+// Chrome, Safari, Edge, Opera
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+// Remove red background for firefox on empty number input fields.
+input:invalid {
+  box-shadow: none;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+header.maintop {
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background-color: white;
+  border-bottom: 1px solid #777;
+}
+
+a.logo {
+  display: block;
+  width: 145px;
+  height: 30px;
+  margin: 0 20px;
+  background-size: cover;
+  background-image: url('/img/logo_wide_v1.svg');
+  cursor: pointer;
+}
+
+div.main {
+  display: flex;
+  flex-grow: 1;
+  min-height: 0;
+  position: relative;
+}
+
+div.clear {
+  opacity: 0; // Set by animation upon initial loading.
+}
+
+button.selected {
+  background-color: #38cfb0;
+}
+
+button:focus {
+  outline: none;
+}
+
+.card {
+  width: 400px;
+  background-color: $light_bg_1;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  position: relative;
+
+  button {
+    padding: 6px 0;
+  }
+
+  input,
+  select {
+    background-color: $light_bg_2;
+  }
+
+  input:focus,
+  select:focus {
+    background-color: $light_bg_2;
+  }
+
+  form label {
+    font-size: 15px;
+    font-family: $demi-sans;
+  }
+}
+
+body.dark button {
+  color: #f2fffd;
+}
+
+.dynamicopts {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  & > div {
+    min-height: 55px;
+    margin-top: 10px;
+    width: 47%;
+  }
+}
+
+div.mainlinks > div,
+div.mainlinks > a {
+  padding-right: 1.7em;
+  color: #4a4949;
+  cursor: pointer;
+}
+
+.plainlink {
+  color: inherit;
+}
+
+header.maintop a,
+header.maintop a:visited,
+header.maintop a:hover,
+.plainlink,
+.plainlink:visited,
+.plainlink:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.subtlelink,
+.subtlelink:visited {
+  text-decoration: none;
+  color: #05053b;
+}
+
+.subtlelink:hover {
+  text-decoration: underline;
+  color: #07075e;
+  cursor: pointer;
+}
+
+div.mainlinks .hoverbright:hover {
+  color: $dark_bg_3;
+}
+
+form.card button:hover {
+  color: black;
+}
+
+div.spinner {
+  animation: spin 2s infinite linear;
+}
+
+// Firefox
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fill-abs {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.stylish-overflow {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #7774 #7771;
+
+  /* Works on Chrome/Edge/Safari */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #7771;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #7774;
+    border-radius: 4px;
+  }
+}
+
+.max-h-100 {
+  max-height: 100%;
+}
+
+div.note-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+
+  &.good {
+    background-color: #2d2e;
+  }
+
+  &.bad {
+    background-color: #d22e;
+  }
+
+  &.warn {
+    background-color: #f82e;
+  }
+}
+
+#noteIndicator {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  font-size: 16px;
+  line-height: 1;
+  font-family: $demi-sans;
+  z-index: 2;
+
+  &.good {
+    color: #2d2e;
+  }
+
+  &.bad {
+    color: #d22e;
+  }
+
+  &.warn {
+    color: #f82e;
+  }
+}
+
+div.popup-notes {
+  position: fixed;
+  right: 5px;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  border-radius: 4px;
+  z-index: 1000;
+  max-width: 750px;
+
+  & > span {
+    display: inline-block;
+    background-color: black;
+    color: $font-color-dark;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+    border-bottom: 1px solid #7777;
+    padding: 4px 10px;
+    line-height: 1;
+    margin: 3px 0 0;
+    max-width: 100%;
+  }
+
+  .note-indicator {
+    margin-bottom: 2px;
+  }
+}
+
+#noteBox,
+#profileBox {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: white;
+  border: 1px solid #7777;
+  z-index: 100;
+  font-family: $sans;
+  min-width: 150px;
+  line-height: 1.5;
+  max-height: 90%;
+
+  .icon {
+    position: absolute;
+    right: 15px;
+    top: 8px;
+  }
+
+  .header {
+    border-bottom: 1px solid #7777;
+
+    & > div {
+      margin-right: 20px;
+      opacity: 0.5;
+      cursor: pointer;
+
+      &.active {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+#noteBox {
+  width: 425px;
+
+  div.note.firstview {
+    background-color: #7772;
+  }
+
+  div.note:not(:last-child) {
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: #7777;
+  }
+}
+
+#profileBox {
+  min-width: 250px;
+  font-size: 15px;
+  padding: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.d-hide {
+  display: none !important;
+}
+
+.bg0 {
+  background-color: white;
+}
+
+.bg1 {
+  background-color: $light_bg_1;
+}
+
+.bg2 {
+  background-color: $light_bg_2;
+}
+
+.buycolor {
+  color: $buycolor_light;
+}
+
+.sellcolor {
+  color: $sellcolor_light;
+}
+
+.errcolor {
+  color: #e61c00;
+}
+
+hr.dashed {
+  border-top: 1px dashed #777;
+}
+
+.vscroll {
+  max-width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.hoverbg:hover {
+  background-color: #7775;
+}
+
+div.form-closer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 11px;
+  cursor: pointer;
+
+  span {
+    opacity: 0.8;
+  }
+}
+
+.micro-icon {
+  position: relative;
+  bottom: 2px;
+}
+
+#tooltip {
+  position: absolute;
+  left: -10000px;
+  z-index: 1000;
+  padding: 3px 6px;
+  background-color: #040012;
+  border: 1px solid #333;
+  color: white;
+  max-width: 500px;
+  font-size: 15px;
+}
+
+div.border1 {
+  border: 1px solid #aaa;
+}

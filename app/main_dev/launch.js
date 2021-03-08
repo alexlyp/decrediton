@@ -14,7 +14,6 @@ import {
   AddToDcrdLog,
   AddToDcrwalletLog,
   AddToDcrlndLog,
-  AddToDexcLog,
   GetDcrdLogs,
   GetDcrwalletLogs,
   lastErrorLine,
@@ -42,7 +41,7 @@ const argv = parseArgs(process.argv.slice(1), OPTIONS);
 const debug = argv.debug || process.env.NODE_ENV === "development";
 const logger = createLogger(debug);
 
-let dex;
+let dex = false;
 
 let dcrdPID, dcrwPID, dcrlndPID;
 
@@ -198,13 +197,13 @@ export const closeDcrlnd = () => {
 };
 
 export const closeDexc = () => {
-  logger.log("info", "closing dexc" + dex);
-  if (dex === null) {
+  logger.log("info", "closing dexc " + dex);
+  if (dex === false) {
     // process is not started by decrediton
     return true;
   }
   dexc.callDEX("shutdown", {});
-  dex = null;
+  dex = false;
   return true;
 };
 
@@ -820,39 +819,27 @@ export const launchDCRLnd = (
     testnet
   ) =>
     new Promise((resolve, reject) => {
-      if (dex !== null) {
+      if (!dex) {
         resolve();
       }
-      const dexcRoot = path.join(walletPath, "dexc");
-      const dbPath = path.join(dexcRoot, "db");
-      dex = dexc.callDEX("startCore", {
-          dbPath: dbPath,
-          net: !testnet ? Mainnet : Testnet
-      });
-
-      dex.on("error", function (err) {
-        reject(err);
-      });
-
-      dex.on("close", (code) => {
-        logger.log("info", `dexc exited with code ${code}`);
-      });
-
-      dex.stdout.on("data", (data) => {
-        AddToDexcLog(process.stdout, data, debug);
-        resolve(data.toString("utf-8"));
-      });
-
-      dex.stderr.on("data", (data) => {
-        AddToDexcLog(process.stderr, data, debug);
-        reject(data.toString("utf-8"));
-      });
-
-      dexcCreds = {
-        address: "localhost",
-        port: 5758
-      };
-      return resolve(dexcCreds);
+      try {
+        const dexcRoot = path.join(walletPath, "dexc");
+        const dbPath = path.join(dexcRoot, "db");
+        dexc.callDEX("startCore", {
+            dbPath: dbPath,
+            net: !testnet ? Mainnet : Testnet
+        });
+        dexcCreds = {
+          address: "localhost",
+          port: 5758
+        };
+        dexc.callDEX("startServer", `localhost:5758`);// dexcCreds.address + ":" + dexcCreds.host);
+        console.log(dexc.callDEX("IsInitialized", {}));
+        dex = true;
+        return resolve(dexcCreds);
+    } catch(error) {
+      return reject(error);
+    }
     });
 
 export const GetDcrwPort = () => dcrwPort;
