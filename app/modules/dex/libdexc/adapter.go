@@ -16,8 +16,6 @@ import (
 	"decred.org/dcrdex/dex"
 	"github.com/decred/slog"
 
-	"github.com/davecgh/go-spew/spew"
-
 	_ "decred.org/dcrdex/client/asset/btc" // register btc asset
 	_ "decred.org/dcrdex/client/asset/dcr" // register dcr asset
 	_ "decred.org/dcrdex/client/asset/ltc" // register ltc asset
@@ -117,12 +115,10 @@ func (c *CoreAdapter) startServer(raw json.RawMessage) (string, error) {
 	if !atomic.CompareAndSwapUint32(&c.serverRunning, 0, 1) {
 		return "", fmt.Errorf("already initialized")
 	}
-	spew.Dump(raw)
 	var webAddr string
 	if err := json.Unmarshal(raw, &webAddr); err != nil {
 		return "", err
 	}
-	spew.Dump(webAddr)
 	webSrv, err := webserver.New(c.core, webAddr, dex.StdOutLogger("SRVR", c.logLevel), false)
 	if err != nil {
 		return "", fmt.Errorf("Error creating web server: %v", err)
@@ -133,7 +129,6 @@ func (c *CoreAdapter) startServer(raw json.RawMessage) (string, error) {
 		return "", fmt.Errorf("Error starting web server: %v", err)
 	}
 	c.webServer = cm
-	spew.Dump(cm, err)
 	go func() {
 		defer atomic.StoreUint32(&c.serverRunning, 0)
 		cm.Wait()
