@@ -834,10 +834,25 @@ export const launchDCRLnd = (
           port: 5758
         };
         dexc.callDEX("startServer", `localhost:5758`);// dexcCreds.address + ":" + dexcCreds.host);
-        console.log(dexc.callDEX("IsInitialized", {}));
-        dex = true;
+        dex = dexc;
         return resolve(dexcCreds);
     } catch(error) {
+      return reject(error);
+    }
+  });
+
+  export const initCheckDexc = () =>
+    new Promise((resolve, reject) => {
+      if (!dex) {
+        resolve();
+      }
+      try {
+        const dexc = GetDexcPID();
+
+      const init = dexc.callDEX("IsInitialized", {})
+      return resolve(init);
+    } catch(error) {
+      console.log("launch error", error);
       return reject(error);
     }
     });

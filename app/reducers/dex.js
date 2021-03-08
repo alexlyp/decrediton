@@ -13,7 +13,10 @@ import {
   DEXC_REGISTER_FAILED,
   DEXC_LAUNCH_WINDOW_ATTEMPT,
   DEXC_LAUNCH_WINDOW_SUCCESS,
-  DEXC_LAUNCH_WINDOW_FAILED
+  DEXC_LAUNCH_WINDOW_FAILED,
+  DEXC_CHECKINIT_ATTEMPT,
+  DEXC_CHECKINIT_FAILED,
+  DEXC_CHECKINIT_SUCCESS
 } from "../actions/DexActions";
 
 export default function ln(state = {}, action) {
@@ -122,6 +125,26 @@ export default function ln(state = {}, action) {
         launchWindowAttempt: false,
         launchWindow: true,
         launchWinodwError: null
+      };
+    case DEXC_CHECKINIT_ATTEMPT:
+      return {
+        ...state,
+        dexcInitAttempt: true,
+        dexcInitError: null
+      };
+    case DEXC_CHECKINIT_FAILED:
+      return {
+        ...state,
+        dexcInitAttempt: false,
+        dexcInit: false,
+        dexcInitError: action.error
+      };
+    case DEXC_CHECKINIT_SUCCESS:
+      return {
+        ...state,
+        dexcInitAttempt: false,
+        dexcInit: action.res,
+        dexcInitError: null
       };
     default:
       return state;

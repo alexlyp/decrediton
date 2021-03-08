@@ -1,6 +1,10 @@
 import * as sel from "selectors";
 import { ipcRenderer } from "electron";
 import { getWalletPath } from "main_dev/paths";
+import {
+  addAllowedExternalRequest
+} from "./SettingsActions";
+import { EXTERNALREQUEST_DEXC } from "main_dev/externalRequests";
 
 export const DEXC_STARTUP_ATTEMPT = "DEXC_STARTUP_ATTEMPT";
 export const DEXC_STARTUP_FAILED = "DEXC_STARTUP_FAILED";
@@ -24,11 +28,31 @@ export const startDexc = () => (dispatch, getState) => {
       throw res;
     }
     dispatch({ type: DEXC_STARTUP_SUCCESS });
+    dispatch(dexcCheckInit());
   } catch (error) {
     dispatch({ type: DEXC_STARTUP_FAILED, error });
     return;
   }
 };
+
+export const DEXC_CHECKINIT_ATTEMPT = "DEXC_CHECKINIT_ATTEMPT";
+export const DEXC_CHECKINIT_FAILED = "DEXC_CHECKINIT_FAILED";
+export const DEXC_CHECKINIT_SUCCESS = "DEXC_CHECKINIT_SUCCESS";
+
+export const dexcCheckInit = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_CHECKINIT_ATTEMPT });
+  try {
+    const res = ipcRenderer.sendSync("check-init-dexc");
+    if (res instanceof Error) {
+      throw res;
+    }
+    dispatch({ type: DEXC_CHECKINIT_SUCCESS, res });
+  } catch (error) {
+    dispatch({ type: DEXC_CHECKINIT_FAILED, error });
+    return;
+  }
+}
+
 
 export const DEXC_STOPPED = "DEXC_STOPPED";
 
@@ -47,6 +71,7 @@ export const DEXC_INIT_FAILED = "DEXC_INIT_FAILED";
 
 export const initDexc = () => (dispatch, getState) => {
   dispatch({ type: DEXC_INIT_ATTEMPT });
+  dispatch(addAllowedExternalRequest(EXTERNALREQUEST_DEXC));
   if (!sel.dexActive(getState())) {
     dispatch({ type: DEXC_INIT_FAILED, error: "Dexc isn't active" });
     return;

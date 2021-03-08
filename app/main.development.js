@@ -63,7 +63,8 @@ import {
   lnScbInfo,
   updateTrezorFirmware,
   startDexc,
-  stopDexc
+  stopDexc,
+  checkInitDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,
@@ -369,6 +370,23 @@ ipcMain.on(
 ipcMain.on("stop-dcrlnd", async (event) => {
   event.returnValue = await stopDcrlnd();
 });
+
+ipcMain.on(
+  "check-init-dexc",
+ async (
+    event,
+  ) => {
+    try {
+      event.returnValue = await checkInitDexc();
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
 
 ipcMain.on(
   "start-dexc",
