@@ -1,8 +1,13 @@
-import { onInitDexc, initDexcAttempt } from "./hooks";
+import { useDex } from "./hooks";
 import { PassphraseModalButton } from "buttons";
 import { FormattedMessage as T } from "react-intl";
 
-const DexConnectPage = () => {
+const InitPage = () => {
+  const {
+    onInitDexc,
+    initDexcAttempt
+  } = useDex();
+
   return (
     <PassphraseModalButton
       disabled={initDexcAttempt}
@@ -16,4 +21,4 @@ const DexConnectPage = () => {
   );
 };
 
-export default DexConnectPage;
+export default InitPage;

@@ -16,6 +16,7 @@ import {
   launchDexc,
   initCheckDexc,
   initDexcCall,
+  registerDexcCall,
   GetDexcPID,
   closeDcrlnd,
   closeDexc,
@@ -319,6 +320,38 @@ export const initDexc = async (passphrase) => {
     return init;
   } catch (e) {
     logger.log("error", "error init dexc: " + e);
+    return e;
+  }
+};
+
+export const registerDexc = async (
+  passphrase,
+  appPassphrase,
+  account,
+  rpcuser,
+  rpcpass,
+  rpccert,
+  rpclisten) => {
+  if (!GetDexcPID()) {
+    logger.log(
+      "info",
+      "Skipping register since dexc is not runnning"
+    );
+    return false;
+  }
+
+  try {
+    const register = await registerDexcCall(
+      passphrase,
+      appPassphrase,
+      account,
+      rpcuser,
+      rpcpass,
+      rpccert,
+      rpclisten);
+    return register;
+  } catch (e) {
+    logger.log("error", "error register dexc: " + e);
     return e;
   }
 };

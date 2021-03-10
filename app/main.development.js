@@ -65,7 +65,8 @@ import {
   startDexc,
   stopDexc,
   checkInitDexc,
-  initDexc
+  initDexc,
+  registerDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,
@@ -397,6 +398,37 @@ ipcMain.on(
   ) => {
     try {
       event.returnValue = await initDexc(passphrase);
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on(
+  "register-dexc",
+ async (
+    event,
+    passphrase,
+    appPassphrase,
+    account,
+    rpcuser,
+    rpcpass,
+    rpccert,
+    rpclisten
+  ) => {
+    try {
+      event.returnValue = await registerDexc(
+        passphrase,
+        appPassphrase,
+        account,
+        rpcuser,
+        rpcpass,
+        rpccert,
+        rpclisten);
     } catch (error) {
       if (!(error instanceof Error)) {
         event.returnValue = new Error(error);

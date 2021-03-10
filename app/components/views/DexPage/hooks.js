@@ -8,9 +8,15 @@ export const useDex = () => {
   const dexcActive = useSelector(sel.dexcActive);
   const dexcInit = useSelector(sel.dexcInit);
   const initDexcAttempt = useSelector(sel.initDexcAttempt);
+  const registerDexcAttempt = useSelector(sel.registerDexcAttempt);
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
+    [dispatch]
+  );
+
+  const onRegisterDexc = useCallback(
+    (passphrase) => dispatch(da.registerDexc(passphrase)),
     [dispatch]
   );
 
@@ -18,6 +24,8 @@ export const useDex = () => {
     dexcActive,
     dexcInit,
     onInitDexc,
-    initDexcAttempt
+    initDexcAttempt,
+    onRegisterDexc,
+    registerDexcAttempt
   };
 };

@@ -850,6 +850,7 @@ export const launchDCRLnd = (
       const dexc = GetDexcPID();
 
       const init = dexc.callDEX("IsInitialized", {})
+      console.log(init);
       return resolve(init);
     } catch(error) {
       console.log("check init error", error);
@@ -864,14 +865,35 @@ export const launchDCRLnd = (
         }
         try {
         const dexc = GetDexcPID();
-  
-        const init = dexc.callDEX("Init", {})
+        const init = dexc.callDEX("Init", {pass: passphrase})
         return resolve(init);
       } catch(error) {
         console.log("init error", error);
         return reject(error);
       }
       });
+
+  export const registerDexcCall = (
+    passphrase,
+    appPassphrase,
+    account,
+    rpcuser,
+    rpcpass,
+    rpccert,
+    rpclisten) =>
+    new Promise((resolve, reject) => {
+      if (!dex) {
+        resolve();
+      }
+      try {
+        const dexc = GetDexcPID();
+        const init = dexc.callDEX("Register", { pass: passphrase, appPw: appPassphrase, account, rpcuser, rpcpass, rpccert, rpclisten })
+        return resolve(init);
+      } catch(error) {
+        console.log("register error", error);
+        return reject(error);
+      }
+    });
 
 export const GetDcrwPort = () => dcrwPort;
 

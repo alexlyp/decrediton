@@ -1,5 +1,6 @@
-import DexConnectPage from "./ConnectPage";
-import DexView from "./DexView";
+import InitPage from "./InitPage";
+import RegisterPage from "./RegisterPage";
+//import DexView from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage } from "layout";
 
@@ -10,9 +11,9 @@ const DexPage = () => {
   return (
     <StandalonePage>
       {dexcActive && dexcInit ? 
-        <DexView/> : (
+        <RegisterPage/> : (
           dexcActive ?
-          <DexConnectPage/> :
+          <InitPage/> :
           dfasdfsdf
         )
       }
