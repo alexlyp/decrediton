@@ -1,5 +1,6 @@
 import { useDex } from "./hooks";
 import { PassphraseModalButton } from "buttons";
+import { StandalonePage } from "layout";
 import { FormattedMessage as T } from "react-intl";
 
 const InitPage = () => {
@@ -9,15 +10,17 @@ const InitPage = () => {
   } = useDex();
 
   return (
-    <PassphraseModalButton
-      disabled={initDexcAttempt}
-      modalTitle={
-        <T id="dex.initPassphrase" m="Set new Dexc app passphrase" />
-      }
-      loading={initDexcAttempt}
-      onSubmit={onInitDexc}
-      buttonLabel={<T id="dex.initPassphraseButton" m="Init Dexc" />}
-    />
+    <StandalonePage>
+      <PassphraseModalButton
+        disabled={initDexcAttempt}
+        modalTitle={
+          <T id="dex.initPassphrase" m="Set new Dexc app passphrase" />
+        }
+        loading={initDexcAttempt}
+        onSubmit={onInitDexc}
+        buttonLabel={<T id="dex.initPassphraseButton" m="Init Dexc" />}
+      />
+    </StandalonePage>
   );
 };
 

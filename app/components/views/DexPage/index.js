@@ -1,5 +1,5 @@
 import InitPage from "./InitPage";
-//import RegisterPage from "./RegisterPage";
+import RegisterPage from "./RegisterPage";
 //import DexView from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage } from "layout";
@@ -8,19 +8,28 @@ import LoginPage from "./LoginPage";
 
 
 const DexPage = () => {
-  const { dexcActive, dexcInit } = useDex();
-  console.log(dexcActive, dexcInit);
-  return (
-    <StandalonePage>
-      {dexcActive && dexcInit ? 
-        <LoginPage/> : (
-          dexcActive ?
-          <InitPage/> :
-          dfasdfsdf
-        )
+  const { 
+    dexcActive,
+    dexcInit,
+    loggedIn
+  } = useDex();
+  if (dexcActive) {
+    if (dexcInit) {
+      if (!loggedIn) {
+        return <LoginPage/>;
+      } else {
+        // Some wallet created check?
+        return <CreateWalletPage/>;
+        // else RegisterPage
       }
+    } else {
+      return <InitPage/>;
+    }
+  } else {
+    <StandalonePage>
+      ERROR! DEXC NOT RUNNING
     </StandalonePage>
-  );
+  }
 };
 
 export default DexPage;

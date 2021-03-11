@@ -1,14 +1,18 @@
 import { useDex } from "./hooks";
 import { PassphraseModalButton } from "buttons";
+import { StandalonePage } from "layout";
 import { FormattedMessage as T } from "react-intl";
 
 const CreateWalletPage = () => {
   const {
     onCreateWalletDexc,
-    createWalletDexcAttempt
+    createWalletDexcAttempt,
+    user
   } = useDex();
 
   return (
+    <StandalonePage>
+    {user}
     <PassphraseModalButton
       disabled={createWalletDexcAttempt}
       modalTitle={
@@ -18,6 +22,7 @@ const CreateWalletPage = () => {
       onSubmit={onCreateWalletDexc}
       buttonLabel={<T id="dex.initPassphraseButton" m="CreateWallet" />}
     />
+    </StandalonePage>
   );
 };
 
