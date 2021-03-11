@@ -9,6 +9,9 @@ export const useDex = () => {
   const dexcInit = useSelector(sel.dexcInit);
   const initDexcAttempt = useSelector(sel.initDexcAttempt);
   const registerDexcAttempt = useSelector(sel.registerDexcAttempt);
+  const createWalletDexcAttempt = useSelector(sel.createWalletDexcAttempt);
+  const loginDexcAttempt = useSelector(sel.loginDexcAttempt);
+  const user = useSelector(sel.dexcUser);
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
@@ -20,12 +23,27 @@ export const useDex = () => {
     [dispatch]
   );
 
+  const onCreateWalletDexc = useCallback(
+    (passphrase) => dispatch(da.createWalletDexc(passphrase)),
+    [dispatch]
+  );
+
+  const onLoginDexc = useCallback(
+    (passphrase) => dispatch(da.loginDexc(passphrase)),
+    [dispatch]
+  );
+
   return {
     dexcActive,
     dexcInit,
     onInitDexc,
     initDexcAttempt,
     onRegisterDexc,
-    registerDexcAttempt
+    registerDexcAttempt,
+    onCreateWalletDexc,
+    createWalletDexcAttempt,
+    onLoginDexc,
+    loginDexcAttempt,
+    user
   };
 };

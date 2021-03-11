@@ -1,8 +1,10 @@
 import InitPage from "./InitPage";
-import RegisterPage from "./RegisterPage";
+//import RegisterPage from "./RegisterPage";
 //import DexView from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage } from "layout";
+import CreateWalletPage from "./CreateWalletPage";
+import LoginPage from "./LoginPage";
 
 
 const DexPage = () => {
@@ -11,7 +13,7 @@ const DexPage = () => {
   return (
     <StandalonePage>
       {dexcActive && dexcInit ? 
-        <RegisterPage/> : (
+        <LoginPage/> : (
           dexcActive ?
           <InitPage/> :
           dfasdfsdf

@@ -99,14 +99,90 @@ export const DEXC_LOGIN_ATTEMPT = "DEXC_LOGIN_ATTEMPT";
 export const DEXC_LOGIN_SUCCESS = "DEXC_LOGIN_SUCCESS";
 export const DEXC_LOGIN_FAILED = "DEXC_LOGIN_FAILED";
 
-export const loginDexc = () => (dispatch, getState) => {
+export const loginDexc = (passphrase) => (dispatch, getState) => {
   dispatch({ type: DEXC_LOGIN_ATTEMPT });
   if (!sel.dexcActive(getState())) {
     dispatch({ type: DEXC_LOGIN_FAILED, error: "Dexc isn't active" });
     return;
   }
+  try {
+    console.log("action", passphrase);
+    const res = ipcRenderer.sendSync("login-dexc",
+      passphrase
+    );
+    if (res instanceof Error) {
+      throw res;
+    }
+    dispatch({ type: DEXC_LOGIN_SUCCESS });
+    // Request current user information
+    dispatch(userDexc());
+  } catch (error) {
+    dispatch({ type: DEXC_LOGIN_FAILED, error });
+    return;
+  }
+};
 
-  dispatch({ type: DEXC_LOGIN_SUCCESS });
+export const DEXC_CREATEWALLET_ATTEMPT = "DEXC_CREATEWALLET_ATTEMPT";
+export const DEXC_CREATEWALLET_SUCCESS = "DEXC_CREATEWALLET_SUCCESS";
+export const DEXC_CREATEWALLET_FAILED = "DEXC_CREATEWALLET_FAILED";
+
+export const createWalletDexc = (passphrase) => (dispatch, getState) => {
+  dispatch({ type: DEXC_CREATEWALLET_ATTEMPT });
+  if (!sel.dexcActive(getState())) {
+    dispatch({ type: DEXC_CREATEWALLET_FAILED, error: "Dexc isn't active" });
+    return;
+  }
+  try {
+    const appPassphrase = "p1";
+    const account = "dex";
+    const rpcuser = "user";
+    const rpcpass= "password";
+    const rpccert = "/home/user/.config/decrediton/wallets/testnet/split tx/rpc.cert";
+    const rpclisten = "127.0.0.1:19110";
+    const res = ipcRenderer.sendSync("create-wallet-dexc",
+      passphrase,
+      appPassphrase,
+      account,
+      rpcuser,
+      rpcpass,
+      rpccert,
+      rpclisten
+    );
+    if (res instanceof Error) {
+      throw res;
+    }  
+    dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
+  } catch (error) {
+    dispatch({ type: DEXC_CREATEWALLET_FAILED, error });
+    return;
+  }
+
+  dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
+};
+
+export const DEXC_USER_ATTEMPT = "DEXC_USER_ATTEMPT";
+export const DEXC_USER_SUCCESS = "DEXC_USER_SUCCESS";
+export const DEXC_USER_FAILED = "DEXC_USER_FAILED";
+
+export const userDexc = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_USER_ATTEMPT });
+  if (!sel.dexcActive(getState())) {
+    dispatch({ type: DEXC_USER_FAILED, error: "Dexc isn't active" });
+    return;
+  }
+  try {
+    const res = ipcRenderer.sendSync("user-dexc");
+    if (res instanceof Error) {
+      throw res;
+    } 
+    console.log(res);
+    dispatch({ type: DEXC_USER_SUCCESS, user: res });
+  } catch (error) {
+    dispatch({ type: DEXC_USER_FAILED, error });
+    return;
+  }
+
+  dispatch({ type: DEXC_USER_SUCCESS });
 };
 
 export const DEXC_REGISTER_ATTEMPT = "DEXC_REGISTER_ATTEMPT";
@@ -120,21 +196,7 @@ export const registerDexc = (passphrase) => (dispatch, getState) => {
     return;
   }
   try {
-
-    const appPassphrase = "p1";
-    const account = "dex";
-    const rpcuser = "user";
-    const rpcpass= "password";
-    const rpccert = "/home/user/.config/decrediton/wallets/testnet/split tx/rpc.cert";
-    const rpclisten = "127.0.0.1:19110";
     const res = ipcRenderer.sendSync("register-dexc",
-      passphrase,
-      appPassphrase,
-      account,
-      rpcuser,
-      rpcpass,
-      rpccert,
-      rpclisten
     );
     if (res instanceof Error) {
       throw res;
@@ -144,7 +206,6 @@ export const registerDexc = (passphrase) => (dispatch, getState) => {
     dispatch({ type: DEXC_REGISTER_FAILED, error });
     return;
   }
-
   dispatch({ type: DEXC_REGISTER_SUCCESS });
 };
 

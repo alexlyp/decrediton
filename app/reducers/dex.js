@@ -16,7 +16,13 @@ import {
   DEXC_LAUNCH_WINDOW_FAILED,
   DEXC_CHECKINIT_ATTEMPT,
   DEXC_CHECKINIT_FAILED,
-  DEXC_CHECKINIT_SUCCESS
+  DEXC_CHECKINIT_SUCCESS,
+  DEXC_USER_ATTEMPT,
+  DEXC_USER_FAILED,
+  DEXC_USER_SUCCESS,
+  DEXC_CREATEWALLET_ATTEMPT,
+  DEXC_CREATEWALLET_FAILED,
+  DEXC_CREATEWALLET_SUCCESS
 } from "../actions/DexActions";
 
 export default function ln(state = {}, action) {
@@ -83,6 +89,44 @@ export default function ln(state = {}, action) {
         registerAttempt: false,
         registered: true,
         registerError: null
+      };
+    case DEXC_CREATEWALLET_ATTEMPT:
+      return {
+        ...state,
+        createWalletAttempt: true,
+        createWalletError: null
+      };
+    case DEXC_CREATEWALLET_FAILED:
+      return {
+        ...state,
+        createWalletAttempt: false,
+        createWalletError: action.error
+      };
+    case DEXC_CREATEWALLET_SUCCESS:
+      return {
+        ...state,
+        createWalletAttempt: false,
+        createWalletError: null
+      };
+    case DEXC_USER_ATTEMPT:
+      return {
+        ...state,
+        userAttempt: true,
+        user: null,
+        userError: null
+      };
+    case DEXC_USER_FAILED:
+      return {
+        ...state,
+        userAttempt: false,
+        userError: action.error
+      };
+    case DEXC_USER_SUCCESS:
+      return {
+        ...state,
+        userAttempt: false,
+        user: action.user,
+        userError: null
       };
     case DEXC_INIT_ATTEMPT:
       return {

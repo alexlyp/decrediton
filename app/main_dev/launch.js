@@ -850,7 +850,6 @@ export const launchDCRLnd = (
       const dexc = GetDexcPID();
 
       const init = dexc.callDEX("IsInitialized", {})
-      console.log(init);
       return resolve(init);
     } catch(error) {
       console.log("check init error", error);
@@ -859,11 +858,11 @@ export const launchDCRLnd = (
     });
 
   export const initDexcCall = (passphrase) =>
-      new Promise((resolve, reject) => {
-        if (!dex) {
-          resolve();
-        }
-        try {
+    new Promise((resolve, reject) => {
+      if (!dex) {
+        resolve();
+      }
+      try {
         const dexc = GetDexcPID();
         const init = dexc.callDEX("Init", {pass: passphrase})
         return resolve(init);
@@ -871,9 +870,25 @@ export const launchDCRLnd = (
         console.log("init error", error);
         return reject(error);
       }
-      });
+    });
 
-  export const registerDexcCall = (
+  export const loginDexcCall = (passphrase) =>
+    new Promise((resolve, reject) => {
+      if (!dex) {
+        resolve();
+      }
+      try {
+        const dexc = GetDexcPID();
+        console.log("launch", passphrase);
+        const login = dexc.callDEX("Login", {pass: passphrase})
+        return resolve(login);
+      } catch(error) {
+        console.log("login error", error);
+        return reject(error);
+      }
+    });
+  
+  export const createWalletDexcCall = (
     passphrase,
     appPassphrase,
     account,
@@ -887,13 +902,29 @@ export const launchDCRLnd = (
       }
       try {
         const dexc = GetDexcPID();
-        const init = dexc.callDEX("Register", { pass: passphrase, appPw: appPassphrase, account, rpcuser, rpcpass, rpccert, rpclisten })
+        const init = dexc.callDEX("CreateWallet", { pass: passphrase, appPw: appPassphrase, account, rpcuser, rpcpass, rpccert, rpclisten })
         return resolve(init);
       } catch(error) {
         console.log("register error", error);
         return reject(error);
       }
     });
+
+  export const userDexcCall = () =>
+    new Promise((resolve, reject) => {
+      if (!dex) {
+        resolve();
+      }
+      try {
+      const dexc = GetDexcPID();
+
+      const user = dexc.callDEX("User", {})
+      return resolve(user);
+    } catch(error) {
+      console.log("dex user error", error);
+      return reject(error);
+    }
+  });
 
 export const GetDcrwPort = () => dcrwPort;
 

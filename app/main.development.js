@@ -66,7 +66,9 @@ import {
   stopDexc,
   checkInitDexc,
   initDexc,
-  registerDexc
+  createWalletDexc,
+  userDexc,
+  loginDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,
@@ -409,7 +411,26 @@ ipcMain.on(
 );
 
 ipcMain.on(
-  "register-dexc",
+  "login-dexc",
+ async (
+    event,
+    passphrase
+  ) => {
+    try {
+      console.log("main", passphrase);
+      event.returnValue = await loginDexc(passphrase);
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on(
+  "create-wallet-dexc",
  async (
     event,
     passphrase,
@@ -421,7 +442,7 @@ ipcMain.on(
     rpclisten
   ) => {
     try {
-      event.returnValue = await registerDexc(
+      event.returnValue = await createWalletDexc(
         passphrase,
         appPassphrase,
         account,
@@ -429,6 +450,23 @@ ipcMain.on(
         rpcpass,
         rpccert,
         rpclisten);
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on(
+  "user-dexc",
+ async (
+    event,
+  ) => {
+    try {
+      event.returnValue = await userDexc();
     } catch (error) {
       if (!(error instanceof Error)) {
         event.returnValue = new Error(error);
@@ -448,8 +486,8 @@ ipcMain.on(
   ) => {
     try {
       event.returnValue = await startDexc(
-                walletPath,
-                testnet
+          walletPath,
+          testnet
       );
     } catch (error) {
       if (!(error instanceof Error)) {

@@ -1785,3 +1785,6 @@ export const dexcInit = bool(get(["dex", "dexcInit"]));
 export const initDexcAttempt =  bool(get(["dex", "initAttempt"]));
 export const checkInitDexcAttempt =  bool(get(["dex", "dexcCheckInitAttempt"]));
 export const registerDexcAttempt =  bool(get(["dex", "registerAttempt"]));
+export const createWalletDexcAttempt =  bool(get(["dex", "createWalletAttempt"]));
+export const loginDexcAttempt =  bool(get(["dex", "loginAttempt"]));
+export const dexcUser = get(["dex", "user"]);

@@ -16,7 +16,9 @@ import {
   launchDexc,
   initCheckDexc,
   initDexcCall,
-  registerDexcCall,
+  createWalletDexcCall,
+  userDexcCall,
+  loginDexcCall,
   GetDexcPID,
   closeDcrlnd,
   closeDexc,
@@ -324,7 +326,26 @@ export const initDexc = async (passphrase) => {
   }
 };
 
-export const registerDexc = async (
+export const loginDexc = async (passphrase) => {
+  if (!GetDexcPID()) {
+    logger.log(
+      "info",
+      "Skipping login since dexc is not runnning"
+    );
+    return false;
+  }
+
+  try {
+    console.log("ipc", passphrase);
+    const login = await loginDexcCall(passphrase);
+    return login;
+  } catch (e) {
+    logger.log("error", "error init dexc: " + e);
+    return e;
+  }
+};
+
+export const createWalletDexc = async (
   passphrase,
   appPassphrase,
   account,
@@ -335,13 +356,13 @@ export const registerDexc = async (
   if (!GetDexcPID()) {
     logger.log(
       "info",
-      "Skipping register since dexc is not runnning"
+      "Skipping create wallet since dexc is not runnning"
     );
     return false;
   }
 
   try {
-    const register = await registerDexcCall(
+    const createWallet = await createWalletDexcCall(
       passphrase,
       appPassphrase,
       account,
@@ -349,9 +370,28 @@ export const registerDexc = async (
       rpcpass,
       rpccert,
       rpclisten);
-    return register;
+    return createWallet;
   } catch (e) {
-    logger.log("error", "error register dexc: " + e);
+    logger.log("error", "error create wallet dexc: " + e);
+    return e;
+  }
+};
+
+
+export const userDexc = async () => {
+  if (!GetDexcPID()) {
+    logger.log(
+      "info",
+      "Skipping user request since dexc is not runnning"
+    );
+    return false;
+  }
+
+  try {
+    const user = await userDexcCall();
+    return user;
+  } catch (e) {
+    logger.log("error", "error user dexc: " + e);
     return e;
   }
 };
