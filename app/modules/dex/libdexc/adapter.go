@@ -69,6 +69,7 @@ func NewCoreAdapter() *CoreAdapter {
 		"CreateWallet": c.createWallet,
 		"User":         c.user,
 		"Register":     c.register,
+		"Login":        c.login,
 	}
 
 	return c
@@ -217,4 +218,15 @@ func (c *CoreAdapter) register(raw json.RawMessage) (string, error) {
 	}
 
 	return replyWithErrorCheck(c.core.Register(form))
+}
+
+func (c *CoreAdapter) login(raw json.RawMessage) (string, error) {
+	form := new(struct {
+		Pass string `json:"pass"`
+	})
+	if err := json.Unmarshal(raw, form); err != nil {
+		return "", err
+	}
+
+	return replyWithErrorCheck(c.core.Login([]byte(form.Pass)))
 }
