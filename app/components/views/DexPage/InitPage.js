@@ -1,9 +1,11 @@
 import { useDex } from "./hooks";
 import { PassphraseModalButton } from "buttons";
-import { StandalonePage } from "layout";
+import { StandaloneHeader } from "layout";
 import { FormattedMessage as T } from "react-intl";
+import { LN_ICON } from "constants";
+import "style/ConnectPage.css";
 
-const InitPage = () => {
+export const InitPageContent = () => {
   const {
     onInitDexc,
     initDexcAttempt
@@ -24,4 +26,15 @@ const InitPage = () => {
   );
 };
 
-export default InitPage;
+export const InitPageHeader = () => (
+  <StandaloneHeader
+    title={<T id="dex.initPage.title" m="Set DEX App Password" />}
+    description={
+      <T
+        id="dex.initPage.description"
+        m={"You must create a new passphrase that will be used to log into the DEX for this wallet."}
+      />
+    }
+    iconType={LN_ICON}
+  />
+);

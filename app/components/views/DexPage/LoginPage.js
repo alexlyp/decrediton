@@ -1,16 +1,17 @@
 import { useDex } from "./hooks";
 import { PassphraseModalButton } from "buttons";
-import { StandalonePage } from "layout";
+import { StandaloneHeader } from "layout";
 import { FormattedMessage as T } from "react-intl";
+import { LN_ICON } from "constants";
+import "style/ConnectPage.css";
 
-const LoginPage = () => {
+export const LoginPageContent = () => {
   const {
     onLoginDexc,
     loginAttempt
   } = useDex();
 
   return (
-    <StandalonePage>
       <PassphraseModalButton
         disabled={loginAttempt}
         modalTitle={
@@ -20,8 +21,18 @@ const LoginPage = () => {
         onSubmit={onLoginDexc}
         buttonLabel={<T id="dex.initPassphraseButton" m="Login" />}
       />
-    </StandalonePage>
   );
 };
 
-export default LoginPage;
+export const LoginPageHeader = () => (
+    <StandaloneHeader
+      title={<T id="dex.loginPage.title" m="DEX Login" />}
+      description={
+        <T
+          id="dex.loginPage.description"
+          m={"Login and connect wallet to Dex"}
+        />
+      }
+      iconType={LN_ICON}
+    />
+);
