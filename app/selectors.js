@@ -1789,3 +1789,5 @@ export const createWalletDexcAttempt =  bool(get(["dex", "createWalletAttempt"])
 export const loginDexcAttempt =  bool(get(["dex", "loginAttempt"]));
 export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 export const dexcUser = get(["dex", "user"]);
+export const dexcAddr = get(["dex", "addr"]);
+export const dexcFee = get(["dex", "fee"]);

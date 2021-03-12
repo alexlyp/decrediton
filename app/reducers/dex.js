@@ -22,7 +22,10 @@ import {
   DEXC_USER_SUCCESS,
   DEXC_CREATEWALLET_ATTEMPT,
   DEXC_CREATEWALLET_FAILED,
-  DEXC_CREATEWALLET_SUCCESS
+  DEXC_CREATEWALLET_SUCCESS,
+  DEXC_GETFEE_ATTEMPT,
+  DEXC_GETFEE_FAILED,
+  DEXC_GETFEE_SUCCESS
 } from "../actions/DexActions";
 
 export default function ln(state = {}, action) {
@@ -186,6 +189,30 @@ export default function ln(state = {}, action) {
         dexcCheckInitAttempt: false,
         dexcInit: action.res,
         dexcInitError: null
+      };
+    case DEXC_GETFEE_ATTEMPT:
+      return {
+        ...state,
+        getFeeAttempt: true,
+        fee: null,
+        addr: null,
+        getFeeError: null
+      };
+    case DEXC_GETFEE_FAILED:
+      return {
+        ...state,
+        getFeeAttempt: false,
+        fee: null,
+        addr: null,
+        getFeeError: action.error
+      };
+    case DEXC_GETFEE_SUCCESS:
+      return {
+        ...state,
+        getFeeAttempt: false,
+        fee: action.fee,
+        addr: action.addr,
+        getFeeError: null
       };
     default:
       return state;

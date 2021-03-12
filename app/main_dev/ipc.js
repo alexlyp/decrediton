@@ -17,6 +17,8 @@ import {
   initCheckDexc,
   initDexcCall,
   createWalletDexcCall,
+  getFeeDexcCall,
+  registerDexcCall,
   userDexcCall,
   loginDexcCall,
   GetDexcPID,
@@ -376,6 +378,41 @@ export const createWalletDexc = async (
   }
 };
 
+export const getFeeDexc = async (addr) => {
+  if (!GetDexcPID()) {
+    logger.log(
+      "info",
+      "Skipping getfee since dexc is not runnning"
+    );
+    return false;
+  }
+
+  try {
+    const getFee = await getFeeDexcCall(addr);
+    return getFee;
+  } catch (e) {
+    logger.log("error", "error get fee dexc: " + e);
+    return e;
+  }
+};
+
+export const registerDexc = async (passphrase, addr, fee) => {
+  if (!GetDexcPID()) {
+    logger.log(
+      "info",
+      "Skipping register since dexc is not runnning"
+    );
+    return false;
+  }
+
+  try {
+    const register = await registerDexcCall(passphrase, addr, fee);
+    return register;
+  } catch (e) {
+    logger.log("error", "error register dexc: " + e);
+    return e;
+  }
+};
 
 export const userDexc = async () => {
   if (!GetDexcPID()) {

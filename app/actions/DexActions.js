@@ -86,6 +86,10 @@ export const initDexc = (passphrase) => (dispatch, getState) => {
     );
     if (res instanceof Error) {
       throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
     }  
     dispatch({ type: DEXC_INIT_SUCCESS });
     dispatch({ type: dexcCheckInit() });
@@ -119,6 +123,7 @@ export const loginDexc = (passphrase) => (dispatch, getState) => {
     dispatch({ type: DEXC_LOGIN_SUCCESS });
     // Request current user information
     dispatch(userDexc());
+    dispatch(getFeeDexc());
   } catch (error) {
     dispatch({ type: DEXC_LOGIN_FAILED, error });
     return;
@@ -162,7 +167,6 @@ export const createWalletDexc = (passphrase) => (dispatch, getState) => {
         throw res
       }
     }
-    console.log(res);
     dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
   } catch (error) {
     dispatch({ type: DEXC_CREATEWALLET_FAILED, error });
@@ -184,15 +188,45 @@ export const userDexc = () => (dispatch, getState) => {
     const res = ipcRenderer.sendSync("user-dexc");
     if (res instanceof Error) {
       throw res;
-    } 
-    console.log(res);
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
+    }
     dispatch({ type: DEXC_USER_SUCCESS, user: res });
   } catch (error) {
     dispatch({ type: DEXC_USER_FAILED, error });
     return;
   }
+};
 
-  dispatch({ type: DEXC_USER_SUCCESS });
+export const DEXC_GETFEE_ATTEMPT = "DEXC_GETFEE_ATTEMPT";
+export const DEXC_GETFEE_SUCCESS = "DEXC_GETFEE_SUCCESS";
+export const DEXC_GETFEE_FAILED = "DEXC_GETFEE_FAILED";
+
+export const getFeeDexc = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_GETFEE_ATTEMPT });
+  if (!sel.dexcActive(getState())) {
+    dispatch({ type: DEXC_GETFEE_FAILED, error: "Dexc isn't active" });
+    return;
+  }
+  try {
+    const addr = "dex-test.ssgen.io:7232"
+    const res = ipcRenderer.sendSync("get-fee-dexc",
+      addr
+    );
+    if (res instanceof Error) {
+      throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
+    }
+    dispatch({ type: DEXC_GETFEE_SUCCESS, fee: res, addr });
+  } catch (error) {
+    dispatch({ type: DEXC_GETFEE_FAILED, error });
+    return;
+  }
 };
 
 export const DEXC_REGISTER_ATTEMPT = "DEXC_REGISTER_ATTEMPT";
@@ -205,18 +239,27 @@ export const registerDexc = (passphrase) => (dispatch, getState) => {
     dispatch({ type: DEXC_REGISTER_FAILED, error: "Dexc isn't active" });
     return;
   }
+  const {
+    dex: { fee, addr }
+  } = getState();
   try {
     const res = ipcRenderer.sendSync("register-dexc",
+      passphrase,
+      addr,
+      fee
     );
     if (res instanceof Error) {
       throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
     }  
     dispatch({ type: DEXC_REGISTER_SUCCESS });
   } catch (error) {
     dispatch({ type: DEXC_REGISTER_FAILED, error });
     return;
   }
-  dispatch({ type: DEXC_REGISTER_SUCCESS });
 };
 
 export const DEXC_LAUNCH_WINDOW_ATTEMPT = "DEXC_LAUNCH_WINDOW_ATTEMPT";

@@ -1,4 +1,4 @@
-import { useSelector, useDispatch  } from "react-redux";
+import { useSelector, useDispatch, useStore  } from "react-redux";
 import { useCallback } from "react";
 import * as sel from "selectors";
 import * as da from "actions/DexActions";
@@ -13,6 +13,8 @@ export const useDex = () => {
   const loginDexcAttempt = useSelector(sel.loginDexcAttempt);
   const user = useSelector(sel.dexcUser);
   const loggedIn = useSelector(sel.loggedInDexc);
+  const dexcAddr = useSelector(sel.dexcAddr);
+  const dexcFee = useSelector(sel.dexcFee);
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
@@ -46,6 +48,8 @@ export const useDex = () => {
     onLoginDexc,
     loginDexcAttempt,
     user,
-    loggedIn
+    loggedIn,
+    dexcAddr,
+    dexcFee
   };
 };

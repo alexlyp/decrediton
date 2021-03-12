@@ -68,7 +68,9 @@ import {
   initDexc,
   createWalletDexc,
   userDexc,
-  loginDexc
+  loginDexc,
+  getFeeDexc,
+  registerDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,
@@ -450,6 +452,44 @@ ipcMain.on(
         rpclisten,
         walletPath
       );
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on(
+  "get-fee-dexc",
+ async (
+    event,
+    addr
+  ) => {
+    try {
+      event.returnValue = await getFeeDexc(addr);
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
+    }
+  }
+);
+
+ipcMain.on(
+  "register-dexc",
+ async (
+    event,
+    passphrase,
+    addr,
+    fee
+  ) => {
+    try {
+      event.returnValue = await registerDexc(passphrase, addr, fee);
     } catch (error) {
       if (!(error instanceof Error)) {
         event.returnValue = new Error(error);

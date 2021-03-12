@@ -1,5 +1,5 @@
 
-import RegisterPage from "./RegisterPage";
+import { RegisterPageContent, RegisterPageHeader } from "./RegisterPage";
 //import DexView from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage, StandaloneHeader } from "layout";
@@ -13,7 +13,9 @@ const DexPage = () => {
   const { 
     dexcActive,
     dexcInit,
-    loggedIn
+    loggedIn,
+    dexcAddr,
+    dexcFee
   } = useDex();
   if (dexcActive) {
     if (dexcInit) {
@@ -21,10 +23,13 @@ const DexPage = () => {
         Page = <LoginPageContent />;
         Header = <LoginPageHeader />;
       } else {
-        // Some wallet created check?
-        Page = <CreateWalletPageContent />;
-        Header = <CreateWalletPageHeader />;
-        // else RegisterPage
+        if (dexcAddr && dexcFee) {
+          Page = <RegisterPageContent/>;
+          Header = <RegisterPageHeader />;
+        } else {
+          Page = <CreateWalletPageContent />;
+          Header = <CreateWalletPageHeader />;
+        }
       }
     } else {
       Page = <InitPageContent />;

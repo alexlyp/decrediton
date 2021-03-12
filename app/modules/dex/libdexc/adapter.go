@@ -71,6 +71,7 @@ func NewCoreAdapter() *CoreAdapter {
 		"User":         c.user,
 		"Register":     c.register,
 		"Login":        c.login,
+		"GetFee":       c.getFee,
 	}
 
 	return c
@@ -218,7 +219,7 @@ func (c *CoreAdapter) register(raw json.RawMessage) (string, error) {
 	if err := json.Unmarshal(raw, form); err != nil {
 		return "", err
 	}
-
+	spew.Dump(form)
 	return replyWithErrorCheck(c.core.Register(form))
 }
 

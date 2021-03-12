@@ -912,6 +912,36 @@ export const launchDCRLnd = (
         const init = dexc.callDEX("CreateWallet", { pass: passphrase, appPass: appPassphrase, config, assetID: 42 })
         return resolve(init);
       } catch(error) {
+        console.log("create wallet error", error);
+        return reject(error);
+      }
+    });
+
+  export const getFeeDexcCall = (addr) =>
+      new Promise((resolve, reject) => {
+        if (!dex) {
+          resolve();
+        }
+        try {
+          const dexc = GetDexcPID();
+          const getfee = dexc.callDEX("GetFee", { addr })
+          return resolve(getfee);
+        } catch(error) {
+          console.log("getfee error", error);
+          return reject(error);
+        }
+    });
+    
+  export const registerDexcCall = (passphrase, addr, fee) =>
+    new Promise((resolve, reject) => {
+      if (!dex) {
+        resolve();
+      }
+      try {
+        const dexc = GetDexcPID();
+        const register = dexc.callDEX("Register", { appPass: passphrase, url: addr, fee: parseInt(fee), cert: "" })
+        return resolve(register);
+      } catch(error) {
         console.log("register error", error);
         return reject(error);
       }
