@@ -14,6 +14,7 @@ import (
 	"decred.org/dcrdex/client/core"
 	"decred.org/dcrdex/client/webserver"
 	"decred.org/dcrdex/dex"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/decred/slog"
 
 	_ "decred.org/dcrdex/client/asset/btc" // register btc asset
@@ -190,6 +191,7 @@ func (c *CoreAdapter) createWallet(raw json.RawMessage) (string, error) {
 	if err := json.Unmarshal(raw, form); err != nil {
 		return "", err
 	}
+	spew.Dump(form)
 	return "", c.core.CreateWallet([]byte(form.AppPW), []byte(form.Pass), &core.WalletForm{
 		AssetID: form.AssetID,
 		Config:  form.Config,

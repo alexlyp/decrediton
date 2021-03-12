@@ -12,6 +12,7 @@ export const useDex = () => {
   const createWalletDexcAttempt = useSelector(sel.createWalletDexcAttempt);
   const loginDexcAttempt = useSelector(sel.loginDexcAttempt);
   const user = useSelector(sel.dexcUser);
+  const loggedIn = useSelector(sel.loggedInDexc);
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
@@ -44,6 +45,7 @@ export const useDex = () => {
     createWalletDexcAttempt,
     onLoginDexc,
     loginDexcAttempt,
-    user
+    user,
+    loggedIn
   };
 };

@@ -336,11 +336,10 @@ export const loginDexc = async (passphrase) => {
   }
 
   try {
-    console.log("ipc", passphrase);
     const login = await loginDexcCall(passphrase);
     return login;
   } catch (e) {
-    logger.log("error", "error init dexc: " + e);
+    logger.log("error", "error login dexc: " + e);
     return e;
   }
 };
@@ -351,8 +350,8 @@ export const createWalletDexc = async (
   account,
   rpcuser,
   rpcpass,
-  rpccert,
-  rpclisten) => {
+  rpclisten,
+  walletPath) => {
   if (!GetDexcPID()) {
     logger.log(
       "info",
@@ -368,8 +367,8 @@ export const createWalletDexc = async (
       account,
       rpcuser,
       rpcpass,
-      rpccert,
-      rpclisten);
+      rpclisten,
+      walletPath);
     return createWallet;
   } catch (e) {
     logger.log("error", "error create wallet dexc: " + e);

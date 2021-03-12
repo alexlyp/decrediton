@@ -417,7 +417,6 @@ ipcMain.on(
     passphrase
   ) => {
     try {
-      console.log("main", passphrase);
       event.returnValue = await loginDexc(passphrase);
     } catch (error) {
       if (!(error instanceof Error)) {
@@ -438,8 +437,8 @@ ipcMain.on(
     account,
     rpcuser,
     rpcpass,
-    rpccert,
-    rpclisten
+    rpclisten,
+    walletPath
   ) => {
     try {
       event.returnValue = await createWalletDexc(
@@ -448,8 +447,9 @@ ipcMain.on(
         account,
         rpcuser,
         rpcpass,
-        rpccert,
-        rpclisten);
+        rpclisten,
+        walletPath
+      );
     } catch (error) {
       if (!(error instanceof Error)) {
         event.returnValue = new Error(error);

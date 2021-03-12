@@ -879,8 +879,7 @@ export const launchDCRLnd = (
       }
       try {
         const dexc = GetDexcPID();
-        console.log("launch", passphrase);
-        const login = dexc.callDEX("Login", {pass: passphrase})
+        const login = dexc.callDEX("Login", {pass: passphrase});
         return resolve(login);
       } catch(error) {
         console.log("login error", error);
@@ -894,15 +893,23 @@ export const launchDCRLnd = (
     account,
     rpcuser,
     rpcpass,
-    rpccert,
-    rpclisten) =>
+    rpclisten,
+    walletPath) =>
     new Promise((resolve, reject) => {
       if (!dex) {
         resolve();
       }
+      const rpccert = path.join(walletPath, "rpc.cert");
+      const config = {
+        account,
+        rpccert,
+        username: rpcuser,
+        password: rpcpass,
+        rpclisten
+      }
       try {
         const dexc = GetDexcPID();
-        const init = dexc.callDEX("CreateWallet", { pass: passphrase, appPw: appPassphrase, account, rpcuser, rpcpass, rpccert, rpclisten })
+        const init = dexc.callDEX("CreateWallet", { pass: passphrase, appPass: appPassphrase, config, assetID: 42 })
         return resolve(init);
       } catch(error) {
         console.log("register error", error);

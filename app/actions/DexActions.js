@@ -106,12 +106,15 @@ export const loginDexc = (passphrase) => (dispatch, getState) => {
     return;
   }
   try {
-    console.log("action", passphrase);
     const res = ipcRenderer.sendSync("login-dexc",
       passphrase
     );
     if (res instanceof Error) {
       throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
     }
     dispatch({ type: DEXC_LOGIN_SUCCESS });
     // Request current user information
@@ -133,11 +136,15 @@ export const createWalletDexc = (passphrase) => (dispatch, getState) => {
     return;
   }
   try {
+    const isTestnet = sel.isTestNet(getState());
+    const {
+      daemon: { walletName }
+    } = getState();
+    const walletPath = getWalletPath(isTestnet, walletName);
     const appPassphrase = "p1";
     const account = "dex";
     const rpcuser = "user";
     const rpcpass= "password";
-    const rpccert = "/home/user/.config/decrediton/wallets/testnet/split tx/rpc.cert";
     const rpclisten = "127.0.0.1:19110";
     const res = ipcRenderer.sendSync("create-wallet-dexc",
       passphrase,
@@ -145,19 +152,22 @@ export const createWalletDexc = (passphrase) => (dispatch, getState) => {
       account,
       rpcuser,
       rpcpass,
-      rpccert,
-      rpclisten
+      rpclisten,
+      walletPath
     );
     if (res instanceof Error) {
       throw res;
-    }  
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
+    }
+    console.log(res);
     dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
   } catch (error) {
     dispatch({ type: DEXC_CREATEWALLET_FAILED, error });
     return;
   }
-
-  dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
 };
 
 export const DEXC_USER_ATTEMPT = "DEXC_USER_ATTEMPT";
