@@ -1,7 +1,8 @@
 import fs from "fs-extra";
 import path from "path";
+import ini from "ini";
 import { createLogger } from "./logging";
-import { getWalletPath, getWalletDb, getDcrdPath } from "./paths";
+import { getWalletPath, getWalletDb, getDcrdPath, dcrwalletConf } from "./paths";
 import { initWalletCfg, newWalletConfigCreation, getWalletCfg } from "config";
 import {
   launchDCRD,

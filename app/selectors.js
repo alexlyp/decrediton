@@ -1580,11 +1580,6 @@ export const dcrdataURL = createSelector([isTestNet], (isTestNet) =>
   isTestNet ? DCRDATA_URL_TESTNET : DCRDATA_URL_MAINNET
 );
 
-export const dexcEnabled = compose(
-  (l) => l.indexOf(EXTERNALREQUEST_DEXC) > -1,
-  allowedExternalRequests
-);
-
 export const politeiaEnabled = compose(
   (l) => l.indexOf(EXTERNALREQUEST_POLITEIA) > -1,
   allowedExternalRequests
@@ -1780,6 +1775,8 @@ export const lnTowersList = get(["ln", "towersList"]);
 // start of dex selectors
 
 //export const dexEnabled = bool(and(not(isWatchingOnly), not(isTrezor)));
+export const dexcEnabled = bool(get(["walletLoader", "dexEnabled"]));
+export const enableDexAttempt = bool(get(["dex", "enableDexAttempt"]))
 export const dexcActive = bool(get(["dex", "active"]));
 export const dexcInit = bool(get(["dex", "dexcInit"]));
 export const initDexcAttempt =  bool(get(["dex", "initAttempt"]));
@@ -1791,12 +1788,12 @@ export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 export const dexcUser = get(["dex", "user"]);
 
 export const dexRegistered = compose(
-  (u) => u && u.exchanges,
+  (u) => u && u.exchanges && Object.keys(u.exchanges).length > 0,
   dexcUser
 )
 
 export const dexDCRWalletRunning = compose(
-  (user) => user && user.assets && user.assets["42"] && user.assets["42"].wallet.running,
+  (user) => user && user.assets && user.assets["42"] && user.assets["42"].wallet && user.assets["42"].wallet.running,
   dexcUser
 )
 

@@ -643,6 +643,15 @@ export const launchDCRWallet = (
 
   logger.log("info", `Starting ${dcrwExe} with ${args}`);
 
+  // Check if dex is enabled and if so add rpc user/name, host, cert to options
+  const dex = cfg.get(cfgConstants.ENABLE_DEX);
+  if (dex) {
+    args.push("--username=", cfgConstants.DEXWALLET_RPCUSER);
+    args.push("--password=", cfgConstants.DEXWALLET_RPCPASS);
+    args.push("--rpchost=", cfgConstants.DEXWALLET_HOSTPORT);
+    args.push("--rpccert=", path.join(getWalletPath(testnet, walletPath), "rpc.cert"));
+  }
+
   const dcrwallet = spawn(dcrwExe, args, {
     detached: os.platform() == "win32",
     stdio: ["ignore", "pipe", "pipe", "ignore", "pipe"]

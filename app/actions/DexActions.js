@@ -1,11 +1,38 @@
 import * as sel from "selectors";
+import { getWalletCfg } from "config";
 import { ipcRenderer } from "electron";
 import { getWalletPath } from "main_dev/paths";
+import { makeRandomString } from "helpers";
 import {
   addAllowedExternalRequest
 } from "./SettingsActions";
+import { isTestNet } from "selectors";
 import { EXTERNALREQUEST_DEXC } from "main_dev/externalRequests";
-import { checkInitDexcAttempt } from "../selectors";
+import * as configConstants from "constants/config";
+
+export const DEXC_ENABLE_ATTEMPT = "DEXC_ENABLE_ATTEMPT";
+export const DEXC_ENABLE_FAILED = "DEXC_ENABLE_FAILED";
+export const DEXC_ENABLE_SUCCESS = "DEXC_ENABLE_SUCCESS";
+
+export const enableDexc = () => (dispatch, getState) => {
+  dispatch({ type: DEXC_ENABLE_ATTEMPT });
+  const {daemon: { walletName }} = getState();
+
+  try {
+    const walletConfig = getWalletCfg(isTestNet(getState()), walletName);
+    const walletPath = getWalletPath(isTestNet(getState()), walletName);
+    walletConfig.set(configConstants.ENABLE_DEX, true);
+    walletConfig.set(configConstants.DEXWALLET_RPCUSERNAME, makeRandomString(10));
+    walletConfig.set(configConstants.DEXWALLET_RPCPASSWORD, makeRandomString(10));
+    walletConfig.set(configConstants.DEXWALLET_HOSTPORT, "127.0.0.1:19110");
+    dispatch({ type: DEXC_ENABLE_SUCCESS });
+    dispatch(addAllowedExternalRequest(EXTERNALREQUEST_DEXC));
+    dispatch(startDexc());
+  } catch (error) {
+    dispatch({ type: DEXC_ENABLE_FAILED, error });
+    return;
+  }
+};
 
 export const DEXC_STARTUP_ATTEMPT = "DEXC_STARTUP_ATTEMPT";
 export const DEXC_STARTUP_FAILED = "DEXC_STARTUP_FAILED";
@@ -75,7 +102,6 @@ export const DEXC_INIT_FAILED = "DEXC_INIT_FAILED";
 
 export const initDexc = (passphrase) => (dispatch, getState) => {
   dispatch({ type: DEXC_INIT_ATTEMPT });
-  dispatch(addAllowedExternalRequest(EXTERNALREQUEST_DEXC));
   if (!sel.dexcActive(getState())) {
     dispatch({ type: DEXC_INIT_FAILED, error: "Dexc isn't active" });
     return;
@@ -92,7 +118,9 @@ export const initDexc = (passphrase) => (dispatch, getState) => {
       }
     }  
     dispatch({ type: DEXC_INIT_SUCCESS });
-    dispatch({ type: dexcCheckInit() });
+    // Request current user information
+    dispatch(userDexc());
+    dispatch(getFeeDexc());
   } catch (error) {
     dispatch({ type: DEXC_INIT_FAILED, error });
     return;
@@ -168,6 +196,8 @@ export const createWalletDexc = (passphrase) => (dispatch, getState) => {
       }
     }
     dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
+    // Request current user information
+    dispatch(userDexc());
   } catch (error) {
     dispatch({ type: DEXC_CREATEWALLET_FAILED, error });
     return;
@@ -257,6 +287,8 @@ export const registerDexc = (passphrase) => (dispatch, getState) => {
       }
     }  
     dispatch({ type: DEXC_REGISTER_SUCCESS });
+    // Request current user information
+    dispatch(userDexc());
   } catch (error) {
     dispatch({ type: DEXC_REGISTER_FAILED, error });
     return;

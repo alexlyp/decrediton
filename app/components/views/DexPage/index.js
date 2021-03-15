@@ -4,6 +4,7 @@ import { DexViewContent, DexViewHeader } from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage, StandaloneHeader } from "layout";
 import { CreateWalletPageContent, CreateWalletPageHeader } from "./CreateWalletPage";
+import { EnablePageContent, EnablePageHeader } from "./EnablePage";
 import { InitPageContent, InitPageHeader } from "./InitPage";
 import { LoginPageContent, LoginPageHeader } from "./LoginPage";
 
@@ -17,9 +18,14 @@ const DexPage = () => {
     dexcAddr,
     dexcFee,
     dexRegistered,
-    dexDCRWalletRunning
+    dexDCRWalletRunning,
+    dexcEnabled,
+    user
   } = useDex();
-  if (dexcActive) {
+  if (!dexcEnabled) {
+    Page = <EnablePageContent />;
+    Header = <EnablePageHeader />;
+  } else if (dexcActive) {
     if (dexcInit) {
       if (!loggedIn) {
         Page = <LoginPageContent />;
@@ -28,7 +34,7 @@ const DexPage = () => {
         if (dexRegistered && dexDCRWalletRunning) {
           Page = <DexViewContent />;
           Header = <DexViewHeader />;
-        } else if (dexcAddr && dexcFee) {
+        } else if (dexcAddr && dexcFee && dexDCRWalletRunning) {
           Page = <RegisterPageContent/>;
           Header = <RegisterPageHeader />;
         } else if (!dexDCRWalletRunning) {

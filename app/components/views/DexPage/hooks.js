@@ -5,6 +5,7 @@ import * as da from "actions/DexActions";
 
 export const useDex = () => {
   const dispatch = useDispatch();
+  const dexcEnabled = useSelector(sel.dexcEnabled);
   const dexcActive = useSelector(sel.dexcActive);
   const dexcInit = useSelector(sel.dexcInit);
   const initDexcAttempt = useSelector(sel.initDexcAttempt);
@@ -17,6 +18,7 @@ export const useDex = () => {
   const dexRegistered = useSelector(sel.dexRegistered);
   const dexDCRWalletRunning = useSelector(sel.dexDCRWalletRunning);
   const user = useSelector(sel.dexcUser);
+  const enableDexAttempt = useSelector(sel.enableDexAttempt);
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
@@ -38,7 +40,13 @@ export const useDex = () => {
     [dispatch]
   );
 
+  const onEnableDexc = useCallback(
+    (passphrase) => dispatch(da.enableDexc()),
+    [dispatch]
+  );
+
   return {
+    dexcEnabled,
     dexcActive,
     dexcInit,
     onInitDexc,
@@ -54,6 +62,8 @@ export const useDex = () => {
     dexcFee,
     dexRegistered,
     dexDCRWalletRunning,
+    onEnableDexc,
+    enableDexAttempt,
     user
   };
 };

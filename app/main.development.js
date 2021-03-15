@@ -70,7 +70,8 @@ import {
   userDexc,
   loginDexc,
   getFeeDexc,
-  registerDexc
+  registerDexc,
+  enableDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,

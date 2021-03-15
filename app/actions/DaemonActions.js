@@ -404,6 +404,7 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
       const mixedAccountBranch = walletCfg.get(cfgConstants.MIXED_ACC_BRANCH);
       const isLegacy = walletCfg.get(cfgConstants.VSP_IS_LEGACY);
       const rememberedVspHost = walletCfg.get(cfgConstants.REMEMBERED_VSP_HOST);
+      const enableDex = walletCfg.get(cfgConstants.ENABALE_DEX);
 
       walletCfg.set(cfgConstants.LAST_ACCESS, Date.now());
       dispatch({
@@ -436,7 +437,8 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
         changeAccount,
         csppServer,
         csppPort,
-        mixedAccountBranch
+        mixedAccountBranch,
+        enableDex
       });
       selectedWallet.value.isTrezor && dispatch(enableTrezor());
       await dispatch(getVersionServiceAttempt());

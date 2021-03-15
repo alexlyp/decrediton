@@ -21,7 +21,8 @@ import {
   setVSPDVoteChoices
 } from "./VSPActions";
 import {
-  startDexc
+  startDexc,
+  enableDexc
 } from "./DexActions";
 import { getStartupTransactions } from "./TransactionActions";
 import { getAccountMixerServiceAttempt } from "./AccountMixerActions";
@@ -69,7 +70,7 @@ export const STARTWALLETSERVICE_SUCCESS = "STARTWALLETSERVICE_SUCCESS";
 const startWalletServicesTrigger = () => (dispatch, getState) =>
   new Promise((resolve, reject) => {
     const startServicesAsync = async () => {
-      const { spvSynced, privacyEnabled } = getState().walletLoader;
+      const { spvSynced, privacyEnabled, dexEnabled } = getState().walletLoader;
       if (!spvSynced) {
         dispatch(getTicketBuyerServiceAttempt());
       }
@@ -96,7 +97,10 @@ const startWalletServicesTrigger = () => (dispatch, getState) =>
 
       await dispatch(getVoteChoicesAttempt());
 
-      await dispatch(startDexc());
+      await dispatch(enableDexc());
+      if (dexEnabled) {
+        await dispatch(startDexc());
+      }
     };
 
     startServicesAsync()

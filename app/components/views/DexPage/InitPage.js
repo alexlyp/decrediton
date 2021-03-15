@@ -12,7 +12,6 @@ export const InitPageContent = () => {
   } = useDex();
 
   return (
-    <StandalonePage>
       <PassphraseModalButton
         disabled={initDexcAttempt}
         modalTitle={
@@ -22,7 +21,6 @@ export const InitPageContent = () => {
         onSubmit={onInitDexc}
         buttonLabel={<T id="dex.initPassphraseButton" m="Init Dexc" />}
       />
-    </StandalonePage>
   );
 };
 

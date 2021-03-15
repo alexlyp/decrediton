@@ -1,4 +1,7 @@
 import {
+  DEXC_ENABLE_ATTEMPT,
+  DEXC_ENABLE_FAILED,
+  DEXC_ENABLE_SUCCESS,
   DEXC_STARTUP_ATTEMPT,
   DEXC_STARTUP_FAILED,
   DEXC_STARTUP_SUCCESS,
@@ -30,6 +33,27 @@ import {
 
 export default function ln(state = {}, action) {
   switch (action.type) {
+    case DEXC_ENABLE_ATTEMPT:
+      return {
+        ...state,
+        enableDexAttempt: true,
+        enabledDex: false,
+        enabledError: null
+      };
+    case DEXC_ENABLE_FAILED:
+      return {
+        ...state,
+        enableDexAttempt: false,
+        enabledDex: false,
+        enabledError: action.error
+      };
+    case DEXC_ENABLE_SUCCESS:
+      return {
+        ...state,
+        enableDexAttempt: false,
+        enabledDex: true,
+        enabledError: null
+      };
     case DEXC_STARTUP_ATTEMPT:
       return {
         ...state,
@@ -147,6 +171,8 @@ export default function ln(state = {}, action) {
       return {
         ...state,
         initAttempt: false,
+        dexcInit: true,
+        loggedIn: true,
         registerError: null
       };
     case DEXC_LAUNCH_WINDOW_ATTEMPT:
