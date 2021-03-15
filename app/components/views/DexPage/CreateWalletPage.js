@@ -8,13 +8,11 @@ import "style/ConnectPage.css";
 export const CreateWalletPageContent = () => {
   const {
     onCreateWalletDexc,
-    createWalletDexcAttempt,
-    user
+    createWalletDexcAttempt
   } = useDex();
 
   return ( 
     <div>
-      {user}
       <PassphraseModalButton
         disabled={createWalletDexcAttempt}
         modalTitle={

@@ -193,7 +193,8 @@ export const userDexc = () => (dispatch, getState) => {
         throw res
       }
     }
-    dispatch({ type: DEXC_USER_SUCCESS, user: res });
+    const resJson = JSON.parse(res);
+    dispatch({ type: DEXC_USER_SUCCESS, user: resJson });
   } catch (error) {
     dispatch({ type: DEXC_USER_FAILED, error });
     return;

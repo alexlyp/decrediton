@@ -1789,5 +1789,16 @@ export const createWalletDexcAttempt =  bool(get(["dex", "createWalletAttempt"])
 export const loginDexcAttempt =  bool(get(["dex", "loginAttempt"]));
 export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 export const dexcUser = get(["dex", "user"]);
+
+export const dexRegistered = compose(
+  (u) => u && u.exchanges,
+  dexcUser
+)
+
+export const dexDCRWalletRunning = compose(
+  (user) => user && user.assets && user.assets["42"] && user.assets["42"].wallet.running,
+  dexcUser
+)
+
 export const dexcAddr = get(["dex", "addr"]);
 export const dexcFee = get(["dex", "fee"]);

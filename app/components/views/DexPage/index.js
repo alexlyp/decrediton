@@ -1,6 +1,6 @@
 
 import { RegisterPageContent, RegisterPageHeader } from "./RegisterPage";
-//import DexView from "./DexView";
+import { DexViewContent, DexViewHeader } from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage, StandaloneHeader } from "layout";
 import { CreateWalletPageContent, CreateWalletPageHeader } from "./CreateWalletPage";
@@ -15,7 +15,9 @@ const DexPage = () => {
     dexcInit,
     loggedIn,
     dexcAddr,
-    dexcFee
+    dexcFee,
+    dexRegistered,
+    dexDCRWalletRunning
   } = useDex();
   if (dexcActive) {
     if (dexcInit) {
@@ -23,10 +25,13 @@ const DexPage = () => {
         Page = <LoginPageContent />;
         Header = <LoginPageHeader />;
       } else {
-        if (dexcAddr && dexcFee) {
+        if (dexRegistered && dexDCRWalletRunning) {
+          Page = <DexViewContent />;
+          Header = <DexViewHeader />;
+        } else if (dexcAddr && dexcFee) {
           Page = <RegisterPageContent/>;
           Header = <RegisterPageHeader />;
-        } else {
+        } else if (!dexDCRWalletRunning) {
           Page = <CreateWalletPageContent />;
           Header = <CreateWalletPageHeader />;
         }
@@ -59,12 +64,5 @@ const ErrorHeader = () => {
     iconType={LN_ICON}
   />
 };
-
-export const DexViewHeader = () => (
-  <StandaloneHeader
-    title={<T id="dex.createWallet.title" m="Dex" />}
-    iconType={LN_ICON}
-  />
-);
 
 export default DexPage;
