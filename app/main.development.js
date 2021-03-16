@@ -70,8 +70,7 @@ import {
   userDexc,
   loginDexc,
   getFeeDexc,
-  registerDexc,
-  enableDexc
+  registerDexc
 } from "./main_dev/ipc";
 import {
   initTemplate,
@@ -334,13 +333,18 @@ ipcMain.on("stop-wallet", (event) => {
   event.returnValue = stopWallet();
 });
 
-ipcMain.on("start-wallet", (event, walletPath, testnet) => {
+ipcMain.on("start-wallet", (event, walletPath, testnet, rpcCreds) => {
+  const { rpcUser, rpcPass, rpcListen, rpcCert } = rpcCreds;
   event.returnValue = startWallet(
     mainWindow,
     daemonIsAdvanced,
     testnet,
     walletPath,
-    reactIPC
+    reactIPC,
+    rpcUser, 
+    rpcPass, 
+    rpcListen,
+    rpcCert
   );
 });
 
@@ -441,7 +445,7 @@ ipcMain.on(
     rpcuser,
     rpcpass,
     rpclisten,
-    walletPath
+    rpccert
   ) => {
     try {
       event.returnValue = await createWalletDexc(
@@ -451,7 +455,7 @@ ipcMain.on(
         rpcuser,
         rpcpass,
         rpclisten,
-        walletPath
+        rpccert
       );
     } catch (error) {
       if (!(error instanceof Error)) {

@@ -1,8 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
-import ini from "ini";
 import { createLogger } from "./logging";
-import { getWalletPath, getWalletDb, getDcrdPath, dcrwalletConf } from "./paths";
+import { getWalletPath, getWalletDb, getDcrdPath } from "./paths";
 import { initWalletCfg, newWalletConfigCreation, getWalletCfg } from "config";
 import {
   launchDCRD,
@@ -214,7 +213,11 @@ export const startWallet = (
   daemonIsAdvanced,
   testnet,
   walletPath,
-  reactIPC
+  reactIPC,
+  rpcUser,
+  rpcPass,
+  rpcHost,
+  rpcListen
 ) => {
   if (GetDcrwPID()) {
     logger.log("info", "dcrwallet already started " + GetDcrwPID());
@@ -228,7 +231,11 @@ export const startWallet = (
       daemonIsAdvanced,
       walletPath,
       testnet,
-      reactIPC
+      reactIPC,
+      rpcUser,
+      rpcPass,
+      rpcHost,
+      rpcListen
     );
   } catch (e) {
     logger.log("error", "error launching dcrwallet: " + e);
@@ -354,7 +361,7 @@ export const createWalletDexc = async (
   rpcuser,
   rpcpass,
   rpclisten,
-  walletPath) => {
+  rpccert) => {
   if (!GetDexcPID()) {
     logger.log(
       "info",
@@ -371,7 +378,7 @@ export const createWalletDexc = async (
       rpcuser,
       rpcpass,
       rpclisten,
-      walletPath);
+      rpccert);
     return createWallet;
   } catch (e) {
     logger.log("error", "error create wallet dexc: " + e);

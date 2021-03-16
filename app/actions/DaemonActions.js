@@ -1,3 +1,5 @@
+import path from "path";
+import { getWalletPath } from "main_dev/paths";
 import {
   syncCancel,
   setSelectedWallet,
@@ -16,8 +18,9 @@ import { getWalletCfg, getGlobalCfg, setLastHeight } from "config";
 import { isTestNet } from "selectors";
 import axios from "axios";
 import { STANDARD_EXTERNAL_REQUESTS } from "main_dev/externalRequests";
-import { DIFF_CONNECTION_ERROR, LOCALE, TESTNET } from "constants";
+import { DIFF_CONNECTION_ERROR, LOCALE, TESTNET, DefaultWalletRPCListener } from "constants";
 import * as cfgConstants from "constants/config";
+import { makeRandomString } from "../helpers";
 
 export const DECREDITON_VERSION = "DECREDITON_VERSION";
 export const SELECT_LANGUAGE = "SELECT_LANGUAGE";
@@ -349,15 +352,28 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
       if (!selectedWallet) {
         selectedWallet = ipcRenderer.sendSync("get-selected-wallet");
       }
-      const walletStarted = await wallet.startWallet(
-        selectedWallet.value.wallet,
-        network == "testnet"
-      );
-      const { port } = walletStarted;
+      const isTestnet = network == "testnet"
       const walletCfg = getWalletCfg(
-        network == "testnet",
+        isTestnet,
         selectedWallet.value.wallet
       );
+
+      const enableDex = walletCfg.get(cfgConstants.ENABALE_DEX);
+      let rpcCreds = null;
+      if (enableDex) {
+        rpcCreds = {
+          rpcUser: makeRandomString(12),
+          rpcPass: makeRandomString(12),
+          rpcListen: DefaultWalletRPCListener,
+          rpcCert: path.join(getWalletPath(isTestnet, selectedWallet.value.wallet), "rpc.cert")
+        };
+      }
+      const walletStarted = await wallet.startWallet(
+        selectedWallet.value.wallet,
+        isTestnet,
+        rpcCreds
+      );
+      const { port } = walletStarted;
       wallet.setPreviousWallet(selectedWallet);
 
       // TODO clean up this found stakepool
@@ -404,7 +420,6 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
       const mixedAccountBranch = walletCfg.get(cfgConstants.MIXED_ACC_BRANCH);
       const isLegacy = walletCfg.get(cfgConstants.VSP_IS_LEGACY);
       const rememberedVspHost = walletCfg.get(cfgConstants.REMEMBERED_VSP_HOST);
-      const enableDex = walletCfg.get(cfgConstants.ENABALE_DEX);
 
       walletCfg.set(cfgConstants.LAST_ACCESS, Date.now());
       dispatch({
@@ -438,7 +453,8 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
         csppServer,
         csppPort,
         mixedAccountBranch,
-        enableDex
+        enableDex,
+        rpcCreds
       });
       selectedWallet.value.isTrezor && dispatch(enableTrezor());
       await dispatch(getVersionServiceAttempt());

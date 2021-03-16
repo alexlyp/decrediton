@@ -21,8 +21,7 @@ import {
   setVSPDVoteChoices
 } from "./VSPActions";
 import {
-  startDexc,
-  enableDexc
+  startDexc
 } from "./DexActions";
 import { getStartupTransactions } from "./TransactionActions";
 import { getAccountMixerServiceAttempt } from "./AccountMixerActions";
@@ -97,7 +96,6 @@ const startWalletServicesTrigger = () => (dispatch, getState) =>
 
       await dispatch(getVoteChoicesAttempt());
 
-      await dispatch(enableDexc());
       if (dexEnabled) {
         await dispatch(startDexc());
       }

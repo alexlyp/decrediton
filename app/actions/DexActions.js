@@ -1,12 +1,9 @@
 import * as sel from "selectors";
-import { getWalletCfg } from "config";
 import { ipcRenderer } from "electron";
 import { getWalletPath } from "main_dev/paths";
-import { makeRandomString } from "helpers";
 import {
   addAllowedExternalRequest
 } from "./SettingsActions";
-import { isTestNet } from "selectors";
 import { EXTERNALREQUEST_DEXC } from "main_dev/externalRequests";
 import * as configConstants from "constants/config";
 
@@ -19,15 +16,10 @@ export const enableDexc = () => (dispatch, getState) => {
   const {daemon: { walletName }} = getState();
 
   try {
-    const walletConfig = getWalletCfg(isTestNet(getState()), walletName);
-    const walletPath = getWalletPath(isTestNet(getState()), walletName);
     walletConfig.set(configConstants.ENABLE_DEX, true);
-    walletConfig.set(configConstants.DEXWALLET_RPCUSERNAME, makeRandomString(10));
-    walletConfig.set(configConstants.DEXWALLET_RPCPASSWORD, makeRandomString(10));
-    walletConfig.set(configConstants.DEXWALLET_HOSTPORT, "127.0.0.1:19110");
-    dispatch({ type: DEXC_ENABLE_SUCCESS });
     dispatch(addAllowedExternalRequest(EXTERNALREQUEST_DEXC));
-    dispatch(startDexc());
+    dispatch({ type: DEXC_ENABLE_SUCCESS });
+    dispatch(closeWalletRequest());
   } catch (error) {
     dispatch({ type: DEXC_ENABLE_FAILED, error });
     return;
@@ -171,14 +163,17 @@ export const createWalletDexc = (passphrase) => (dispatch, getState) => {
   try {
     const isTestnet = sel.isTestNet(getState());
     const {
-      daemon: { walletName }
+      daemon: { walletName },
+      walletLoader: { dexRpcSettings }
     } = getState();
+    const rpcCreds = dexRpcSettings;
     const walletPath = getWalletPath(isTestnet, walletName);
     const appPassphrase = "p1";
     const account = "dex";
-    const rpcuser = "user";
-    const rpcpass= "password";
-    const rpclisten = "127.0.0.1:19110";
+    const rpcuser = rpcCreds.rpcUser;
+    const rpcpass= rpcCreds.rpcPass;
+    const rpclisten = rpcCreds.rpcListen;
+    const rpccert = rpcCreds.rpcCert;
     const res = ipcRenderer.sendSync("create-wallet-dexc",
       passphrase,
       appPassphrase,
@@ -186,7 +181,7 @@ export const createWalletDexc = (passphrase) => (dispatch, getState) => {
       rpcuser,
       rpcpass,
       rpclisten,
-      walletPath
+      rpccert
     );
     if (res instanceof Error) {
       throw res;

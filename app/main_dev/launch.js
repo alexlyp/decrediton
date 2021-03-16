@@ -538,7 +538,11 @@ export const launchDCRWallet = (
   daemonIsAdvanced,
   walletPath,
   testnet,
-  reactIPC
+  reactIPC,
+  rpcUser,
+  rpcPass,
+  rpcListen,
+  rpcCert
 ) => {
   const cfg = getWalletCfg(testnet, walletPath);
   const confFile = fs.existsSync(
@@ -644,12 +648,19 @@ export const launchDCRWallet = (
   logger.log("info", `Starting ${dcrwExe} with ${args}`);
 
   // Check if dex is enabled and if so add rpc user/name, host, cert to options
-  const dex = cfg.get(cfgConstants.ENABLE_DEX);
-  if (dex) {
-    args.push("--username=", cfgConstants.DEXWALLET_RPCUSER);
-    args.push("--password=", cfgConstants.DEXWALLET_RPCPASS);
-    args.push("--rpchost=", cfgConstants.DEXWALLET_HOSTPORT);
-    args.push("--rpccert=", path.join(getWalletPath(testnet, walletPath), "rpc.cert"));
+  // We'rd doing this after logger to avoid user/pass being logged.  It's randomly
+  // set each start, but better to be safe.
+  if (rpcUser) {
+    args.push(util.format("--username=%s", rpcUser));
+  }
+  if (rpcPass) {
+    args.push(util.format("--password=%s", rpcPass));
+  }
+  if (rpcListen) {
+    args.push(util.format("--rpclisten=%s", rpcListen));
+  }
+  if (rpcCert) {
+    args.push(util.format("--rpccert=%s", rpcCert));
   }
 
   const dcrwallet = spawn(dcrwExe, args, {
@@ -903,12 +914,11 @@ export const launchDCRLnd = (
     rpcuser,
     rpcpass,
     rpclisten,
-    walletPath) =>
+    rpccert) =>
     new Promise((resolve, reject) => {
       if (!dex) {
         resolve();
       }
-      const rpccert = path.join(walletPath, "rpc.cert");
       const config = {
         account,
         rpccert,
