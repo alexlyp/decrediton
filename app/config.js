@@ -233,3 +233,26 @@ export function newWalletConfigCreation(testnet, walletPath) {
     ini.stringify(dcrwConf)
   );
 }
+
+export function checkNoLegacyWalletConfig(testnet, walletPath, noLegacyRpc) {
+  let fileContents;
+  try {
+    fileContents = ini.parse(fs.readFileSync(dcrwalletConf(getWalletPath(testnet, walletPath)), "utf8"));
+    fileContents = Object.fromEntries(Object.entries(fileContents).map(([key, value]) => {
+      if (key == "Application Options") {
+        if (value.nolegacyrpc && noLegacyRpc) {
+          delete value.nolegacyrpc;
+        } else if (!noLegacyRpc) {
+          value.nolegacyrpc = "1";
+        }
+      }
+      return [key, value]
+    }));
+    fs.writeFileSync(
+      dcrwalletConf(getWalletPath(testnet, walletPath)),
+      ini.stringify(fileContents)
+    );
+  } catch (e) {
+    console.log(e);
+  }
+}

@@ -2,7 +2,7 @@ import fs from "fs-extra";
 import path from "path";
 import { createLogger } from "./logging";
 import { getWalletPath, getWalletDb, getDcrdPath } from "./paths";
-import { initWalletCfg, newWalletConfigCreation, getWalletCfg } from "config";
+import { initWalletCfg, newWalletConfigCreation, getWalletCfg, checkNoLegacyWalletConfig } from "config";
 import {
   launchDCRD,
   launchDCRWallet,
@@ -225,6 +225,7 @@ export const startWallet = (
     return GetDcrwPID();
   }
   initWalletCfg(testnet, walletPath);
+  checkNoLegacyWalletConfig(testnet, walletPath, rpcUser && rpcPass && rpcHost && rpcListen);
   try {
     return launchDCRWallet(
       mainWindow,
