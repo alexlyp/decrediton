@@ -1,5 +1,5 @@
 import { useDex } from "./hooks";
-import { KeyBlueButton } from "buttons";
+import { ResetNetworkButton } from "buttons";
 import { StandaloneHeader } from "layout";
 import { FormattedMessage as T } from "react-intl";
 import { LN_ICON } from "constants";
@@ -12,12 +12,23 @@ export const EnablePageContent = () => {
   } = useDex();
 
   return (
-      <KeyBlueButton
-        disabled={enableDexAttempt}
-        loading={enableDexAttempt}
-        onClick={onEnableDexc}>
-          {<T id="dex.enableButton" m="Enable Dexc" />}
-      </KeyBlueButton>
+    <ResetNetworkButton
+      modalTitle={
+        <T id="dex.resetWalletRequired" m="Wallet reset required" />
+      }
+      buttonLabel={<T id="dex.enableButton" m="Enable DEXC" />}
+      modalContent={
+        <T
+          id="dex.resetWalletRequiredContent"
+          m="The wallet must be restarted to be able to communicate with the DEX client.  Return to the DEX page once re-loaded and you may continue the process."
+        />
+      }
+      disabled={enableDexAttempt}
+      loading={enableDexAttempt}
+      size="large"
+      block={false}
+      onSubmit={onEnableDexc}
+    />
   );
 };
 

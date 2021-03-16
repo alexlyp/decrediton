@@ -1,11 +1,18 @@
 import * as sel from "selectors";
 import { ipcRenderer } from "electron";
 import { getWalletPath } from "main_dev/paths";
+import { getWalletCfg } from "config";
+import { isTestNet } from "selectors";
 import {
   addAllowedExternalRequest
 } from "./SettingsActions";
+import {
+  closeWalletRequest
+} from "./WalletLoaderActions";
 import { EXTERNALREQUEST_DEXC } from "main_dev/externalRequests";
 import * as configConstants from "constants/config";
+import DefaultWalletRPCListener from "constants";
+import { makeRandomString } from "helpers";
 
 export const DEXC_ENABLE_ATTEMPT = "DEXC_ENABLE_ATTEMPT";
 export const DEXC_ENABLE_FAILED = "DEXC_ENABLE_FAILED";
@@ -15,9 +22,14 @@ export const enableDexc = () => (dispatch, getState) => {
   dispatch({ type: DEXC_ENABLE_ATTEMPT });
   const {daemon: { walletName }} = getState();
 
-  try {
+  try {  
+    const walletConfig = getWalletCfg(isTestNet(getState()), walletName);
+    walletConfig.set(configConstants.DEXWALLET_RPCUSERNAME, makeRandomString(12));
+    walletConfig.set(configConstants.DEXWALLET_RPCPASSWORD, makeRandomString(12));
+    walletConfig.set(configConstants.DEXWALLET_HOSTPORT, "127.0.0.1:19110");
     walletConfig.set(configConstants.ENABLE_DEX, true);
     dispatch(addAllowedExternalRequest(EXTERNALREQUEST_DEXC));
+    
     dispatch({ type: DEXC_ENABLE_SUCCESS });
     dispatch(closeWalletRequest());
   } catch (error) {

@@ -20,7 +20,6 @@ import axios from "axios";
 import { STANDARD_EXTERNAL_REQUESTS } from "main_dev/externalRequests";
 import { DIFF_CONNECTION_ERROR, LOCALE, TESTNET, DefaultWalletRPCListener } from "constants";
 import * as cfgConstants from "constants/config";
-import { makeRandomString } from "../helpers";
 
 export const DECREDITON_VERSION = "DECREDITON_VERSION";
 export const SELECT_LANGUAGE = "SELECT_LANGUAGE";
@@ -358,15 +357,17 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
         selectedWallet.value.wallet
       );
 
-      const enableDex = walletCfg.get(cfgConstants.ENABALE_DEX);
+      const enableDex = walletCfg.get(cfgConstants.ENABLE_DEX);
       let rpcCreds = null;
       if (enableDex) {
         rpcCreds = {
-          rpcUser: makeRandomString(12),
-          rpcPass: makeRandomString(12),
-          rpcListen: DefaultWalletRPCListener,
+          rpcUser: walletCfg.get(cfgConstants.DEXWALLET_RPCUSERNAME),
+          rpcPass: walletCfg.get(cfgConstants.DEXWALLET_RPCPASSWORD),
+          rpcListen: walletCfg.get(cfgConstants.DEXWALLET_HOSTPORT),
           rpcCert: path.join(getWalletPath(isTestnet, selectedWallet.value.wallet), "rpc.cert")
         };
+      } else {
+        rpcCreds = {};
       }
       const walletStarted = await wallet.startWallet(
         selectedWallet.value.wallet,
