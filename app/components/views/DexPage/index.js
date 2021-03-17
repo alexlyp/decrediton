@@ -1,5 +1,6 @@
 
 import { RegisterPageContent, RegisterPageHeader } from "./RegisterPage";
+import { ConnectExchangePageContent, ConnectExchangePageHeader } from "./ConnectExchangePage";
 import { DexViewContent, DexViewHeader } from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage, StandaloneHeader } from "layout";
@@ -20,6 +21,7 @@ const DexPage = () => {
     dexRegistered,
     dexDCRWalletRunning,
     dexcEnabled,
+    dexConnected,
     user
   } = useDex();
   if (!dexcEnabled) {
@@ -34,6 +36,10 @@ const DexPage = () => {
         if (dexRegistered && dexDCRWalletRunning) {
           Page = <DexViewContent />;
           Header = <DexViewHeader />;
+        } else if (!dexConnected && dexDCRWalletRunning) {
+          // Wallet connected but exchange not connected (user request empty)
+          Page = <ConnectExchangePageContent />;
+          Header = <ConnectExchangePageHeader />;
         } else if (dexcAddr && dexcFee && dexDCRWalletRunning) {
           Page = <RegisterPageContent/>;
           Header = <RegisterPageHeader />;

@@ -16,6 +16,7 @@ export const useDex = () => {
   const dexcAddr = useSelector(sel.dexcAddr);
   const dexcFee = useSelector(sel.dexcFee);
   const dexRegistered = useSelector(sel.dexRegistered);
+  const dexConnected = useSelector(sel.dexcConnected);
   const dexDCRWalletRunning = useSelector(sel.dexDCRWalletRunning);
   const user = useSelector(sel.dexcUser);
   const enableDexAttempt = useSelector(sel.enableDexAttempt);
@@ -61,6 +62,7 @@ export const useDex = () => {
     dexcAddr,
     dexcFee,
     dexRegistered,
+    dexConnected,
     dexDCRWalletRunning,
     onEnableDexc,
     enableDexAttempt,

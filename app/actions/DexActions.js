@@ -124,7 +124,6 @@ export const initDexc = (passphrase) => (dispatch, getState) => {
     dispatch({ type: DEXC_INIT_SUCCESS });
     // Request current user information
     dispatch(userDexc());
-    dispatch(getFeeDexc());
   } catch (error) {
     dispatch({ type: DEXC_INIT_FAILED, error });
     return;
@@ -155,7 +154,6 @@ export const loginDexc = (passphrase) => (dispatch, getState) => {
     dispatch({ type: DEXC_LOGIN_SUCCESS });
     // Request current user information
     dispatch(userDexc());
-    dispatch(getFeeDexc());
   } catch (error) {
     dispatch({ type: DEXC_LOGIN_FAILED, error });
     return;
@@ -232,6 +230,10 @@ export const userDexc = () => (dispatch, getState) => {
     }
     const resJson = JSON.parse(res);
     dispatch({ type: DEXC_USER_SUCCESS, user: resJson });
+    // Check to see if user is already registered, if so don't get fee.
+    if (!resJson || !resJson.exchanges || Object.keys(resJson.exchanges).length <= 0) {
+      dispatch(getFeeDexc());
+    }
   } catch (error) {
     dispatch({ type: DEXC_USER_FAILED, error });
     return;

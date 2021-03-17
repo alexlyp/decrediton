@@ -1787,7 +1787,13 @@ export const loginDexcAttempt =  bool(get(["dex", "loginAttempt"]));
 export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 export const dexcUser = get(["dex", "user"]);
 
+export const dexcConnected = compose(
+  (u) => u && u.exchanges && Object.keys(u.exchanges).length > 0,
+  dexcUser
+)
+
 export const dexRegistered = compose(
+  // XXX check if any of the exchanges that come back from users request are registered
   (u) => u && u.exchanges && Object.keys(u.exchanges).length > 0,
   dexcUser
 )
