@@ -1,5 +1,5 @@
 import { useDex } from "./hooks";
-import { PassphraseModalButton } from "buttons";
+import { SetNewPassphraseModalButton } from "buttons";
 import { StandaloneHeader } from "layout";
 import { FormattedMessage as T } from "react-intl";
 import { LN_ICON } from "constants";
@@ -12,7 +12,7 @@ export const InitPageContent = () => {
   } = useDex();
 
   return (
-      <PassphraseModalButton
+      <SetNewPassphraseModalButton
         disabled={initDexcAttempt}
         modalTitle={
           <T id="dex.initPassphrase" m="Set new Dexc app passphrase" />

@@ -44,7 +44,8 @@ import {
   ConfirmModal,
   DocumentationInfoModal,
   AboutModal,
-  CantCloseModals
+  CantCloseModals,
+  SetNewPassphraseModal
 } from "modals";
 
 import styles from "./Buttons.module.css";
@@ -104,6 +105,7 @@ export const InvisiblePassphraseModalButton = mbb(
   InvisibleButton
 );
 export const PassphraseModalButton = mbb(null, PassphraseModal, KeyBlueButton);
+export const SetNewPassphraseModalButton = mbb(null, SetNewPassphraseModal, KeyBlueButton);
 export const AutoBuyerPassphraseModalSwitch = mbb(
   null,
   PassphraseModal,
