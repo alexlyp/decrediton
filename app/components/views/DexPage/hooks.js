@@ -20,6 +20,8 @@ export const useDex = () => {
   const dexDCRWalletRunning = useSelector(sel.dexDCRWalletRunning);
   const user = useSelector(sel.dexcUser);
   const enableDexAttempt = useSelector(sel.enableDexAttempt);
+  const defaultSpendingAccount = useSelector(sel.defaultSpendingAccount);
+  const notMixedAccounts = useSelector(sel.getNotMixedAccounts);
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
@@ -32,7 +34,7 @@ export const useDex = () => {
   );
 
   const onCreateWalletDexc = useCallback(
-    (passphrase) => dispatch(da.createWalletDexc(passphrase)),
+    (passphrase, appPassphrase, account) => dispatch(da.createWalletDexc(passphrase, appPassphrase, account)),
     [dispatch]
   );
 
@@ -66,6 +68,8 @@ export const useDex = () => {
     dexDCRWalletRunning,
     onEnableDexc,
     enableDexAttempt,
+    defaultSpendingAccount,
+    notMixedAccounts,
     user
   };
 };

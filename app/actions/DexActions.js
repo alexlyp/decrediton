@@ -164,7 +164,7 @@ export const DEXC_CREATEWALLET_ATTEMPT = "DEXC_CREATEWALLET_ATTEMPT";
 export const DEXC_CREATEWALLET_SUCCESS = "DEXC_CREATEWALLET_SUCCESS";
 export const DEXC_CREATEWALLET_FAILED = "DEXC_CREATEWALLET_FAILED";
 
-export const createWalletDexc = (passphrase) => (dispatch, getState) => {
+export const createWalletDexc = (passphrase, appPassphrase, accountVal) => (dispatch, getState) => {
   dispatch({ type: DEXC_CREATEWALLET_ATTEMPT });
   if (!sel.dexcActive(getState())) {
     dispatch({ type: DEXC_CREATEWALLET_FAILED, error: "Dexc isn't active" });
@@ -178,8 +178,7 @@ export const createWalletDexc = (passphrase) => (dispatch, getState) => {
     } = getState();
     const rpcCreds = dexRpcSettings;
     const walletPath = getWalletPath(isTestnet, walletName);
-    const appPassphrase = "p1";
-    const account = "dex";
+    const account = accountVal.name;
     const rpcuser = rpcCreds.rpcUser;
     const rpcpass= rpcCreds.rpcPass;
     const rpclisten = rpcCreds.rpcListen;
