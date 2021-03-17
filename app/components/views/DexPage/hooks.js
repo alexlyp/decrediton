@@ -44,7 +44,12 @@ export const useDex = () => {
   );
 
   const onEnableDexc = useCallback(
-    (passphrase) => dispatch(da.enableDexc()),
+    () => dispatch(da.enableDexc()),
+    [dispatch]
+  );
+
+  const onGetFee = useCallback(
+    (address) => dispatch(da.getFeeDexc(address)),
     [dispatch]
   );
 
@@ -70,6 +75,7 @@ export const useDex = () => {
     enableDexAttempt,
     defaultSpendingAccount,
     notMixedAccounts,
+    onGetFee,
     user
   };
 };

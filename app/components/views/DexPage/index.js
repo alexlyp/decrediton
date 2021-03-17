@@ -36,11 +36,7 @@ const DexPage = () => {
         if (dexRegistered && dexDCRWalletRunning) {
           Page = <DexViewContent />;
           Header = <DexViewHeader />;
-        } else if (!dexConnected && dexDCRWalletRunning) {
-          // Wallet connected but exchange not connected (user request empty)
-          Page = <ConnectExchangePageContent />;
-          Header = <ConnectExchangePageHeader />;
-        } else if (dexcAddr && dexcFee && dexDCRWalletRunning) {
+        } else if (dexDCRWalletRunning) {
           Page = <RegisterPageContent/>;
           Header = <RegisterPageHeader />;
         } else if (!dexDCRWalletRunning) {

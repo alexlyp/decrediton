@@ -951,14 +951,14 @@ export const launchDCRLnd = (
         }
     });
     
-  export const registerDexcCall = (passphrase, addr, fee) =>
+  export const registerDexcCall = (appPass, addr, fee) =>
     new Promise((resolve, reject) => {
       if (!dex) {
         resolve();
       }
       try {
         const dexc = GetDexcPID();
-        const register = dexc.callDEX("Register", { appPass: passphrase, url: addr, fee: parseInt(fee), cert: "" })
+        const register = dexc.callDEX("Register", { appPass, url: addr, fee: parseInt(fee), cert: "" })
         return resolve(register);
       } catch(error) {
         console.log("register error", error);

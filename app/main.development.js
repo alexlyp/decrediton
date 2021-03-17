@@ -489,12 +489,12 @@ ipcMain.on(
   "register-dexc",
  async (
     event,
-    passphrase,
+    appPass,
     addr,
     fee
   ) => {
     try {
-      event.returnValue = await registerDexc(passphrase, addr, fee);
+      event.returnValue = await registerDexc(appPass, addr, fee);
     } catch (error) {
       if (!(error instanceof Error)) {
         event.returnValue = new Error(error);

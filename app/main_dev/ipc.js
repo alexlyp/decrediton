@@ -405,7 +405,7 @@ export const getFeeDexc = async (addr) => {
   }
 };
 
-export const registerDexc = async (passphrase, addr, fee) => {
+export const registerDexc = async (appPass, addr, fee) => {
   if (!GetDexcPID()) {
     logger.log(
       "info",
@@ -415,7 +415,7 @@ export const registerDexc = async (passphrase, addr, fee) => {
   }
 
   try {
-    const register = await registerDexcCall(passphrase, addr, fee);
+    const register = await registerDexcCall(appPass, addr, fee);
     return register;
   } catch (e) {
     logger.log("error", "error register dexc: " + e);

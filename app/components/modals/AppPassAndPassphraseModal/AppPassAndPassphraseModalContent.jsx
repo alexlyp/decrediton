@@ -30,6 +30,7 @@ const Modal = ({
         onKeyDownSubmit={onTriggerPassphraseModalSubmit}
       />
     </PassphraseModalField>
+    {error && <div className="error">{error}</div>}
   </PassphraseModal>
 );
 

@@ -16,7 +16,8 @@ const Modal = ({
   onSubmit,
   setPassPhrase,
   submitLabel,
-  isValid
+  isValid,
+  passphraseLabel
 }) => (
   <DefaultModal
     className={classNames(style.passphrase, modalClassName)}
@@ -38,7 +39,7 @@ const Modal = ({
     </div>
     <div className={style.passphraseContent}>
       <PassphraseModalField
-        label={
+        label={passphraseLabel ? passphraseLabel :
           <T id="passphraseModal.privatePassphrase" m="Private Passphrase" />
         }>
         <PasswordInput

@@ -229,10 +229,6 @@ export const userDexc = () => (dispatch, getState) => {
     }
     const resJson = JSON.parse(res);
     dispatch({ type: DEXC_USER_SUCCESS, user: resJson });
-    // Check to see if user is already registered, if so don't get fee.
-    if (!resJson || !resJson.exchanges || Object.keys(resJson.exchanges).length <= 0) {
-      dispatch(getFeeDexc());
-    }
   } catch (error) {
     dispatch({ type: DEXC_USER_FAILED, error });
     return;
@@ -243,14 +239,13 @@ export const DEXC_GETFEE_ATTEMPT = "DEXC_GETFEE_ATTEMPT";
 export const DEXC_GETFEE_SUCCESS = "DEXC_GETFEE_SUCCESS";
 export const DEXC_GETFEE_FAILED = "DEXC_GETFEE_FAILED";
 
-export const getFeeDexc = () => (dispatch, getState) => {
+export const getFeeDexc = (addr) => (dispatch, getState) => {
   dispatch({ type: DEXC_GETFEE_ATTEMPT });
   if (!sel.dexcActive(getState())) {
     dispatch({ type: DEXC_GETFEE_FAILED, error: "Dexc isn't active" });
     return;
   }
   try {
-    const addr = "dex-test.ssgen.io:7232"
     const res = ipcRenderer.sendSync("get-fee-dexc",
       addr
     );
@@ -272,7 +267,7 @@ export const DEXC_REGISTER_ATTEMPT = "DEXC_REGISTER_ATTEMPT";
 export const DEXC_REGISTER_SUCCESS = "DEXC_REGISTER_SUCCESS";
 export const DEXC_REGISTER_FAILED = "DEXC_REGISTER_FAILED";
 
-export const registerDexc = (passphrase) => (dispatch, getState) => {
+export const registerDexc = (appPass) => (dispatch, getState) => {
   dispatch({ type: DEXC_REGISTER_ATTEMPT });
   if (!sel.dexcActive(getState())) {
     dispatch({ type: DEXC_REGISTER_FAILED, error: "Dexc isn't active" });
@@ -283,7 +278,7 @@ export const registerDexc = (passphrase) => (dispatch, getState) => {
   } = getState();
   try {
     const res = ipcRenderer.sendSync("register-dexc",
-      passphrase,
+      appPass,
       addr,
       fee
     );
