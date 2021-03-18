@@ -22,6 +22,11 @@ export const useDex = () => {
   const enableDexAttempt = useSelector(sel.enableDexAttempt);
   const defaultSpendingAccount = useSelector(sel.defaultSpendingAccount);
   const notMixedAccounts = useSelector(sel.getNotMixedAccounts);
+  
+  const onLaunchDexWindow = useCallback(
+    () => dispatch(da.launchDexcWindow()),
+    [dispatch]
+  );
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
@@ -76,6 +81,7 @@ export const useDex = () => {
     defaultSpendingAccount,
     notMixedAccounts,
     onGetFee,
-    user
+    user,
+    onLaunchDexWindow
   };
 };

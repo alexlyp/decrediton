@@ -849,14 +849,12 @@ export const launchDCRLnd = (
             dbPath: dbPath,
             net: !testnet ? Mainnet : Testnet
         });
-        dexcCreds = {
-          address: "localhost",
-          port: 5758
-        };
-        dexc.callDEX("startServer", `localhost:5758`);// dexcCreds.address + ":" + dexcCreds.host);
+        const serverAddress = "localhost:5758";
+        dexc.callDEX("startServer", `localhost:5758`);
         dex = dexc;
-        return resolve(dexcCreds);
+        return resolve(serverAddress);
     } catch(error) {
+      console.log("error", error);
       return reject(error);
     }
   });

@@ -1,21 +1,32 @@
-import BrowserView from "react-electron-browser-view";
-import { FormattedMessage as T } from "react-intl";
+import { useDex } from "./hooks";
+import { KeyBlueButton } from "buttons";
 import { StandaloneHeader } from "layout";
+import { FormattedMessage as T } from "react-intl";
 import { LN_ICON } from "constants";
+import "style/ConnectPage.css";
 
-export const DexViewContent = () => (
-      <BrowserView
-        src="http://127.0.0.1:5758/markets"
-        style={{
-          height: 1000
-        }}
-      />
+export const DexViewContent = () => {
+  const {
+    onLaunchDexWindow
+  } = useDex();
+
+  return (
+      <KeyBlueButton
+        onSubmit={onLaunchDexWindow}>
+        <T id="dex.launchDexWindow" m="Launch DEX Window" />
+      </KeyBlueButton>
   );
-
+};
 
 export const DexViewHeader = () => (
-  <StandaloneHeader
-    title={<T id="dex.dexView.title" m="Dex" />}
-    iconType={LN_ICON}
-  />
+    <StandaloneHeader
+      title={<T id="dex.launchDexWindow.title" m="Launch Dex Window" />}
+      description={
+        <T
+          id="dex.launchDexWIndow.description"
+          m={"Launch the window to access the DEX"}
+        />
+      }
+      iconType={LN_ICON}
+    />
 );

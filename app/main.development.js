@@ -548,6 +548,22 @@ ipcMain.on("stop-dexc", async (event) => {
   event.returnValue = await stopDexc();
 });
 
+ipcMain.on("launch-dex-window", async (event) => {
+  event.returnValue = await createDexWindow();
+});
+
+function createDexWindow () {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  })
+  //win.loadFile('dex.html')
+}
+
 ipcMain.on("dcrlnd-creds", (event) => {
   if (GetDcrlndPID() && GetDcrlndPID() !== -1) {
     event.returnValue = GetDcrlndCreds();

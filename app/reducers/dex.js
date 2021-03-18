@@ -73,7 +73,8 @@ export default function ln(state = {}, action) {
         startAttempt: false,
         exists: true,
         active: true,
-        startupStage: null
+        startupStage: null,
+        dexServerAddress: action.serverAddress
       };
     case DEXC_LOGIN_ATTEMPT:
       return {
@@ -186,7 +187,7 @@ export default function ln(state = {}, action) {
       return {
         ...state,
         launchWindowAttempt: false,
-        launchWindow: true,
+        launchWindow: false,
         launchWinodwError: action.error
       };
     case DEXC_LAUNCH_WINDOW_SUCCESS:

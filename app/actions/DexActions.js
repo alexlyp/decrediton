@@ -56,10 +56,15 @@ export const startDexc = () => (dispatch, getState) => {
       walletPath,
       isTestnet
     );
-    if (typeof res === "string" || res instanceof Error) {
+    if (res instanceof Error) {
       throw res;
+    } 
+    if ( typeof res === "string" ) {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
     }
-    dispatch({ type: DEXC_STARTUP_SUCCESS });
+    dispatch({ type: DEXC_STARTUP_SUCCESS, serverAddress: res});
     dispatch(dexcCheckInit());
   } catch (error) {
     dispatch({ type: DEXC_STARTUP_FAILED, error });
@@ -79,6 +84,9 @@ export const dexcCheckInit = () => (dispatch, getState) => {
       throw res;
     }
     if ( typeof res === "string" ) {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
       res = res == "true" ? true : false;
     }
     dispatch({ type: DEXC_CHECKINIT_SUCCESS, res });
@@ -303,11 +311,30 @@ export const DEXC_LAUNCH_WINDOW_SUCCESS = "DEXC_LAUNCH_WINDOW_SUCCESS";
 export const DEXC_LAUNCH_WINDOW_FAILED = "DEXC_LAUNCH_WINDOW_FAILED";
 
 export const launchDexcWindow = () => (dispatch, getState) => {
+  const {
+    dex: { dexServerAddress }
+  } = getState();
   dispatch({ type: DEXC_LAUNCH_WINDOW_ATTEMPT });
   if (!sel.dexcActive(getState())) {
     dispatch({ type: DEXC_LAUNCH_WINDOW_FAILED, error: "Dexc isn't active" });
     return;
   }
-
-  dispatch({ type: DEXC_LAUNCH_WINDOW_SUCCESS });
+  try {
+    const res = ipcRenderer.sendSync("launch-dex-window",
+      dexServerAddress
+    );
+    if (res instanceof Error) {
+      throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
+    }  
+    dispatch({ type: DEXC_LAUNCH_WINDOW_SUCCESS });
+    // Request current user information
+    dispatch(userDexc());
+  } catch (error) {
+    dispatch({ type: DEXC_LAUNCH_WINDOW_FAILED, error });
+    return;
+  }
 };
