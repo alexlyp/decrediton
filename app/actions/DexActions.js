@@ -64,6 +64,7 @@ export const startDexc = () => (dispatch, getState) => {
         throw res
       }
     }
+    console.log(res);
     dispatch({ type: DEXC_STARTUP_SUCCESS, serverAddress: res});
     dispatch(dexcCheckInit());
   } catch (error) {
@@ -320,8 +321,9 @@ export const launchDexcWindow = () => (dispatch, getState) => {
     return;
   }
   try {
+    const serverAddress = dexServerAddress;
     const res = ipcRenderer.sendSync("launch-dex-window",
-      dexServerAddress
+      serverAddress
     );
     if (res instanceof Error) {
       throw res;

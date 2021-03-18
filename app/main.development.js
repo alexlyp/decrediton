@@ -26,7 +26,8 @@ import {
   reloadAllowedExternalRequests,
   LEGACY_allowStakepoolRequests,
   allowVSPRequests,
-  allowExternalRequest
+  allowExternalRequest,
+  DEX_LOCALPAGE
 } from "./main_dev/externalRequests";
 import { setupProxy } from "./main_dev/proxy";
 import {
@@ -559,9 +560,9 @@ function createDexWindow () {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
-    }
-  })
-  //win.loadFile('dex.html')
+    },
+  });
+  win.loadURL("http://" + DEX_LOCALPAGE);
 }
 
 ipcMain.on("dcrlnd-creds", (event) => {

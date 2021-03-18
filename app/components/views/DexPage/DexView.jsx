@@ -12,7 +12,7 @@ export const DexViewContent = () => {
 
   return (
       <KeyBlueButton
-        onSubmit={onLaunchDexWindow}>
+        onClick={onLaunchDexWindow}>
         <T id="dex.launchDexWindow" m="Launch DEX Window" />
       </KeyBlueButton>
   );
