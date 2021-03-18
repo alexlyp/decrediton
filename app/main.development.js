@@ -440,6 +440,7 @@ ipcMain.on(
   "create-wallet-dexc",
  async (
     event,
+    assetID,
     passphrase,
     appPassphrase,
     account,
@@ -450,6 +451,7 @@ ipcMain.on(
   ) => {
     try {
       event.returnValue = await createWalletDexc(
+        assetID,
         passphrase,
         appPassphrase,
         account,

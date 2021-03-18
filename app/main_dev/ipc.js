@@ -357,6 +357,7 @@ export const loginDexc = async (passphrase) => {
 };
 
 export const createWalletDexc = async (
+  assetID,
   passphrase,
   appPassphrase,
   account,
@@ -374,6 +375,7 @@ export const createWalletDexc = async (
 
   try {
     const createWallet = await createWalletDexcCall(
+      assetID,
       passphrase,
       appPassphrase,
       account,
