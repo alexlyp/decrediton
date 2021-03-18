@@ -554,15 +554,11 @@ ipcMain.on("launch-dex-window", async (event) => {
 });
 
 function createDexWindow () {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    },
+  const child = new BrowserWindow({ parent: mainWindow, modal: true, show: false })
+  child.loadURL("http://" + DEX_LOCALPAGE);
+  child.once('ready-to-show', () => {
+    child.show()
   });
-  win.loadURL("http://" + DEX_LOCALPAGE);
 }
 
 ipcMain.on("dcrlnd-creds", (event) => {
