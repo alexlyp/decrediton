@@ -556,7 +556,7 @@ ipcMain.on("launch-dex-window", async (event) => {
 });
 
 function createDexWindow () {
-  const child = new BrowserWindow({ parent: mainWindow, modal: true, show: false })
+  const child = new BrowserWindow({ parent: mainWindow, modal: true, show: false, autoHideMenuBar: true })
   child.loadURL("http://" + DEX_LOCALPAGE);
   child.once('ready-to-show', () => {
     child.show()

@@ -920,8 +920,10 @@ export const launchDCRLnd = (
       if (!dex) {
         resolve();
       }
+      let pw = {};
       let config = {};
       if (assetID == 42) {
+        pw = passphrase;
         config = {
           account,
           rpccert,
@@ -930,6 +932,7 @@ export const launchDCRLnd = (
           rpclisten
         }
       } else if (assetID == 0) {
+        pw = "password";
         const splitRPC = rpclisten.split(":");
         if (splitRPC.length < 2) {
           return reject("error: rpclisten malformed for btc");
@@ -944,7 +947,7 @@ export const launchDCRLnd = (
       }
       try {
         const dexc = GetDexcPID();
-        const init = dexc.callDEX("CreateWallet", { pass: passphrase, appPass: appPassphrase, config, assetID })
+        const init = dexc.callDEX("CreateWallet", { pass: pw, appPass: appPassphrase, config, assetID })
         return resolve(init);
       } catch(error) {
         console.log("create wallet error", error);
