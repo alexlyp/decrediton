@@ -1,5 +1,7 @@
 import fs from "fs-extra";
 import parseArgs from "minimist";
+import path from "path";
+import ini from "ini";
 import { app, BrowserWindow, Menu, dialog } from "electron";
 import { initGlobalCfg, validateGlobalCfgFile } from "./config";
 import {
@@ -18,7 +20,8 @@ import {
 import {
   getWalletsDirectoryPath,
   getWalletsDirectoryPathNetwork,
-  getAppDataDirectory
+  getAppDataDirectory,
+  getDefaultBitcoinDirectory
 } from "./main_dev/paths";
 import { getGlobalCfgPath, checkAndInitWalletCfg } from "./main_dev/paths";
 import {
@@ -562,6 +565,20 @@ function createDexWindow () {
     child.show()
   });
 }
+
+ipcMain.on("check-btc-config", async (event) => {
+  console.log("herefsdasdf!", path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"));
+  try {
+    const bitcoinFile = ini.parse(fs.readFileSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"), "utf8"));
+    event.returnValue = bitcoinFile;
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
+    }
+  }
+});
 
 ipcMain.on("dcrlnd-creds", (event) => {
   if (GetDcrlndPID() && GetDcrlndPID() !== -1) {

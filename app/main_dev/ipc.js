@@ -294,7 +294,6 @@ export const startDexc = async (
       walletPath,
       testnet
     );
-    console.log(started);
     return started;
   } catch (e) {
     logger.log("error", "error launching dexc: " + e);

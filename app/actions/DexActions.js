@@ -64,13 +64,13 @@ export const startDexc = () => (dispatch, getState) => {
         throw res
       }
     }
-    console.log(res);
     dispatch({ type: DEXC_STARTUP_SUCCESS, serverAddress: res});
     dispatch(dexcCheckInit());
   } catch (error) {
     dispatch({ type: DEXC_STARTUP_FAILED, error });
     return;
   }
+  dispatch(checkBTCConfig());
 };
 
 export const DEXC_CHECKINIT_ATTEMPT = "DEXC_CHECKINIT_ATTEMPT";
@@ -387,3 +387,26 @@ export const launchDexcWindow = () => (dispatch, getState) => {
     return;
   }
 };
+
+export const CHECK_BTC_CONFIG_ATTEMPT = "CHECK_BTC_CONFIG_ATTEMPT";
+export const CHECK_BTC_CONFIG_SUCCESS = "CHECK_BTC_CONFIG_SUCCESS";
+export const CHECK_BTC_CONFIG_FAILED = "CHECK_BTC_CONFIG_FAILED";
+
+export const checkBTCConfig = () => (dispatch) => {
+  dispatch({ type: CHECK_BTC_CONFIG_ATTEMPT });
+  try {
+    const res = ipcRenderer.sendSync("check-btc-config");
+    if (res instanceof Error) {
+      throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
+    }
+    dispatch({ type: CHECK_BTC_CONFIG_SUCCESS, btcConfig: res });
+  } catch (error) {
+    dispatch({ type: CHECK_BTC_CONFIG_FAILED, error });
+    return;
+  }
+}
+
