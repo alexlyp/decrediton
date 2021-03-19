@@ -70,6 +70,7 @@ const startWalletServicesTrigger = () => (dispatch, getState) =>
   new Promise((resolve, reject) => {
     const startServicesAsync = async () => {
       const { spvSynced, privacyEnabled, dexEnabled } = getState().walletLoader;
+
       if (!spvSynced) {
         dispatch(getTicketBuyerServiceAttempt());
       }
@@ -96,7 +97,8 @@ const startWalletServicesTrigger = () => (dispatch, getState) =>
 
       await dispatch(getVoteChoicesAttempt());
 
-      if (dexEnabled) {
+      // Start DEXC if dexEnabled and NOT SPV mode
+      if (dexEnabled && !sel.isSPV(getState())) {
         await dispatch(startDexc());
       }
     };
