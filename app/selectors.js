@@ -1803,5 +1803,10 @@ export const dexDCRWalletRunning = compose(
   dexcUser
 )
 
+export const dexBTCWalletRunning = compose(
+  (user) => user && user.assets && user.assets["0"] && user.assets["0"].wallet && user.assets["0"].wallet.running,
+  dexcUser
+)
+
 export const dexcAddr = get(["dex", "addr"]);
 export const dexcFee = get(["dex", "fee"]);

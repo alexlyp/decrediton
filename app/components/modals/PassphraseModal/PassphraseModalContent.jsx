@@ -17,7 +17,8 @@ const Modal = ({
   setPassPhrase,
   submitLabel,
   isValid,
-  passphraseLabel
+  passphraseLabel,
+  passphraseNotRequired
 }) => (
   <DefaultModal
     className={classNames(style.passphrase, modalClassName)}
@@ -44,7 +45,7 @@ const Modal = ({
         }>
         <PasswordInput
           autoFocus={true}
-          required
+          required={!passphraseNotRequired}
           id="passphrase"
           placeholder=""
           value={passPhrase}

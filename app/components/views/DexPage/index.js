@@ -8,6 +8,7 @@ import { CreateWalletPageContent, CreateWalletPageHeader } from "./CreateWalletP
 import { EnablePageContent, EnablePageHeader } from "./EnablePage";
 import { InitPageContent, InitPageHeader } from "./InitPage";
 import { LoginPageContent, LoginPageHeader } from "./LoginPage";
+import { dexBTCWalletRunning } from "../../../selectors";
 
 
 const DexPage = () => {
@@ -22,7 +23,8 @@ const DexPage = () => {
     dexDCRWalletRunning,
     dexcEnabled,
     dexConnected,
-    user
+    user,
+    dexBTCWalletRunning
   } = useDex();
   if (!dexcEnabled) {
     Page = <EnablePageContent />;
@@ -33,13 +35,13 @@ const DexPage = () => {
         Page = <LoginPageContent />;
         Header = <LoginPageHeader />;
       } else {
-        if (dexRegistered && dexDCRWalletRunning) {
+        if (dexRegistered && dexDCRWalletRunning && dexBTCWalletRunning) {
           Page = <DexViewContent />;
           Header = <DexViewHeader />;
-        } else if (dexDCRWalletRunning) {
+        } else if (dexDCRWalletRunning && dexBTCWalletRunning) {
           Page = <RegisterPageContent/>;
           Header = <RegisterPageHeader />;
-        } else if (!dexDCRWalletRunning) {
+        } else if (!dexDCRWalletRunning || !dexBTCWalletRunning) {
           Page = <CreateWalletPageContent />;
           Header = <CreateWalletPageHeader />;
         }

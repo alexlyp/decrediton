@@ -18,6 +18,7 @@ export const useDex = () => {
   const dexRegistered = useSelector(sel.dexRegistered);
   const dexConnected = useSelector(sel.dexcConnected);
   const dexDCRWalletRunning = useSelector(sel.dexDCRWalletRunning);
+  const dexBTCWalletRunning = useSelector(sel.dexBTCWalletRunning);
   const user = useSelector(sel.dexcUser);
   const enableDexAttempt = useSelector(sel.enableDexAttempt);
   const defaultSpendingAccount = useSelector(sel.defaultSpendingAccount);
@@ -91,6 +92,7 @@ export const useDex = () => {
     dexRegistered,
     dexConnected,
     dexDCRWalletRunning,
+    dexBTCWalletRunning,
     onEnableDexc,
     enableDexAttempt,
     defaultSpendingAccount,

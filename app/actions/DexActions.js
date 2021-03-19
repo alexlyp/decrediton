@@ -210,7 +210,6 @@ export const createWalletDexc = (passphrase, appPassphrase, accountVal) => (disp
       }
     }
     dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
-    dispatch(btcCreateWalletDexc(passphrase, appPassphrase, "dextest"));
     // Request current user information
     dispatch(userDexc());
   } catch (error) {
@@ -224,9 +223,9 @@ export const BTC_CREATEWALLET_SUCCESS = "BTC_CREATEWALLET_SUCCESS";
 export const BTC_CREATEWALLET_FAILED = "BTC_CREATEWALLET_FAILED";
 
 export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => (dispatch, getState) => {
-  dispatch({ type: DEXC_CREATEWALLET_ATTEMPT });
+  dispatch({ type: BTC_CREATEWALLET_ATTEMPT });
   if (!sel.dexcActive(getState())) {
-    dispatch({ type: DEXC_CREATEWALLET_FAILED, error: "Dexc isn't active" });
+    dispatch({ type: BTC_CREATEWALLET_FAILED, error: "Dexc isn't active" });
     return;
   }
   try {
@@ -234,8 +233,8 @@ export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => (d
       walletLoader: { dexRpcSettings }
     } = getState();
     const account = walletName;
-    const rpcuser = "USER";
-    const rpcpass= "PASSWORD";
+    const rpcuser = "USER1";
+    const rpcpass= "USER2";
     const rpclisten = "127.0.0.1:18332";
     const assetID = 0;
     const res = ipcRenderer.sendSync("create-wallet-dexc",
@@ -254,11 +253,11 @@ export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => (d
         throw res
       }
     }
-    dispatch({ type: DEXC_CREATEWALLET_SUCCESS });
+    dispatch({ type: BTC_CREATEWALLET_SUCCESS });
     // Request current user information
     dispatch(userDexc());
   } catch (error) {
-    dispatch({ type: DEXC_CREATEWALLET_FAILED, error });
+    dispatch({ type: BTC_CREATEWALLET_FAILED, error });
     return;
   }
 };
