@@ -70,7 +70,6 @@ export const startDexc = () => (dispatch, getState) => {
     dispatch({ type: DEXC_STARTUP_FAILED, error });
     return;
   }
-  dispatch(checkBTCConfig());
 };
 
 export const DEXC_CHECKINIT_ATTEMPT = "DEXC_CHECKINIT_ATTEMPT";
@@ -403,6 +402,7 @@ export const checkBTCConfig = () => (dispatch) => {
         throw res
       }
     }
+    console.log(res);
     dispatch({ type: CHECK_BTC_CONFIG_SUCCESS, btcConfig: res });
   } catch (error) {
     dispatch({ type: CHECK_BTC_CONFIG_FAILED, error });
@@ -410,3 +410,33 @@ export const checkBTCConfig = () => (dispatch) => {
   }
 }
 
+export const UPDATE_BTC_CONFIG_ATTEMPT = "UPDATE_BTC_CONFIG_ATTEMPT";
+export const UPDATE_BTC_CONFIG_SUCCESS = "UPDATE_BTC_CONFIG_SUCCESS";
+export const UPDATE_BTC_CONFIG_FAILED = "UPDATE_BTC_CONFIG_FAILED";
+
+export const updateBTCConfig = () => (dispatch) => {
+  dispatch({ type: UPDATE_BTC_CONFIG_ATTEMPT });
+  try {
+    const rpcuser = "USER1";
+    const rpcpassword = "USER2";
+    const rpcbind = "127.0.0.1";
+    const rpcport = "18332";
+    const res = ipcRenderer.sendSync("update-btc-config",
+      rpcuser,
+      rpcpassword,
+      rpcbind,
+      rpcport);
+    if (res instanceof Error) {
+      throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res
+      }
+    }
+    console.log(res);
+    dispatch({ type: UPDATE_BTC_CONFIG_SUCCESS, btcConfigUpdate: res });
+  } catch (error) {
+    dispatch({ type: UPDATE_BTC_CONFIG_FAILED, error });
+    return;
+  }
+}

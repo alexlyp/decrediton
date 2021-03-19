@@ -1,9 +1,13 @@
 import fs from "fs-extra";
 import parseArgs from "minimist";
 import path from "path";
-import ini from "ini";
 import { app, BrowserWindow, Menu, dialog } from "electron";
-import { initGlobalCfg, validateGlobalCfgFile } from "./config";
+import { 
+  getDefaultBitcoinConfig,
+  updateDefaultBitcoinConfig,
+  initGlobalCfg,
+  validateGlobalCfgFile
+ } from "./config";
 import {
   appLocaleFromElectronLocale,
   default as locales
@@ -20,8 +24,7 @@ import {
 import {
   getWalletsDirectoryPath,
   getWalletsDirectoryPathNetwork,
-  getAppDataDirectory,
-  getDefaultBitcoinDirectory
+  getAppDataDirectory
 } from "./main_dev/paths";
 import { getGlobalCfgPath, checkAndInitWalletCfg } from "./main_dev/paths";
 import {
@@ -567,10 +570,20 @@ function createDexWindow () {
 }
 
 ipcMain.on("check-btc-config", async (event) => {
-  console.log("herefsdasdf!", path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"));
   try {
-    const bitcoinFile = ini.parse(fs.readFileSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"), "utf8"));
-    event.returnValue = bitcoinFile;
+    event.returnValue = getDefaultBitcoinConfig();
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
+    }
+  }
+});
+
+ipcMain.on("update-btc-config", async (event, rpcuser, rpcpassword, rpcbind, rpcport) => {
+  try {
+    event.returnValue = updateDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport);
   } catch (error) {
     if (!(error instanceof Error)) {
       event.returnValue = new Error(error);

@@ -7,14 +7,26 @@ import "style/ConnectPage.css";
 
 export const DexViewContent = () => {
   const {
-    onLaunchDexWindow
+    onLaunchDexWindow,
+    onCheckBTCConfig,
+    onUpdateBTCConfig
   } = useDex();
 
   return (
+    <div>
       <KeyBlueButton
         onClick={onLaunchDexWindow}>
         <T id="dex.launchDexWindow" m="Launch DEX Window" />
       </KeyBlueButton>
+      <KeyBlueButton
+        onClick={onCheckBTCConfig}>
+        <T id="dex.checkBTCConfig" m="Check Bitcoin Config" />
+      </KeyBlueButton>
+      <KeyBlueButton
+        onClick={onUpdateBTCConfig}>
+        <T id="dex.updateBTCConfig" m="Update BTC Config" />
+      </KeyBlueButton>
+    </div>
   );
 };
 

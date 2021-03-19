@@ -43,6 +43,21 @@ export const useDex = () => {
     [dispatch]
   );
 
+  const onBTCCreateWalletDexc = useCallback(
+    (passphrase, appPassphrase, walletname) => dispatch(da.btcCreateWalletDexc(passphrase, appPassphrase, walletname)),
+    [dispatch]
+  );
+
+  const onUpdateBTCConfig = useCallback(
+    (rpcuser, rpcpassword, rpcport, rpcbind) => dispatch(da.updateBTCConfig(rpcuser, rpcpassword, rpcport, rpcbind)),
+    [dispatch]
+  );
+
+  const onCheckBTCConfig = useCallback(
+    (fileLocation) => dispatch(da.checkBTCConfig(fileLocation)),
+    [dispatch]
+  );
+
   const onLoginDexc = useCallback(
     (passphrase) => dispatch(da.loginDexc(passphrase)),
     [dispatch]
@@ -82,6 +97,9 @@ export const useDex = () => {
     notMixedAccounts,
     onGetFee,
     user,
-    onLaunchDexWindow
+    onLaunchDexWindow,
+    onCheckBTCConfig,
+    onUpdateBTCConfig,
+    onBTCCreateWalletDexc
   };
 };

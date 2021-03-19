@@ -1,12 +1,14 @@
 import fs from "fs";
 import Store from "electron-store";
 import ini from "ini";
+import path from "path";
 import { stakePoolInfo } from "./middleware/vspapi";
 import {
   getGlobalCfgPath,
   getWalletPath,
   dcrwalletConf,
-  getDcrdRpcCert
+  getDcrdRpcCert,
+  getDefaultBitcoinDirectory
 } from "./main_dev/paths";
 import * as cfgConstants from "constants/config";
 
@@ -255,4 +257,89 @@ export function checkNoLegacyWalletConfig(testnet, walletPath, noLegacyRpc) {
   } catch (e) {
     console.log(e);
   }
+}
+
+export function getDefaultBitcoinConfig() {
+  try {
+    return ini.parse(fs.readFileSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"), "utf8"));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export function newDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport) {
+  if (!fs.existsSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"))) {
+    const bitcoinConf = {
+        rpcuser,
+        rpcpassword,
+        rpcbind,
+        rpcport,
+        server: 1
+    };
+    fs.writeFileSync(
+      path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"),
+      ini.stringify(bitcoinConf)
+    );
+  }
+}
+
+export function updateDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport) {
+  try {
+    // Check if default file exists, if not create a new one with args given.
+    if (!fs.existsSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"))) {
+      newDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport)
+    } else {
+      let fileContents;
+      let needUser = true;
+      let needPassword = true;
+      let needBind = true;
+      let needPort = true;
+      fileContents = ini.parse(fs.readFileSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"), "utf8"));
+      fileContents = Object.fromEntries(Object.entries(fileContents).map(([key, value]) => {
+        // Check if any fields that are needed are currently used, if so keep those values
+        if (key == "rpcuser") {
+          needUser = false;
+          if (value !== "")
+            rpcuser = value;
+        }
+        if (key == "rpcpassword") {
+          needPassword = false;
+          if (value !== "")
+            rpcpassword = value;
+        }
+        if (key == "rpcbind") {
+          needBind = false;
+          if (value !== "")
+            rpcBind = value;
+        }
+        if (key == "rpcport") {
+          needPort = false;
+          if (value !== "")
+            rpcport = value;
+        }
+        return [key, value]
+      }));
+      // Set Fields in Config if they weren't found.
+      if (needUser) 
+        fileContents.rpcuser = rpcuser;
+      
+      if (needPassword) 
+        fileContents.rpcpassword = rpcpassword;
+
+      if (needBind) 
+        fileContents.rpcbind = rpcbind;
+
+      if (needPort) 
+        fileContents.rpcport = rpcport;
+
+      fileContents.server = 1;
+      fs.writeFileSync(
+        path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"),
+        ini.stringify(fileContents)
+      );
+    }
+    return {rpcuser, rpcpassword, rpcbind, rpcport};
+  } catch (e) {
+      console.log(e);
+    }
 }
