@@ -6,14 +6,11 @@ import { LN_ICON } from "constants";
 import "style/ConnectPage.css";
 
 export const DexViewContent = () => {
-  const {
-    onLaunchDexWindow
-  } = useDex();
+  const { onLaunchDexWindow } = useDex();
 
   return (
     <div>
-      <KeyBlueButton
-        onClick={onLaunchDexWindow}>
+      <KeyBlueButton onClick={onLaunchDexWindow}>
         <T id="dex.launchDexWindow" m="Launch DEX Window" />
       </KeyBlueButton>
     </div>
@@ -21,14 +18,14 @@ export const DexViewContent = () => {
 };
 
 export const DexViewHeader = () => (
-    <StandaloneHeader
-      title={<T id="dex.launchDexWindow.title" m="Launch Dex Window" />}
-      description={
-        <T
-          id="dex.launchDexWIndow.description"
-          m={"Launch the window to access the DEX"}
-        />
-      }
-      iconType={LN_ICON}
-    />
+  <StandaloneHeader
+    title={<T id="dex.launchDexWindow.title" m="Launch Dex Window" />}
+    description={
+      <T
+        id="dex.launchDexWIndow.description"
+        m={"Launch the window to access the DEX"}
+      />
+    }
+    iconType={LN_ICON}
+  />
 );

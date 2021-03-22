@@ -6,16 +6,9 @@ import { LN_ICON } from "constants";
 import "style/ConnectPage.css";
 
 export const ConnectExchangePageContent = () => {
-  const {
-    onRegisterDexc,
-    registerDexcAttempt
-  } = useDex();
+  const { onRegisterDexc, registerDexcAttempt } = useDex();
 
-  return (
-    <div>
-      EXCHANGE NOT CONNECTED... AWAITING FURTHER INSTRUCTIONS
-    </div>
-  );
+  return <div>EXCHANGE NOT CONNECTED... AWAITING FURTHER INSTRUCTIONS</div>;
 };
 
 export const ConnectExchangePageHeader = () => (

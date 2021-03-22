@@ -1,19 +1,23 @@
-
 import { RegisterPageContent, RegisterPageHeader } from "./RegisterPage";
-import { ConnectExchangePageContent, ConnectExchangePageHeader } from "./ConnectExchangePage";
+import {
+  ConnectExchangePageContent,
+  ConnectExchangePageHeader
+} from "./ConnectExchangePage";
 import { DexViewContent, DexViewHeader } from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage, StandaloneHeader } from "layout";
-import { CreateWalletPageContent, CreateWalletPageHeader } from "./CreateWalletPage";
+import {
+  CreateWalletPageContent,
+  CreateWalletPageHeader
+} from "./CreateWalletPage";
 import { EnablePageContent, EnablePageHeader } from "./EnablePage";
 import { InitPageContent, InitPageHeader } from "./InitPage";
 import { LoginPageContent, LoginPageHeader } from "./LoginPage";
 import { dexBTCWalletRunning } from "../../../selectors";
 
-
 const DexPage = () => {
   let Page, Header;
-  const { 
+  const {
     dexcActive,
     dexcInit,
     loggedIn,
@@ -39,7 +43,7 @@ const DexPage = () => {
           Page = <DexViewContent />;
           Header = <DexViewHeader />;
         } else if (dexDCRWalletRunning && dexBTCWalletRunning) {
-          Page = <RegisterPageContent/>;
+          Page = <RegisterPageContent />;
           Header = <RegisterPageHeader />;
         } else if (!dexDCRWalletRunning || !dexBTCWalletRunning) {
           Page = <CreateWalletPageContent />;
@@ -52,27 +56,17 @@ const DexPage = () => {
     }
   } else {
     Page = <div>ERROR! DEXC NOT RUNNING</div>;
-    Header =  <ErrorHeader />; 
+    Header = <ErrorHeader />;
   }
-  return (
-    <StandalonePage header={Header}>
-      {Page}
-    </StandalonePage>
-  );
-
+  return <StandalonePage header={Header}>{Page}</StandalonePage>;
 };
 
 const ErrorHeader = () => {
   <StandaloneHeader
     title={<T id="dex.error.title" m="Dexc Error" />}
-    description={
-      <T
-        id="dex.error.description"
-        m={"Dex not running"}
-      />
-    }
+    description={<T id="dex.error.description" m={"Dex not running"} />}
     iconType={LN_ICON}
-  />
+  />;
 };
 
 export default DexPage;

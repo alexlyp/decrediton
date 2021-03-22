@@ -18,9 +18,7 @@ const Modal = ({
       parentIsValid: isValid
     }}>
     <PassphraseModalField
-      label={
-        <T id="appPassphrase.newPassphrase" m="DEX Passphrase" />
-      }>
+      label={<T id="appPassphrase.newPassphrase" m="DEX Passphrase" />}>
       <PasswordInput
         required
         showErrors={appPassphrase !== null && !isValid}

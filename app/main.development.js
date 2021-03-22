@@ -2,12 +2,12 @@ import fs from "fs-extra";
 import parseArgs from "minimist";
 import path from "path";
 import { app, BrowserWindow, Menu, dialog } from "electron";
-import { 
+import {
   getDefaultBitcoinConfig,
   updateDefaultBitcoinConfig,
   initGlobalCfg,
   validateGlobalCfgFile
- } from "./config";
+} from "./config";
 import {
   appLocaleFromElectronLocale,
   default as locales
@@ -348,8 +348,8 @@ ipcMain.on("start-wallet", (event, walletPath, testnet, rpcCreds) => {
     testnet,
     walletPath,
     reactIPC,
-    rpcUser, 
-    rpcPass, 
+    rpcUser,
+    rpcPass,
     rpcListen,
     rpcCert
   );
@@ -389,62 +389,45 @@ ipcMain.on("stop-dcrlnd", async (event) => {
   event.returnValue = await stopDcrlnd();
 });
 
-ipcMain.on(
-  "check-init-dexc",
- async (
-    event,
-  ) => {
-    try {
-      event.returnValue = await checkInitDexc();
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        event.returnValue = new Error(error);
-      } else {
-        event.returnValue = error;
-      }
+ipcMain.on("check-init-dexc", async (event) => {
+  try {
+    event.returnValue = await checkInitDexc();
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
     }
   }
-);
+});
 
-ipcMain.on(
-  "init-dexc",
- async (
-    event,
-    passphrase
-  ) => {
-    try {
-      event.returnValue = await initDexc(passphrase);
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        event.returnValue = new Error(error);
-      } else {
-        event.returnValue = error;
-      }
+ipcMain.on("init-dexc", async (event, passphrase) => {
+  try {
+    event.returnValue = await initDexc(passphrase);
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
     }
   }
-);
+});
 
-ipcMain.on(
-  "login-dexc",
- async (
-    event,
-    passphrase
-  ) => {
-    try {
-      event.returnValue = await loginDexc(passphrase);
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        event.returnValue = new Error(error);
-      } else {
-        event.returnValue = error;
-      }
+ipcMain.on("login-dexc", async (event, passphrase) => {
+  try {
+    event.returnValue = await loginDexc(passphrase);
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
     }
   }
-);
+});
 
 ipcMain.on(
   "create-wallet-dexc",
- async (
+  async (
     event,
     assetID,
     passphrase,
@@ -476,82 +459,53 @@ ipcMain.on(
   }
 );
 
-ipcMain.on(
-  "get-fee-dexc",
- async (
-    event,
-    addr
-  ) => {
-    try {
-      event.returnValue = await getFeeDexc(addr);
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        event.returnValue = new Error(error);
-      } else {
-        event.returnValue = error;
-      }
+ipcMain.on("get-fee-dexc", async (event, addr) => {
+  try {
+    event.returnValue = await getFeeDexc(addr);
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
     }
   }
-);
+});
 
-ipcMain.on(
-  "register-dexc",
- async (
-    event,
-    appPass,
-    addr,
-    fee
-  ) => {
-    try {
-      event.returnValue = await registerDexc(appPass, addr, fee);
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        event.returnValue = new Error(error);
-      } else {
-        event.returnValue = error;
-      }
+ipcMain.on("register-dexc", async (event, appPass, addr, fee) => {
+  try {
+    event.returnValue = await registerDexc(appPass, addr, fee);
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
     }
   }
-);
+});
 
-ipcMain.on(
-  "user-dexc",
- async (
-    event,
-  ) => {
-    try {
-      event.returnValue = await userDexc();
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        event.returnValue = new Error(error);
-      } else {
-        event.returnValue = error;
-      }
+ipcMain.on("user-dexc", async (event) => {
+  try {
+    event.returnValue = await userDexc();
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
     }
   }
-);
+});
 
-ipcMain.on(
-  "start-dexc",
- async (
-    event,
-    walletPath,
-    testnet
-  ) => {
-    try {
-      event.returnValue = await startDexc(
-          walletPath,
-          testnet
-      );
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        event.returnValue = new Error(error);
-      } else {
-        event.returnValue = error;
-      }
+ipcMain.on("start-dexc", async (event, walletPath, testnet) => {
+  try {
+    event.returnValue = await startDexc(walletPath, testnet);
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
     }
   }
-);
+});
 
 ipcMain.on("stop-dexc", async (event) => {
   event.returnValue = await stopDexc();
@@ -561,11 +515,16 @@ ipcMain.on("launch-dex-window", async (event) => {
   event.returnValue = await createDexWindow();
 });
 
-function createDexWindow () {
-  const child = new BrowserWindow({ parent: mainWindow, modal: true, show: false, autoHideMenuBar: true })
+function createDexWindow() {
+  const child = new BrowserWindow({
+    parent: mainWindow,
+    modal: true,
+    show: false,
+    autoHideMenuBar: true
+  });
   child.loadURL("http://" + DEX_LOCALPAGE);
-  child.once('ready-to-show', () => {
-    child.show()
+  child.once("ready-to-show", () => {
+    child.show();
   });
 }
 
@@ -581,17 +540,25 @@ ipcMain.on("check-btc-config", async (event) => {
   }
 });
 
-ipcMain.on("update-btc-config", async (event, rpcuser, rpcpassword, rpcbind, rpcport) => {
-  try {
-    event.returnValue = updateDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport);
-  } catch (error) {
-    if (!(error instanceof Error)) {
-      event.returnValue = new Error(error);
-    } else {
-      event.returnValue = error;
+ipcMain.on(
+  "update-btc-config",
+  async (event, rpcuser, rpcpassword, rpcbind, rpcport) => {
+    try {
+      event.returnValue = updateDefaultBitcoinConfig(
+        rpcuser,
+        rpcpassword,
+        rpcbind,
+        rpcport
+      );
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        event.returnValue = new Error(error);
+      } else {
+        event.returnValue = error;
+      }
     }
   }
-});
+);
 
 ipcMain.on("dcrlnd-creds", (event) => {
   if (GetDcrlndPID() && GetDcrlndPID() !== -1) {

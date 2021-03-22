@@ -1,4 +1,4 @@
-import { useSelector, useDispatch, useStore  } from "react-redux";
+import { useSelector, useDispatch, useStore } from "react-redux";
 import { useCallback } from "react";
 import * as sel from "selectors";
 import * as da from "actions/DexActions";
@@ -23,11 +23,10 @@ export const useDex = () => {
   const enableDexAttempt = useSelector(sel.enableDexAttempt);
   const defaultSpendingAccount = useSelector(sel.defaultSpendingAccount);
   const notMixedAccounts = useSelector(sel.getNotMixedAccounts);
-  
-  const onLaunchDexWindow = useCallback(
-    () => dispatch(da.launchDexcWindow()),
-    [dispatch]
-  );
+
+  const onLaunchDexWindow = useCallback(() => dispatch(da.launchDexcWindow()), [
+    dispatch
+  ]);
 
   const onInitDexc = useCallback(
     (passphrase) => dispatch(da.initDexc(passphrase)),
@@ -40,17 +39,20 @@ export const useDex = () => {
   );
 
   const onCreateWalletDexc = useCallback(
-    (passphrase, appPassphrase, account) => dispatch(da.createWalletDexc(passphrase, appPassphrase, account)),
+    (passphrase, appPassphrase, account) =>
+      dispatch(da.createWalletDexc(passphrase, appPassphrase, account)),
     [dispatch]
   );
 
   const onBTCCreateWalletDexc = useCallback(
-    (passphrase, appPassphrase, walletname) => dispatch(da.btcCreateWalletDexc(passphrase, appPassphrase, walletname)),
+    (passphrase, appPassphrase, walletname) =>
+      dispatch(da.btcCreateWalletDexc(passphrase, appPassphrase, walletname)),
     [dispatch]
   );
 
   const onUpdateBTCConfig = useCallback(
-    (rpcuser, rpcpassword, rpcport, rpcbind) => dispatch(da.updateBTCConfig(rpcuser, rpcpassword, rpcport, rpcbind)),
+    (rpcuser, rpcpassword, rpcport, rpcbind) =>
+      dispatch(da.updateBTCConfig(rpcuser, rpcpassword, rpcport, rpcbind)),
     [dispatch]
   );
 
@@ -64,15 +66,11 @@ export const useDex = () => {
     [dispatch]
   );
 
-  const onEnableDexc = useCallback(
-    () => dispatch(da.enableDexc()),
-    [dispatch]
-  );
+  const onEnableDexc = useCallback(() => dispatch(da.enableDexc()), [dispatch]);
 
-  const onGetFee = useCallback(
-    (address) => dispatch(da.getFeeDexc(address)),
-    [dispatch]
-  );
+  const onGetFee = useCallback((address) => dispatch(da.getFeeDexc(address)), [
+    dispatch
+  ]);
 
   return {
     dexcEnabled,

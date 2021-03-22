@@ -18,7 +18,12 @@ import { getWalletCfg, getGlobalCfg, setLastHeight } from "config";
 import { isTestNet } from "selectors";
 import axios from "axios";
 import { STANDARD_EXTERNAL_REQUESTS } from "main_dev/externalRequests";
-import { DIFF_CONNECTION_ERROR, LOCALE, TESTNET, DefaultWalletRPCListener } from "constants";
+import {
+  DIFF_CONNECTION_ERROR,
+  LOCALE,
+  TESTNET,
+  DefaultWalletRPCListener
+} from "constants";
 import * as cfgConstants from "constants/config";
 
 export const DECREDITON_VERSION = "DECREDITON_VERSION";
@@ -351,11 +356,8 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
       if (!selectedWallet) {
         selectedWallet = ipcRenderer.sendSync("get-selected-wallet");
       }
-      const isTestnet = network == "testnet"
-      const walletCfg = getWalletCfg(
-        isTestnet,
-        selectedWallet.value.wallet
-      );
+      const isTestnet = network == "testnet";
+      const walletCfg = getWalletCfg(isTestnet, selectedWallet.value.wallet);
 
       const enableDex = walletCfg.get(cfgConstants.ENABLE_DEX);
       let rpcCreds = null;
@@ -364,7 +366,10 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
           rpcUser: walletCfg.get(cfgConstants.DEXWALLET_RPCUSERNAME),
           rpcPass: walletCfg.get(cfgConstants.DEXWALLET_RPCPASSWORD),
           rpcListen: walletCfg.get(cfgConstants.DEXWALLET_HOSTPORT),
-          rpcCert: path.join(getWalletPath(isTestnet, selectedWallet.value.wallet), "rpc.cert")
+          rpcCert: path.join(
+            getWalletPath(isTestnet, selectedWallet.value.wallet),
+            "rpc.cert"
+          )
         };
       } else {
         rpcCreds = {};

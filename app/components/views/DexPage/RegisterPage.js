@@ -43,26 +43,35 @@ export const RegisterPageContent = () => {
       return;
     }
     if (!addr) {
-      const error = <T id="error.Dex.Address" m="Please enter a valid DEX Server." />;
+      const error = (
+        <T id="error.Dex.Address" m="Please enter a valid DEX Server." />
+      );
       setIsError(error);
       return;
     }
   }, [isValid, addr]);
 
-
   if (dexcFee && dexcAddr) {
     return (
       <div>
-        <T id="dex.payRegistration.Fee" m="Please enter your DEX app passphrase to pay the following fee:" />
+        <T
+          id="dex.payRegistration.Fee"
+          m="Please enter your DEX app passphrase to pay the following fee:"
+        />
         <Balance amount={dexcFee} />
-        <T id="dex.payRegistration.Address" m="DEX Server registering to:" /> {dexcAddr}
+        <T
+          id="dex.payRegistration.Address"
+          m="DEX Server registering to:"
+        />{" "}
+        {dexcAddr}
         <PassphraseModalButton
           disabled={registerDexcAttempt}
-          modalTitle={
-            <T id="dex.payDexFeeModalTitle" m="Pay DEX Fee" />
-          }
+          modalTitle={<T id="dex.payDexFeeModalTitle" m="Pay DEX Fee" />}
           modalDescription={
-            <T id="dex.payDexFeeModalDescription" m="Please enter your DEX App passphrase to pay the fee to register to the DEX Server" />
+            <T
+              id="dex.payDexFeeModalDescription"
+              m="Please enter your DEX App passphrase to pay the fee to register to the DEX Server"
+            />
           }
           passphraseLabel={
             <T id="dex.payDexFeeAppPassphrase" m="DEX App Passphrase" />

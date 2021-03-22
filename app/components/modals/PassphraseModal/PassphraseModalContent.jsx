@@ -40,8 +40,12 @@ const Modal = ({
     </div>
     <div className={style.passphraseContent}>
       <PassphraseModalField
-        label={passphraseLabel ? passphraseLabel :
-          <T id="passphraseModal.privatePassphrase" m="Private Passphrase" />
+        label={
+          passphraseLabel ? (
+            passphraseLabel
+          ) : (
+            <T id="passphraseModal.privatePassphrase" m="Private Passphrase" />
+          )
         }>
         <PasswordInput
           autoFocus={true}

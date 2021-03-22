@@ -20,9 +20,7 @@ import {
   getVSPTicketsByFeeStatus,
   setVSPDVoteChoices
 } from "./VSPActions";
-import {
-  startDexc
-} from "./DexActions";
+import { startDexc } from "./DexActions";
 import { getStartupTransactions } from "./TransactionActions";
 import { getAccountMixerServiceAttempt } from "./AccountMixerActions";
 import { checkLnWallet } from "./LNActions";

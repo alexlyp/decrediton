@@ -91,11 +91,11 @@ export default function ln(state = {}, action) {
         loginError: action.error
       };
     case DEXC_LOGIN_SUCCESS:
-    return {
-      ...state,
-      loginAttempt: false,
-      loggedIn: true,
-      loginError: null
+      return {
+        ...state,
+        loginAttempt: false,
+        loggedIn: true,
+        loginError: null
       };
     case DEXC_REGISTER_ATTEMPT:
       return {

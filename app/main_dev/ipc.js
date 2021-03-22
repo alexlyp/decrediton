@@ -2,7 +2,12 @@ import fs from "fs-extra";
 import path from "path";
 import { createLogger } from "./logging";
 import { getWalletPath, getWalletDb, getDcrdPath } from "./paths";
-import { initWalletCfg, newWalletConfigCreation, getWalletCfg, checkNoLegacyWalletConfig } from "config";
+import {
+  initWalletCfg,
+  newWalletConfigCreation,
+  getWalletCfg,
+  checkNoLegacyWalletConfig
+} from "config";
 import {
   launchDCRD,
   launchDCRWallet,
@@ -225,7 +230,11 @@ export const startWallet = (
     return GetDcrwPID();
   }
   initWalletCfg(testnet, walletPath);
-  checkNoLegacyWalletConfig(testnet, walletPath, rpcUser && rpcPass && rpcHost && rpcListen);
+  checkNoLegacyWalletConfig(
+    testnet,
+    walletPath,
+    rpcUser && rpcPass && rpcHost && rpcListen
+  );
   try {
     return launchDCRWallet(
       mainWindow,
@@ -276,10 +285,7 @@ export const startDcrlnd = async (
   }
 };
 
-export const startDexc = async (
-  walletPath,
-  testnet
-) => {
+export const startDexc = async (walletPath, testnet) => {
   if (GetDexcPID()) {
     logger.log(
       "info",
@@ -290,10 +296,7 @@ export const startDexc = async (
   }
 
   try {
-    const started = await launchDexc(
-      walletPath,
-      testnet
-    );
+    const started = await launchDexc(walletPath, testnet);
     return started;
   } catch (e) {
     logger.log("error", "error launching dexc: " + e);
@@ -303,10 +306,7 @@ export const startDexc = async (
 
 export const checkInitDexc = async () => {
   if (!GetDexcPID()) {
-    logger.log(
-      "info",
-      "Skipping check of init since dexc is not runnning"
-    );
+    logger.log("info", "Skipping check of init since dexc is not runnning");
     return false;
   }
 
@@ -321,10 +321,7 @@ export const checkInitDexc = async () => {
 
 export const initDexc = async (passphrase) => {
   if (!GetDexcPID()) {
-    logger.log(
-      "info",
-      "Skipping init since dexc is not runnning"
-    );
+    logger.log("info", "Skipping init since dexc is not runnning");
     return false;
   }
 
@@ -339,10 +336,7 @@ export const initDexc = async (passphrase) => {
 
 export const loginDexc = async (passphrase) => {
   if (!GetDexcPID()) {
-    logger.log(
-      "info",
-      "Skipping login since dexc is not runnning"
-    );
+    logger.log("info", "Skipping login since dexc is not runnning");
     return false;
   }
 
@@ -363,12 +357,10 @@ export const createWalletDexc = async (
   rpcuser,
   rpcpass,
   rpclisten,
-  rpccert) => {
+  rpccert
+) => {
   if (!GetDexcPID()) {
-    logger.log(
-      "info",
-      "Skipping create wallet since dexc is not runnning"
-    );
+    logger.log("info", "Skipping create wallet since dexc is not runnning");
     return false;
   }
 
@@ -381,7 +373,8 @@ export const createWalletDexc = async (
       rpcuser,
       rpcpass,
       rpclisten,
-      rpccert);
+      rpccert
+    );
     return createWallet;
   } catch (e) {
     logger.log("error", "error create wallet dexc: " + e);
@@ -391,10 +384,7 @@ export const createWalletDexc = async (
 
 export const getFeeDexc = async (addr) => {
   if (!GetDexcPID()) {
-    logger.log(
-      "info",
-      "Skipping getfee since dexc is not runnning"
-    );
+    logger.log("info", "Skipping getfee since dexc is not runnning");
     return false;
   }
 
@@ -409,10 +399,7 @@ export const getFeeDexc = async (addr) => {
 
 export const registerDexc = async (appPass, addr, fee) => {
   if (!GetDexcPID()) {
-    logger.log(
-      "info",
-      "Skipping register since dexc is not runnning"
-    );
+    logger.log("info", "Skipping register since dexc is not runnning");
     return false;
   }
 
@@ -427,10 +414,7 @@ export const registerDexc = async (appPass, addr, fee) => {
 
 export const userDexc = async () => {
   if (!GetDexcPID()) {
-    logger.log(
-      "info",
-      "Skipping user request since dexc is not runnning"
-    );
+    logger.log("info", "Skipping user request since dexc is not runnning");
     return false;
   }
 

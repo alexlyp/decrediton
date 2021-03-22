@@ -1776,37 +1776,49 @@ export const lnTowersList = get(["ln", "towersList"]);
 
 //export const dexEnabled = bool(and(not(isWatchingOnly), not(isTrezor)));
 export const dexcEnabled = bool(get(["walletLoader", "dexEnabled"]));
-export const enableDexAttempt = bool(get(["dex", "enableDexAttempt"]))
+export const enableDexAttempt = bool(get(["dex", "enableDexAttempt"]));
 export const dexcActive = bool(get(["dex", "active"]));
 export const dexcInit = bool(get(["dex", "dexcInit"]));
-export const initDexcAttempt =  bool(get(["dex", "initAttempt"]));
-export const checkInitDexcAttempt =  bool(get(["dex", "dexcCheckInitAttempt"]));
-export const registerDexcAttempt =  bool(get(["dex", "registerAttempt"]));
-export const createWalletDexcAttempt =  bool(get(["dex", "createWalletAttempt"]));
-export const loginDexcAttempt =  bool(get(["dex", "loginAttempt"]));
+export const initDexcAttempt = bool(get(["dex", "initAttempt"]));
+export const checkInitDexcAttempt = bool(get(["dex", "dexcCheckInitAttempt"]));
+export const registerDexcAttempt = bool(get(["dex", "registerAttempt"]));
+export const createWalletDexcAttempt = bool(
+  get(["dex", "createWalletAttempt"])
+);
+export const loginDexcAttempt = bool(get(["dex", "loginAttempt"]));
 export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 export const dexcUser = get(["dex", "user"]);
 
 export const dexcConnected = compose(
   (u) => u && u.exchanges && Object.keys(u.exchanges).length > 0,
   dexcUser
-)
+);
 
 export const dexRegistered = compose(
   // XXX check if any of the exchanges that come back from users request are registered
   (u) => u && u.exchanges && Object.keys(u.exchanges).length > 0,
   dexcUser
-)
+);
 
 export const dexDCRWalletRunning = compose(
-  (user) => user && user.assets && user.assets["42"] && user.assets["42"].wallet && user.assets["42"].wallet.running,
+  (user) =>
+    user &&
+    user.assets &&
+    user.assets["42"] &&
+    user.assets["42"].wallet &&
+    user.assets["42"].wallet.running,
   dexcUser
-)
+);
 
 export const dexBTCWalletRunning = compose(
-  (user) => user && user.assets && user.assets["0"] && user.assets["0"].wallet && user.assets["0"].wallet.running,
+  (user) =>
+    user &&
+    user.assets &&
+    user.assets["0"] &&
+    user.assets["0"].wallet &&
+    user.assets["0"].wallet.running,
   dexcUser
-)
+);
 
 export const dexcAddr = get(["dex", "addr"]);
 export const dexcFee = get(["dex", "fee"]);

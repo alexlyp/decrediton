@@ -6,21 +6,16 @@ import { LN_ICON } from "constants";
 import "style/ConnectPage.css";
 
 export const InitPageContent = () => {
-  const {
-    onInitDexc,
-    initDexcAttempt
-  } = useDex();
+  const { onInitDexc, initDexcAttempt } = useDex();
 
   return (
-      <SetNewPassphraseModalButton
-        disabled={initDexcAttempt}
-        modalTitle={
-          <T id="dex.initPassphrase" m="Set new Dexc app passphrase" />
-        }
-        loading={initDexcAttempt}
-        onSubmit={onInitDexc}
-        buttonLabel={<T id="dex.initPassphraseButton" m="Init Dexc" />}
-      />
+    <SetNewPassphraseModalButton
+      disabled={initDexcAttempt}
+      modalTitle={<T id="dex.initPassphrase" m="Set new Dexc app passphrase" />}
+      loading={initDexcAttempt}
+      onSubmit={onInitDexc}
+      buttonLabel={<T id="dex.initPassphraseButton" m="Init Dexc" />}
+    />
   );
 };
 
@@ -30,7 +25,9 @@ export const InitPageHeader = () => (
     description={
       <T
         id="dex.initPage.description"
-        m={"You must create a new passphrase that will be used to log into the DEX for this wallet."}
+        m={
+          "You must create a new passphrase that will be used to log into the DEX for this wallet."
+        }
       />
     }
     iconType={LN_ICON}

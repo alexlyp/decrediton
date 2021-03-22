@@ -18,7 +18,7 @@ const AppPassAndPassphraseModal = ({ onCancelModal, onSubmit, ...props }) => {
 
   const onSubmitCallback = useCallback(
     (passPhrase) => {
-      onSubmit(passPhrase, { appPassphrase } );
+      onSubmit(passPhrase, { appPassphrase });
       resetState();
     },
     [appPassphrase, onSubmit, resetState]

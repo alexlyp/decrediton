@@ -6,16 +6,11 @@ import { LN_ICON } from "constants";
 import "style/ConnectPage.css";
 
 export const EnablePageContent = () => {
-  const {
-    onEnableDexc,
-    enableDexAttempt,
-  } = useDex();
+  const { onEnableDexc, enableDexAttempt } = useDex();
 
   return (
     <ResetNetworkButton
-      modalTitle={
-        <T id="dex.resetWalletRequired" m="Wallet reset required" />
-      }
+      modalTitle={<T id="dex.resetWalletRequired" m="Wallet reset required" />}
       buttonLabel={<T id="dex.enableButton" m="Enable DEXC" />}
       modalContent={
         <T

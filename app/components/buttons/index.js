@@ -106,8 +106,16 @@ export const InvisiblePassphraseModalButton = mbb(
   InvisibleButton
 );
 export const PassphraseModalButton = mbb(null, PassphraseModal, KeyBlueButton);
-export const SetNewPassphraseModalButton = mbb(null, SetNewPassphraseModal, KeyBlueButton);
-export const AppPassAndPassphraseModalButton = mbb(null, AppPassAndPassphraseModal, KeyBlueButton);
+export const SetNewPassphraseModalButton = mbb(
+  null,
+  SetNewPassphraseModal,
+  KeyBlueButton
+);
+export const AppPassAndPassphraseModalButton = mbb(
+  null,
+  AppPassAndPassphraseModal,
+  KeyBlueButton
+);
 export const AutoBuyerPassphraseModalSwitch = mbb(
   null,
   PassphraseModal,

@@ -2,11 +2,7 @@ import Modal from "./SetNewPassphraseModalContent";
 import { useState, useCallback } from "react";
 import { useEffect } from "react";
 
-const SetNewPassphraseModal = ({
-  onCancelModal,
-  onSubmit,
-  ...props
-}) => {
+const SetNewPassphraseModal = ({ onCancelModal, onSubmit, ...props }) => {
   const [confirmPrivPass, setConfirmPrivPass] = useState(null);
   const [passPhrase, setPassPhrase] = useState(null);
   const [isValid, setIsValid] = useState(null);
@@ -31,8 +27,8 @@ const SetNewPassphraseModal = ({
   }, [passPhrase, onSubmit, resetState, isValid]);
 
   useEffect(() => {
-      setIsValid(!!passPhrase && passPhrase === confirmPrivPass);
-    }, [passPhrase, confirmPrivPass]);
+    setIsValid(!!passPhrase && passPhrase === confirmPrivPass);
+  }, [passPhrase, confirmPrivPass]);
 
   return (
     <Modal

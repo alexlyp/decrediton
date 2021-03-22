@@ -833,169 +833,177 @@ export const launchDCRLnd = (
     return resolve(dcrlndCreds);
   });
 
-  const Mainnet = 0;
-  const Testnet = 1;
+const Mainnet = 0;
+const Testnet = 1;
 
-  export const launchDexc = (
-    walletPath,
-    testnet
-  ) =>
-    new Promise((resolve, reject) => {
-      if (!dex) {
-        resolve();
-      }
-      try {
-        const dexcRoot = path.join(walletPath, "dexc");
-        const dbPath = path.join(dexcRoot, "db");
-        dexc.callDEX("startCore", {
-            dbPath: dbPath,
-            net: !testnet ? Mainnet : Testnet
-        });
-        const serverAddress = DEX_LOCALPAGE;
-        dexc.callDEX("startServer", serverAddress);
-        dex = dexc;
-        return resolve(serverAddress);
-    } catch(error) {
+export const launchDexc = (walletPath, testnet) =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
+      const dexcRoot = path.join(walletPath, "dexc");
+      const dbPath = path.join(dexcRoot, "db");
+      dexc.callDEX("startCore", {
+        dbPath: dbPath,
+        net: !testnet ? Mainnet : Testnet
+      });
+      const serverAddress = DEX_LOCALPAGE;
+      dexc.callDEX("startServer", serverAddress);
+      dex = dexc;
+      return resolve(serverAddress);
+    } catch (error) {
       console.log("error", error);
       return reject(error);
     }
   });
 
-  export const initCheckDexc = () =>
-    new Promise((resolve, reject) => {
-      if (!dex) {
-        resolve();
-      }
-      try {
+export const initCheckDexc = () =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
       const dexc = GetDexcPID();
 
-      const init = dexc.callDEX("IsInitialized", {})
+      const init = dexc.callDEX("IsInitialized", {});
       return resolve(init);
-    } catch(error) {
+    } catch (error) {
       console.log("check init error", error);
       return reject(error);
     }
-    });
+  });
 
-  export const initDexcCall = (passphrase) =>
-    new Promise((resolve, reject) => {
-      if (!dex) {
-        resolve();
-      }
-      try {
-        const dexc = GetDexcPID();
-        const init = dexc.callDEX("Init", {pass: passphrase})
-        return resolve(init);
-      } catch(error) {
-        console.log("init error", error);
-        return reject(error);
-      }
-    });
+export const initDexcCall = (passphrase) =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
+      const dexc = GetDexcPID();
+      const init = dexc.callDEX("Init", { pass: passphrase });
+      return resolve(init);
+    } catch (error) {
+      console.log("init error", error);
+      return reject(error);
+    }
+  });
 
-  export const loginDexcCall = (passphrase) =>
-    new Promise((resolve, reject) => {
-      if (!dex) {
-        resolve();
-      }
-      try {
-        const dexc = GetDexcPID();
-        const login = dexc.callDEX("Login", {pass: passphrase});
-        return resolve(login);
-      } catch(error) {
-        console.log("login error", error);
-        return reject(error);
-      }
-    });
-  
-  export const createWalletDexcCall = (
-    assetID,
-    passphrase,
-    appPassphrase,
-    account,
-    rpcuser,
-    rpcpass,
-    rpclisten,
-    rpccert) =>
-    new Promise((resolve, reject) => {
-      if (!dex) {
-        resolve();
-      }
-      let pw = {};
-      let config = {};
-      if (assetID == 42) {
-        pw = passphrase;
-        config = {
-          account,
-          rpccert,
-          username: rpcuser,
-          password: rpcpass,
-          rpclisten
-        }
-      } else if (assetID == 0) {
-        pw = "password";
-        const splitRPC = rpclisten.split(":");
-        if (splitRPC.length < 2) {
-          return reject("error: rpclisten malformed for btc");
-        }
-        config = {
-          walletname: account,
-          rpcuser,
-          rpcpassword: rpcpass,
-          rpcbind: splitRPC[0],
-          rpcport: splitRPC[1]
-        }
-      }
-      try {
-        const dexc = GetDexcPID();
-        const init = dexc.callDEX("CreateWallet", { pass: pw, appPass: appPassphrase, config, assetID })
-        return resolve(init);
-      } catch(error) {
-        console.log("create wallet error", error);
-        return reject(error);
-      }
-    });
+export const loginDexcCall = (passphrase) =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
+      const dexc = GetDexcPID();
+      const login = dexc.callDEX("Login", { pass: passphrase });
+      return resolve(login);
+    } catch (error) {
+      console.log("login error", error);
+      return reject(error);
+    }
+  });
 
-  export const getFeeDexcCall = (addr) =>
-      new Promise((resolve, reject) => {
-        if (!dex) {
-          resolve();
-        }
-        try {
-          const dexc = GetDexcPID();
-          const getfee = dexc.callDEX("GetFee", { addr })
-          return resolve(getfee);
-        } catch(error) {
-          console.log("getfee error", error);
-          return reject(error);
-        }
-    });
-    
-  export const registerDexcCall = (appPass, addr, fee) =>
-    new Promise((resolve, reject) => {
-      if (!dex) {
-        resolve();
+export const createWalletDexcCall = (
+  assetID,
+  passphrase,
+  appPassphrase,
+  account,
+  rpcuser,
+  rpcpass,
+  rpclisten,
+  rpccert
+) =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    let pw = {};
+    let config = {};
+    if (assetID == 42) {
+      pw = passphrase;
+      config = {
+        account,
+        rpccert,
+        username: rpcuser,
+        password: rpcpass,
+        rpclisten
+      };
+    } else if (assetID == 0) {
+      pw = "password";
+      const splitRPC = rpclisten.split(":");
+      if (splitRPC.length < 2) {
+        return reject("error: rpclisten malformed for btc");
       }
-      try {
-        const dexc = GetDexcPID();
-        const register = dexc.callDEX("Register", { appPass, url: addr, fee: parseInt(fee), cert: "" })
-        return resolve(register);
-      } catch(error) {
-        console.log("register error", error);
-        return reject(error);
-      }
-    });
+      config = {
+        walletname: account,
+        rpcuser,
+        rpcpassword: rpcpass,
+        rpcbind: splitRPC[0],
+        rpcport: splitRPC[1]
+      };
+    }
+    try {
+      const dexc = GetDexcPID();
+      const init = dexc.callDEX("CreateWallet", {
+        pass: pw,
+        appPass: appPassphrase,
+        config,
+        assetID
+      });
+      return resolve(init);
+    } catch (error) {
+      console.log("create wallet error", error);
+      return reject(error);
+    }
+  });
 
-  export const userDexcCall = () =>
-    new Promise((resolve, reject) => {
-      if (!dex) {
-        resolve();
-      }
-      try {
+export const getFeeDexcCall = (addr) =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
+      const dexc = GetDexcPID();
+      const getfee = dexc.callDEX("GetFee", { addr });
+      return resolve(getfee);
+    } catch (error) {
+      console.log("getfee error", error);
+      return reject(error);
+    }
+  });
+
+export const registerDexcCall = (appPass, addr, fee) =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
+      const dexc = GetDexcPID();
+      const register = dexc.callDEX("Register", {
+        appPass,
+        url: addr,
+        fee: parseInt(fee),
+        cert: ""
+      });
+      return resolve(register);
+    } catch (error) {
+      console.log("register error", error);
+      return reject(error);
+    }
+  });
+
+export const userDexcCall = () =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
       const dexc = GetDexcPID();
 
-      const user = dexc.callDEX("User", {})
+      const user = dexc.callDEX("User", {});
       return resolve(user);
-    } catch(error) {
+    } catch (error) {
       console.log("dex user error", error);
       return reject(error);
     }
