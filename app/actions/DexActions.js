@@ -1,4 +1,5 @@
 import * as sel from "selectors";
+import * as wallet from "wallet";
 import { ipcRenderer } from "electron";
 import { getWalletPath } from "main_dev/paths";
 import { getWalletCfg } from "config";
@@ -7,7 +8,6 @@ import { addAllowedExternalRequest } from "./SettingsActions";
 import { closeWalletRequest } from "./WalletLoaderActions";
 import { EXTERNALREQUEST_DEXC } from "main_dev/externalRequests";
 import * as configConstants from "constants/config";
-import DefaultWalletRPCListener from "constants";
 import { makeRandomString } from "helpers";
 
 export const DEXC_ENABLE_ATTEMPT = "DEXC_ENABLE_ATTEMPT";
@@ -167,7 +167,7 @@ export const DEXC_CREATEWALLET_ATTEMPT = "DEXC_CREATEWALLET_ATTEMPT";
 export const DEXC_CREATEWALLET_SUCCESS = "DEXC_CREATEWALLET_SUCCESS";
 export const DEXC_CREATEWALLET_FAILED = "DEXC_CREATEWALLET_FAILED";
 
-export const createWalletDexc = (passphrase, appPassphrase, accountVal) => (
+export const createWalletDexc = (passphrase, appPassphrase, accountName) => (
   dispatch,
   getState
 ) => {
@@ -184,7 +184,7 @@ export const createWalletDexc = (passphrase, appPassphrase, accountVal) => (
     } = getState();
     const rpcCreds = dexRpcSettings;
     const walletPath = getWalletPath(isTestnet, walletName);
-    const account = accountVal.name;
+    const account = accountName;
     const rpcuser = rpcCreds.rpcUser;
     const rpcpass = rpcCreds.rpcPass;
     const rpclisten = rpcCreds.rpcListen;
@@ -435,4 +435,27 @@ export const updateBTCConfig = () => (dispatch) => {
     dispatch({ type: UPDATE_BTC_CONFIG_FAILED, error });
     return;
   }
+};
+
+export const CREATEDEXACCOUNT_ATTEMPT = "CREATEDEXACCOUNT_ATTEMPT";
+export const CREATEDEXACCOUNT_FAILED = "CREATEDEXACCOUNT_FAILED";
+export const CREATEDEXACCOUNT_SUCCESS = "CREATEDEXACCOUNT_SUCCESS";
+
+export const createDexAccount = (passphrase, accountName) => (
+  dispatch,
+  getState
+) => {
+  const {
+    daemon: { walletName }
+  } = getState();
+  const walletConfig = getWalletCfg(isTestNet(getState()), walletName);
+  dispatch({ type: CREATEDEXACCOUNT_ATTEMPT });
+  return wallet
+    .getNextAccount(sel.walletService(getState()), passphrase, accountName)
+    .then((getNextAccountResponse) => {
+      console.log(getNextAccountResponse);
+      dispatch({ dexAccount: accountName, type: CREATEDEXACCOUNT_SUCCESS })
+      walletConfig.set(configConstants.DEX_ACCOUNT, accountName);
+    })
+    .catch((error) => dispatch({ error, type: CREATEDEXACCOUNT_FAILED }));
 };

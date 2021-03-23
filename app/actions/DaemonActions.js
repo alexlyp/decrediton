@@ -360,6 +360,7 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
       const walletCfg = getWalletCfg(isTestnet, selectedWallet.value.wallet);
 
       const enableDex = walletCfg.get(cfgConstants.ENABLE_DEX);
+      const dexAccount = walletCfg.get(cfgConstants.DEX_ACCOUNT);
       let rpcCreds = null;
       if (enableDex) {
         rpcCreds = {
@@ -460,6 +461,7 @@ export const startWallet = (selectedWallet, hasPassPhrase) => (
         csppPort,
         mixedAccountBranch,
         enableDex,
+        dexAccount,
         rpcCreds
       });
       selectedWallet.value.isTrezor && dispatch(enableTrezor());

@@ -12,7 +12,6 @@ export function useMenuLinks() {
   const lnEnabled = useSelector(sel.lnEnabled);
   const isSPV = useSelector(sel.isSPV);
 
-  console.log(isSPV);
   const newActiveVoteProposalsCount = useSelector(
     sel.newActiveVoteProposalsCount
   );

@@ -112,6 +112,7 @@ export default function walletLoader(state = {}, action) {
         csppPort: action.csppPort,
         mixedAccountBranch: action.mixedAccountBranch,
         dexEnabled: action.enableDex,
+        dexAccount: action.dexAccount,
         dexRpcSettings: action.rpcCreds
       };
     case GETWALLETSEEDSVC_ATTEMPT:

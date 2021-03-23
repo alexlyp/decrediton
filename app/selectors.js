@@ -1774,7 +1774,6 @@ export const lnTowersList = get(["ln", "towersList"]);
 
 // start of dex selectors
 
-//export const dexEnabled = bool(and(not(isWatchingOnly), not(isTrezor)));
 export const dexcEnabled = bool(get(["walletLoader", "dexEnabled"]));
 export const enableDexAttempt = bool(get(["dex", "enableDexAttempt"]));
 export const dexcActive = bool(get(["dex", "active"]));
@@ -1822,3 +1821,5 @@ export const dexBTCWalletRunning = compose(
 
 export const dexcAddr = get(["dex", "addr"]);
 export const dexcFee = get(["dex", "fee"]);
+export const dexAccount = get(["walletLoader", "dexAccount"]);
+export const dexAccountAttempt = bool(get(["dex", "dexAccountAttempt"]));

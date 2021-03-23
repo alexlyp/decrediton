@@ -21,8 +21,8 @@ export const useDex = () => {
   const dexBTCWalletRunning = useSelector(sel.dexBTCWalletRunning);
   const user = useSelector(sel.dexcUser);
   const enableDexAttempt = useSelector(sel.enableDexAttempt);
-  const defaultSpendingAccount = useSelector(sel.defaultSpendingAccount);
-  const notMixedAccounts = useSelector(sel.getNotMixedAccounts);
+  const dexAccount = useSelector(sel.dexAccount);
+  const dexAccountAttempt = useSelector(sel.dexAccountAttempt);
 
   const onLaunchDexWindow = useCallback(() => dispatch(da.launchDexcWindow()), [
     dispatch
@@ -66,6 +66,11 @@ export const useDex = () => {
     [dispatch]
   );
 
+  const onCreateDexAccount = useCallback(
+    (passphrase, name) => dispatch(da.createDexAccount(passphrase, name)),
+    [dispatch]
+  );
+
   const onEnableDexc = useCallback(() => dispatch(da.enableDexc()), [dispatch]);
 
   const onGetFee = useCallback((address) => dispatch(da.getFeeDexc(address)), [
@@ -93,13 +98,14 @@ export const useDex = () => {
     dexBTCWalletRunning,
     onEnableDexc,
     enableDexAttempt,
-    defaultSpendingAccount,
-    notMixedAccounts,
     onGetFee,
     user,
     onLaunchDexWindow,
     onCheckBTCConfig,
     onUpdateBTCConfig,
-    onBTCCreateWalletDexc
+    onBTCCreateWalletDexc,
+    onCreateDexAccount,
+    dexAccount,
+    dexAccountAttempt
   };
 };
