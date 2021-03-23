@@ -5,19 +5,22 @@ import { AddAccountModal } from "modals";
 import { FormattedMessage as T } from "react-intl";
 import { LN_ICON } from "constants";
 import "style/ConnectPage.css";
+import style from "./DexPage.module.css";
 
 export const CreateDexAccountPageContent = () => {
   const { onCreateDexAccount, dexAccountAttempt } = useDex();
 
   return (
-    <PassphraseModalButton
-      disabled={dexAccountAttempt}
-      modalTitle={<T id="dex.createDexAccount" m="Create DEX Account" />}
-      loading={dexAccountAttempt}
-      modalComponent={AddAccountModal}
-      onSubmit={onCreateDexAccount}
-      buttonLabel={<T id="dex.createDexAccountButton" m="Create DEX Account" />}
-    />
+    <div className={style.dexContent}>
+      <PassphraseModalButton
+        disabled={dexAccountAttempt}
+        modalTitle={<T id="dex.createDexAccount" m="Create DEX Account" />}
+        loading={dexAccountAttempt}
+        modalComponent={AddAccountModal}
+        onSubmit={onCreateDexAccount}
+        buttonLabel={<T id="dex.createDexAccountButton" m="Create DEX Account" />}
+      />
+    </div>
   );
 };
 

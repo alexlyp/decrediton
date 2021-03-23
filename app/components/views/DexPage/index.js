@@ -13,7 +13,6 @@ import {
 import { EnablePageContent, EnablePageHeader } from "./EnablePage";
 import { InitPageContent, InitPageHeader } from "./InitPage";
 import { LoginPageContent, LoginPageHeader } from "./LoginPage";
-import { dexBTCWalletRunning } from "../../../selectors";
 import { CreateDexAccountPageContent, CreateDexAccountPageHeader } from "./CreateDexAccountPage";
 
 const DexPage = () => {
