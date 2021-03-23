@@ -57,7 +57,6 @@ const Wallet = ({ setInterval }) => {
           <Route path="/governance" component={GovernancePage} />
           <Route path="/trezor" component={TrezorPage} />
           <Route path="/ln" component={LNPage} />
-          <Route path="/listUtxo" component={ListUtxo} />
           <Route path="/dex" component={DexPage} />
         </StaticSwitch>
         <Route
