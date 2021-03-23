@@ -10,6 +10,7 @@ import { stopNotifcations } from "./NotificationActions";
 import { saveSettings, updateStateSettingsChanged } from "./SettingsActions";
 import { rescanCancel } from "./ControlActions";
 import { enableTrezor } from "./TrezorActions";
+import { logoutDexc } from "./DexActions";
 import { TOGGLE_ISLEGACY, SET_REMEMBERED_VSP_HOST } from "./VSPActions";
 import * as wallet from "wallet";
 import { push as pushHistory, goBack } from "connected-react-router";
@@ -230,6 +231,15 @@ export const deleteDaemonData = () => (dispatch, getState) => {
 };
 
 export const shutdownApp = () => (dispatch, getState) => {
+  const { loggedIn } = getState().dex;
+  if (!loggedIn) {
+    dispatch(shutdown());
+  } else {
+    dispatch(logoutDexc(shutdown()));
+  }
+};
+
+const shutdown = () => (dispatch, getState) => {
   const { currentBlockHeight } = getState().grpc;
   if (currentBlockHeight) {
     setLastHeight(currentBlockHeight);
@@ -242,7 +252,7 @@ export const shutdownApp = () => (dispatch, getState) => {
   dispatch(rescanCancel());
   dispatch(syncCancel());
   dispatch(pushHistory("/shutdown"));
-};
+}
 
 export const cleanShutdown = () => () => wallet.cleanShutdown();
 

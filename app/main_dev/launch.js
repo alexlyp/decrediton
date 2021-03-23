@@ -904,6 +904,21 @@ export const loginDexcCall = (passphrase) =>
     }
   });
 
+export const logoutDexcCall = () =>
+  new Promise((resolve, reject) => {
+    if (!dex) {
+      resolve();
+    }
+    try {
+      const dexc = GetDexcPID();
+      const logout = dexc.callDEX("Logout", {});
+      return resolve(logout);
+    } catch (error) {
+      console.log("login error", error);
+      return reject(error);
+    }
+  });
+
 export const createWalletDexcCall = (
   assetID,
   passphrase,

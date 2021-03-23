@@ -14,7 +14,6 @@ import (
 	"decred.org/dcrdex/client/core"
 	"decred.org/dcrdex/client/webserver"
 	"decred.org/dcrdex/dex"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/decred/slog"
 
 	_ "decred.org/dcrdex/client/asset/btc" // register btc asset
@@ -71,6 +70,7 @@ func NewCoreAdapter() *CoreAdapter {
 		"User":         c.user,
 		"Register":     c.register,
 		"Login":        c.login,
+		"Logout":       c.logout,
 		"GetFee":       c.getFee,
 	}
 
@@ -192,7 +192,6 @@ func (c *CoreAdapter) createWallet(raw json.RawMessage) (string, error) {
 	if err := json.Unmarshal(raw, form); err != nil {
 		return "", err
 	}
-	spew.Dump(form)
 	return "", c.core.CreateWallet([]byte(form.AppPW), []byte(form.Pass), &core.WalletForm{
 		AssetID: form.AssetID,
 		Config:  form.Config,
@@ -219,7 +218,6 @@ func (c *CoreAdapter) register(raw json.RawMessage) (string, error) {
 	if err := json.Unmarshal(raw, form); err != nil {
 		return "", err
 	}
-	spew.Dump(form)
 	return replyWithErrorCheck(c.core.Register(form))
 }
 
@@ -231,4 +229,12 @@ func (c *CoreAdapter) login(raw json.RawMessage) (string, error) {
 		return "", err
 	}
 	return replyWithErrorCheck(c.core.Login([]byte(form.Pass)))
+}
+
+func (c *CoreAdapter) logout(raw json.RawMessage) (string, error) {
+	err := c.core.Logout()
+	if err != nil {
+		return "", err
+	}
+	return "", nil
 }

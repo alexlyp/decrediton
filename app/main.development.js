@@ -76,6 +76,7 @@ import {
   createWalletDexc,
   userDexc,
   loginDexc,
+  logoutDexc,
   getFeeDexc,
   registerDexc
 } from "./main_dev/ipc";
@@ -416,6 +417,18 @@ ipcMain.on("init-dexc", async (event, passphrase) => {
 ipcMain.on("login-dexc", async (event, passphrase) => {
   try {
     event.returnValue = await loginDexc(passphrase);
+  } catch (error) {
+    if (!(error instanceof Error)) {
+      event.returnValue = new Error(error);
+    } else {
+      event.returnValue = error;
+    }
+  }
+});
+
+ipcMain.on("logout-dexc", async (event) => {
+  try {
+    event.returnValue = await logoutDexc();
   } catch (error) {
     if (!(error instanceof Error)) {
       event.returnValue = new Error(error);

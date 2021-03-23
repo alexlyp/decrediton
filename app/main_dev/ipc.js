@@ -26,6 +26,7 @@ import {
   registerDexcCall,
   userDexcCall,
   loginDexcCall,
+  logoutDexcCall,
   GetDexcPID,
   closeDcrlnd,
   closeDexc,
@@ -345,6 +346,21 @@ export const loginDexc = async (passphrase) => {
     return login;
   } catch (e) {
     logger.log("error", "error login dexc: " + e);
+    return e;
+  }
+};
+
+export const logoutDexc = async () => {
+  if (!GetDexcPID()) {
+    logger.log("info", "Skipping login since dexc is not runnning");
+    return false;
+  }
+
+  try {
+    const login = await logoutDexcCall();
+    return login;
+  } catch (e) {
+    logger.log("error", "error logout dexc: " + e);
     return e;
   }
 };

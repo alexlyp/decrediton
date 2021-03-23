@@ -163,6 +163,35 @@ export const loginDexc = (passphrase) => (dispatch, getState) => {
   }
 };
 
+export const DEXC_LOGOUT_ATTEMPT = "DEXC_LOGOUT_ATTEMPT";
+export const DEXC_LOGOUT_SUCCESS = "DEXC_LOGOUT_SUCCESS";
+export const DEXC_LOGOUT_FAILED = "DEXC_LOGOUT_FAILED";
+
+export const logoutDexc = (onSuccess) => (dispatch, getState) => {
+  dispatch({ type: DEXC_LOGOUT_ATTEMPT });
+  if (!sel.dexcActive(getState())) {
+    dispatch({ type: DEXC_LOGOUT_FAILED, error: "Dexc isn't active" });
+    return;
+  }
+  try {
+    const res = ipcRenderer.sendSync("logout-dexc");
+    if (res instanceof Error) {
+      throw res;
+    } else if (typeof res === "string") {
+      if (res.indexOf("error", 0) > -1) {
+        throw res;
+      }
+    }
+    dispatch({ type: DEXC_LOGOUT_SUCCESS });
+    if (onSuccess) {
+      dispatch(onSuccess());
+    }
+  } catch (error) {
+    dispatch({ type: DEXC_LOGOUT_FAILED, error });
+    return;
+  }
+};
+
 export const DEXC_CREATEWALLET_ATTEMPT = "DEXC_CREATEWALLET_ATTEMPT";
 export const DEXC_CREATEWALLET_SUCCESS = "DEXC_CREATEWALLET_SUCCESS";
 export const DEXC_CREATEWALLET_FAILED = "DEXC_CREATEWALLET_FAILED";
