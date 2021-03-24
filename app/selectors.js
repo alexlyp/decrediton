@@ -1742,7 +1742,6 @@ export const getHasTicketFeeError = createSelector(
 export const dexOrdersOpen = get(["dex", "orderOpen"]);
 
 export const getCanClose = not(or(getRunningIndicator, getHasTicketFeeError, dexOrdersOpen));
-export const onlyWallet = get(["control", "onlyWallet"]);
 // end of selectors for closing decrediton.
 
 // ln selectors

@@ -1,9 +1,11 @@
 import PurchasingTicketsModal from "./PurchasingTicketsModal";
 import AccountMixerRunningModal from "./AccountMixerRunningModal";
 import AutobuyerRunning from "./AutobuyerRunningModal";
+import DexOpenOrdersModal from "./DexOpenOrdersModal";
 import HasTicketFeeErro from "./HasTicketFeeError";
 import { useCantCloseModal } from "./hooks";
 import { ConfirmModal } from "modals";
+import { useMountEffect } from "hooks";
 
 const CantCloseModals = (props) => {
   const { show, onSubmit, onCancelModal, modalContent } = props;
@@ -14,8 +16,17 @@ const CantCloseModals = (props) => {
     onHideCantCloseModal,
     shutdownApp,
     accountMixerRunning,
-    purchasingTickets
+    purchasingTickets,
+    dexOrdersOpen,
+    dexLoggedIn
   } = useCantCloseModal();
+
+  useMountEffect(() => {
+    if (dexLoggedIn) {
+      logoutDex()
+    }
+  });
+
   let Component = () => <></>;
   if (autoBuyerRunning) {
     Component = AutobuyerRunning;
@@ -25,19 +36,19 @@ const CantCloseModals = (props) => {
     Component = AccountMixerRunningModal;
   } else if (purchasingTickets) {
     Component = PurchasingTicketsModal;
+  } else if (dexOrdersOpen) {
+    Component = DexOpenOrdersModal;
   } else if (modalContent) {
     return <ConfirmModal {...props} />;
   }
-  console.log(show, cantCloseModalVisible);
+
   return (
     <Component
       show={show ?? cantCloseModalVisible}
       onSubmit={() => {
         if (onSubmit) {
-          console.log("submit?");
           onSubmit();
         } else {
-          console.log("shut down app?");
           shutdownApp();
         }
       }}

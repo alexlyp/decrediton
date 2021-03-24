@@ -503,7 +503,7 @@ export default function control(state = {}, action) {
     case HIDE_ABOUT_MODAL_MACOS:
       return { ...state, aboutModalMacOSVisible: false };
     case SHOW_CANTCLOSE_MODAL:
-      return { ...state, cantCloseModalVisible: true, onlyWallet: action.onlyWallet };
+      return { ...state, cantCloseModalVisible: true };
     case HIDE_CANTCLOSE_MODAL:
       return { ...state, cantCloseModalVisible: false };
     case GETACCOUNTEXTENDEDKEY_ATTEMPT:

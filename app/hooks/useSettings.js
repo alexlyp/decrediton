@@ -57,16 +57,8 @@ const useSettings = () => {
   );
 
   const onCloseWallet = useCallback(
-    () => {
-      console.log("here!dfd");
-      if (canClose) {
-        return dispatch(wla.closeWalletRequest());
-      } else {
-        console.log("here!");
-        //return dispatch(ca.showCantCloseModal(true));
-      }
-    },
-    [dispatch, canClose]
+    () => dispatch(wla.closeWalletRequest()), 
+    [dispatch]
   );
 
   const onAddAllowedRequestType = useCallback(

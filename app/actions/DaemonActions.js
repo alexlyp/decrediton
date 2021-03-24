@@ -231,15 +231,6 @@ export const deleteDaemonData = () => (dispatch, getState) => {
 };
 
 export const shutdownApp = () => (dispatch, getState) => {
-  const { loggedIn } = getState().dex;
-  if (!loggedIn) {
-    dispatch(shutdown());
-  } else {
-    dispatch(logoutDexc(shutdown()));
-  }
-};
-
-const shutdown = () => (dispatch, getState) => {
   const { currentBlockHeight } = getState().grpc;
   if (currentBlockHeight) {
     setLastHeight(currentBlockHeight);
@@ -252,7 +243,7 @@ const shutdown = () => (dispatch, getState) => {
   dispatch(rescanCancel());
   dispatch(syncCancel());
   dispatch(pushHistory("/shutdown"));
-}
+};
 
 export const cleanShutdown = () => () => wallet.cleanShutdown();
 

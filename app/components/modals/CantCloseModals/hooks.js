@@ -1,9 +1,8 @@
 import * as sel from "selectors";
 import { hideCantCloseModal } from "actions/ControlActions";
 import * as da from "actions/DaemonActions";
-import * as wla from "actions/WalletLoaderActions";
+import * as dxa from "actions/DexActions";
 import { useSelector, useDispatch } from "react-redux";
-import { useCallback } from "react";
 
 export function useCantCloseModal() {
   const autoBuyerRunning = useSelector(sel.isTicketAutoBuyerEnabled);
@@ -13,20 +12,12 @@ export function useCantCloseModal() {
   const purchasingTickets = useSelector(sel.purchaseTicketsRequestAttempt);
   const ticketAutoBuyerRunning = useSelector(sel.getTicketAutoBuyerRunning);
   const dexOrdersOpen = useSelector(sel.dexOrdersOpen);
-  const onlyWallet = useSelector(sel.onlyWallet);
+  const dexLoggedIn = useSelector(sel.loggedInDexc);
 
   const dispatch = useDispatch();
   const onHideCantCloseModal = () => dispatch(hideCantCloseModal());
-  const shutdownApp = useCallback(
-    () => {
-      if (onlyWallet) {
-        dispatch(wla.closeWalletRequest());
-      } else {
-        dispatch(da.shutdownApp());
-      }
-    },
-    [dispatch, onlyWallet]
-  );
+  const shutdownApp = () => dispatch(da.shutdownApp());
+  const logoutDex = () => dispatch(dxa.logoutDex());
 
   return {
     autoBuyerRunning: autoBuyerRunning || ticketAutoBuyerRunning,
@@ -36,6 +27,8 @@ export function useCantCloseModal() {
     shutdownApp,
     accountMixerRunning,
     purchasingTickets,
-    dexOrdersOpen
+    dexOrdersOpen,
+    dexLoggedIn,
+    logoutDex
   };
 }
