@@ -437,6 +437,9 @@ const initialState = {
     getNodeInfoAttempt: false,
     towersList: []
   },
+  dex: {
+    dexOrdersOpen: false
+  },
   locales: locales
 };
 

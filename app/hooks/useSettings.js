@@ -23,6 +23,7 @@ const useSettings = () => {
   const needNetworkReset = useSelector(sel.needNetworkReset);
   const walletName = useSelector(sel.getWalletName);
   const walletReady = useSelector(sel.getWalletReady);
+  const canClose = useSelector(sel.getCanClose);
 
   const onAttemptChangePassphrase = useCallback(
     (oldPass, args) => {
@@ -55,9 +56,18 @@ const useSettings = () => {
     [dispatch, isVSPListingEnabled]
   );
 
-  const onCloseWallet = useCallback(() => dispatch(wla.closeWalletRequest()), [
-    dispatch
-  ]);
+  const onCloseWallet = useCallback(
+    () => {
+      console.log("here!dfd");
+      if (canClose) {
+        return dispatch(wla.closeWalletRequest());
+      } else {
+        console.log("here!");
+        //return dispatch(ca.showCantCloseModal(true));
+      }
+    },
+    [dispatch, canClose]
+  );
 
   const onAddAllowedRequestType = useCallback(
     (requestType) => dispatch(sa.addAllowedExternalRequest(requestType)),

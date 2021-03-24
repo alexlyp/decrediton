@@ -31,7 +31,10 @@ import {
   DEXC_GETFEE_SUCCESS,
   CREATEDEXACCOUNT_ATTEMPT,
   CREATEDEXACCOUNT_FAILED,
-  CREATEDEXACCOUNT_SUCCESS
+  CREATEDEXACCOUNT_SUCCESS,
+  DEXC_LOGOUT_ATTEMPT,
+  DEXC_LOGOUT_SUCCESS,
+  DEXC_LOGOUT_FAILED
 } from "../actions/DexActions";
 
 export default function ln(state = {}, action) {
@@ -258,11 +261,31 @@ export default function ln(state = {}, action) {
         dexAccountError: action.error
       };
     case CREATEDEXACCOUNT_SUCCESS:
-    return {
+      return {
         ...state,
         dexAccountAttempt: false,
         dexAccountError: null,
         dexAccount: action.dexAccount
+      };
+    case DEXC_LOGOUT_ATTEMPT:
+      return {
+        ...state,
+        logoutAttempt: true,
+        logoutError: null
+      };
+    case DEXC_LOGOUT_SUCCESS:
+      return {
+        ...state,
+        logoutAttempt: false,
+        logoutError: action.error,
+        openOrders: action.openOrders
+      };
+    case DEXC_LOGOUT_FAILED:
+      return {
+        ...state,
+        logoutAttempt: false,
+        loggedIn: false,
+        logoutError: null
       };
     default:
       return state;

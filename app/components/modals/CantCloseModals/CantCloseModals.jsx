@@ -28,19 +28,16 @@ const CantCloseModals = (props) => {
   } else if (modalContent) {
     return <ConfirmModal {...props} />;
   }
-
+  console.log(show, cantCloseModalVisible);
   return (
     <Component
       show={show ?? cantCloseModalVisible}
       onSubmit={() => {
-        if (onCancelModal) {
-          onCancelModal();
-        } else {
-          onHideCantCloseModal();
-        }
         if (onSubmit) {
+          console.log("submit?");
           onSubmit();
         } else {
+          console.log("shut down app?");
           shutdownApp();
         }
       }}
