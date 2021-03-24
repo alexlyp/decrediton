@@ -187,7 +187,11 @@ export const logoutDexc = (onSuccess) => (dispatch, getState) => {
       dispatch(onSuccess());
     }
   } catch (error) {
-    dispatch({ type: DEXC_LOGOUT_FAILED, error });
+    if (error.indexOf("cannot log out with active orders", 0) > -1) {
+      dispatch({ type: DEXC_LOGOUT_FAILED, error, activeOrders: true });
+    } else {
+      dispatch({ type: DEXC_LOGOUT_FAILED, error, activeOrders: false });
+    }
     return;
   }
 };
