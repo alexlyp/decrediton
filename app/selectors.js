@@ -16,6 +16,7 @@ import {
 import { appLocaleFromElectronLocale } from "./i18n/locales";
 import { reverseHash, reverseRawHash } from "./helpers/byteActions";
 import { MainNetParams, TestNetParams } from "constants";
+import { MainNetDexServer, TestNetDexServer } from "constants";
 import { decodeVoteScript } from "./helpers/tickets";
 import {
   EXTERNALREQUEST_STAKEPOOL_LISTING,
@@ -1826,3 +1827,8 @@ export const dexcAddr = get(["dex", "addr"]);
 export const dexcFee = get(["dex", "fee"]);
 export const dexAccount = get(["walletLoader", "dexAccount"]);
 export const dexAccountAttempt = bool(get(["dex", "dexAccountAttempt"]));
+
+export const defaultDEXServer = compose(
+  (isTestNet) => (isTestNet ? TestNetDexServer : MainNetDexServer ),
+  isTestNet
+);

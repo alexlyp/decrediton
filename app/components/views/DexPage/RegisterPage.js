@@ -14,11 +14,11 @@ export const RegisterPageContent = () => {
     registerDexcAttempt,
     onGetFee,
     dexcFee,
-    dexcAddr
+    dexcAddr,
+    defaultServerAddress
   } = useDex();
-
   const [isValid, setIsValid] = useState(false);
-  const [addr, setAddress] = useState("");
+  const [addr, setAddress] = useState(defaultServerAddress);
   const [error, setIsError] = useState("");
 
   const resetState = useCallback(() => {
@@ -89,7 +89,7 @@ export const RegisterPageContent = () => {
           required
           value={addr}
           onChange={(e) => setAddress(e.target.value)}
-          placeholder=""
+          placeholder="DEX Server"
         />
         {error && <div className="error">{error}</div>}
         <KeyBlueButton

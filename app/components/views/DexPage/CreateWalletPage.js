@@ -74,7 +74,7 @@ export const CreateWalletPageContent = () => {
             required
             value={walletName}
             onChange={(e) => setWalletName(e.target.value)}
-            placeholder=""
+            placeholder="BTC Wallet Name"
           />
           {error && <div className="error">{error}</div>}
           <AppPassAndPassphraseModalButton

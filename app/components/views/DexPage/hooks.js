@@ -23,6 +23,7 @@ export const useDex = () => {
   const enableDexAttempt = useSelector(sel.enableDexAttempt);
   const dexAccount = useSelector(sel.dexAccount);
   const dexAccountAttempt = useSelector(sel.dexAccountAttempt);
+  const defaultServerAddress = useSelector(sel.defaultDEXServer);
 
   const onLaunchDexWindow = useCallback(() => dispatch(da.launchDexcWindow()), [
     dispatch
@@ -106,6 +107,7 @@ export const useDex = () => {
     onBTCCreateWalletDexc,
     onCreateDexAccount,
     dexAccount,
-    dexAccountAttempt
+    dexAccountAttempt,
+    defaultServerAddress
   };
 };

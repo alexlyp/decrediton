@@ -966,7 +966,8 @@ export const createWalletDexcCall = (
         config,
         assetID
       });
-      if (typeof init === "string" && init.indexOf("wallet already exists")) {
+      if (typeof init === "string" && init.indexOf("wallet already exists") > -1) {
+          console.log(init, typeof init);
           init = dexc.callDEX("UpdateWallet", {
             pass: pw,
             appPass: appPassphrase,
