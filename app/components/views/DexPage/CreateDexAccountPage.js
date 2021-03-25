@@ -4,7 +4,6 @@ import { StandaloneHeader } from "layout";
 import { AddAccountModal } from "modals";
 import { FormattedMessage as T } from "react-intl";
 import { LN_ICON } from "constants";
-import "style/ConnectPage.css";
 import style from "./DexPage.module.css";
 
 export const CreateDexAccountPageContent = () => {

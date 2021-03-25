@@ -5,7 +5,7 @@ import { TextInput } from "inputs";
 import { useState, useCallback, useEffect } from "react";
 import { FormattedMessage as T } from "react-intl";
 import { LN_ICON } from "constants";
-import "style/ConnectPage.css";
+import style from "./DexPage.module.css";
 
 export const CreateWalletPageContent = () => {
   const {
