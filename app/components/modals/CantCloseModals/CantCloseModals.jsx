@@ -5,7 +5,7 @@ import DexOpenOrdersModal from "./DexOpenOrdersModal";
 import HasTicketFeeErro from "./HasTicketFeeError";
 import { useCantCloseModal } from "./hooks";
 import { ConfirmModal } from "modals";
-import { useMountEffect } from "hooks";
+import { useEffect } from "react";
 
 const CantCloseModals = (props) => {
   const { show, onSubmit, onCancelModal, modalContent } = props;
@@ -18,15 +18,18 @@ const CantCloseModals = (props) => {
     accountMixerRunning,
     purchasingTickets,
     dexOrdersOpen,
-    dexLoggedIn
+    dexLoggedIn,
+    logoutDex
   } = useCantCloseModal();
 
-  useMountEffect(() => {
-    if (dexLoggedIn) {
+  /*  Check if dex logged in then try to shut down?
+  useEffect(() => {
+    if (dexLoggedIn && show) {
       logoutDex()
     }
   });
-
+  */
+ 
   let Component = () => <></>;
   if (autoBuyerRunning) {
     Component = AutobuyerRunning;

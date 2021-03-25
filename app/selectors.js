@@ -1740,8 +1740,9 @@ export const getHasTicketFeeError = createSelector(
   }
 );
 export const dexOrdersOpen = get(["dex", "orderOpen"]);
+export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 
-export const getCanClose = not(or(getRunningIndicator, getHasTicketFeeError, dexOrdersOpen));
+export const getCanClose = not(or(getRunningIndicator, getHasTicketFeeError, loggedInDexc, dexOrdersOpen));
 // end of selectors for closing decrediton.
 
 // ln selectors
@@ -1786,7 +1787,6 @@ export const createWalletDexcAttempt = bool(
   get(["dex", "createWalletAttempt"])
 );
 export const loginDexcAttempt = bool(get(["dex", "loginAttempt"]));
-export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 export const dexcUser = get(["dex", "user"]);
 
 export const dexcConnected = compose(

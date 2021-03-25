@@ -438,7 +438,8 @@ const initialState = {
     towersList: []
   },
   dex: {
-    dexOrdersOpen: false
+    dexOrdersOpen: false,
+    loggedIn: false
   },
   locales: locales
 };

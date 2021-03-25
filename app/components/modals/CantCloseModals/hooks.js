@@ -17,7 +17,7 @@ export function useCantCloseModal() {
   const dispatch = useDispatch();
   const onHideCantCloseModal = () => dispatch(hideCantCloseModal());
   const shutdownApp = () => dispatch(da.shutdownApp());
-  const logoutDex = () => dispatch(dxa.logoutDex());
+  const logoutDex = () => dispatch(dxa.logoutDexc());
 
   return {
     autoBuyerRunning: autoBuyerRunning || ticketAutoBuyerRunning,

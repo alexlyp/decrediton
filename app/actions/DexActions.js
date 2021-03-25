@@ -167,7 +167,7 @@ export const DEXC_LOGOUT_ATTEMPT = "DEXC_LOGOUT_ATTEMPT";
 export const DEXC_LOGOUT_SUCCESS = "DEXC_LOGOUT_SUCCESS";
 export const DEXC_LOGOUT_FAILED = "DEXC_LOGOUT_FAILED";
 
-export const logoutDexc = (onSuccess) => (dispatch, getState) => {
+export const logoutDexc = () => (dispatch, getState) => {
   dispatch({ type: DEXC_LOGOUT_ATTEMPT });
   if (!sel.dexcActive(getState())) {
     dispatch({ type: DEXC_LOGOUT_FAILED, error: "Dexc isn't active" });
@@ -183,9 +183,6 @@ export const logoutDexc = (onSuccess) => (dispatch, getState) => {
       }
     }
     dispatch({ type: DEXC_LOGOUT_SUCCESS });
-    if (onSuccess) {
-      dispatch(onSuccess());
-    }
   } catch (error) {
     if (error.indexOf("cannot log out with active orders", 0) > -1) {
       dispatch({ type: DEXC_LOGOUT_FAILED, error, openOrder: true });

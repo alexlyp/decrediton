@@ -277,15 +277,15 @@ export default function ln(state = {}, action) {
       return {
         ...state,
         logoutAttempt: false,
-        logoutError: action.error,
-        openOrders: action.openOrders
+        loggedIn: false,
+        logoutError: null
       };
     case DEXC_LOGOUT_FAILED:
       return {
         ...state,
         logoutAttempt: false,
-        loggedIn: false,
-        logoutError: null
+        openOrders: action.openOrders,
+        logoutError: action.error,
       };
     default:
       return state;
