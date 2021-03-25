@@ -187,21 +187,21 @@ export default function ln(state = {}, action) {
         ...state,
         launchWindowAttempt: true,
         launchWindow: false,
-        launchWinodwError: null
+        launchWindowError: null
       };
     case DEXC_LAUNCH_WINDOW_FAILED:
       return {
         ...state,
         launchWindowAttempt: false,
         launchWindow: false,
-        launchWinodwError: action.error
+        launchWindowError: action.error
       };
     case DEXC_LAUNCH_WINDOW_SUCCESS:
       return {
         ...state,
         launchWindowAttempt: false,
         launchWindow: true,
-        launchWinodwError: null
+        launchWindowError: null
       };
     case DEXC_CHECKINIT_ATTEMPT:
       return {

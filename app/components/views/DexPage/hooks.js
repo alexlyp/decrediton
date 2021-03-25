@@ -24,6 +24,15 @@ export const useDex = () => {
   const dexAccount = useSelector(sel.dexAccount);
   const dexAccountAttempt = useSelector(sel.dexAccountAttempt);
   const defaultServerAddress = useSelector(sel.defaultDEXServer);
+  const dexGetFeeError = useSelector(sel.dexGetFeeError);
+  const dexRegisterError = useSelector(sel.dexRegisterError);
+  const dexLoginError = useSelector(sel.dexLoginError);
+  const dexLogoutError = useSelector(sel.dexLogoutError);
+  const dexCreateWalletError = useSelector(sel.dexRegisterError);
+  const userError = useSelector(sel.userError);
+  const initError = useSelector(sel.initError);
+  const dexAccountError = useSelector(sel.dexAccountError);
+  const dexEnableError = useSelector(sel.dexEnableError);
 
   const onLaunchDexWindow = useCallback(() => dispatch(da.launchDexcWindow()), [
     dispatch
@@ -108,6 +117,15 @@ export const useDex = () => {
     onCreateDexAccount,
     dexAccount,
     dexAccountAttempt,
-    defaultServerAddress
+    defaultServerAddress,
+    dexGetFeeError,
+    dexRegisterError,
+    dexLoginError, 
+    dexLogoutError, 
+    dexCreateWalletError, 
+    userError, 
+    initError,
+    dexAccountError, 
+    dexEnableError
   };
 };

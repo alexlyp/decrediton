@@ -15,7 +15,8 @@ export const RegisterPageContent = () => {
     onGetFee,
     dexcFee,
     dexcAddr,
-    defaultServerAddress
+    defaultServerAddress,
+    dexRegisterError
   } = useDex();
   const [isValid, setIsValid] = useState(false);
   const [addr, setAddress] = useState(defaultServerAddress);
@@ -80,6 +81,11 @@ export const RegisterPageContent = () => {
           onSubmit={onRegisterDexc}
           buttonLabel={<T id="dex.payDexFeeButton" m="Pay DEX Fee" />}
         />
+        {dexRegisterError && 
+          <div className={style.error}>
+            {dexRegisterError}
+          </div>
+        }
       </div>
     );
   } else {

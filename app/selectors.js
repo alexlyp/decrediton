@@ -1832,3 +1832,13 @@ export const defaultDEXServer = compose(
   (isTestNet) => (isTestNet ? TestNetDexServer : MainNetDexServer ),
   isTestNet
 );
+
+export const dexGetFeeError = get(["dex", "getFeeError"]);
+export const dexRegisterError = get(["dex", "registerError"]);
+export const dexLoginError = get(["dex", "loginError"]);
+export const dexLogoutError = get(["dex", "logoutError"]);
+export const dexCreateWalletError = get(["dex", "createWalletError"]);
+export const userError = get(["dex", "userError"]);
+export const initError = get(["dex", "initError"]);
+export const dexAccountError = get(["dex", "dexAccountError"]);
+export const dexEnableError = get(["dex", "enabledError"]);

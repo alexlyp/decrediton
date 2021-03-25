@@ -362,11 +362,14 @@ export const registerDexc = (appPass) => (dispatch, getState) => {
     dex: { fee, addr }
   } = getState();
   try {
-    const res = ipcRenderer.sendSync("register-dexc", appPass, addr, fee);
+    let res = ipcRenderer.sendSync("register-dexc", appPass, addr, fee);
     if (res instanceof Error) {
       throw res;
     } else if (typeof res === "string") {
       if (res.indexOf("error", 0) > -1) {
+        if (res.indexOf("insufficient funds") > -1) {
+          res = "Insufficient funds in dex account to pay " + fee + ". Please fund the account, and try again.";
+        } 
         throw res;
       }
     }
