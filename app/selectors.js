@@ -1806,7 +1806,8 @@ export const dexDCRWalletRunning = compose(
     user.assets &&
     user.assets["42"] &&
     user.assets["42"].wallet &&
-    user.assets["42"].wallet.running,
+    user.assets["42"].wallet.running &&
+    user.assets["42"].wallet.synced,
   dexcUser
 );
 
@@ -1816,7 +1817,8 @@ export const dexBTCWalletRunning = compose(
     user.assets &&
     user.assets["0"] &&
     user.assets["0"].wallet &&
-    user.assets["0"].wallet.running,
+    user.assets["0"].wallet.running &&
+    user.assets["0"].wallet.synced,
   dexcUser
 );
 

@@ -67,6 +67,7 @@ func NewCoreAdapter() *CoreAdapter {
 		// Pass-throughs to Core
 		"Init":         c.init,
 		"CreateWallet": c.createWallet,
+		"UpdateWallet": c.updateWallet,
 		"User":         c.user,
 		"Register":     c.register,
 		"Login":        c.login,
@@ -180,6 +181,23 @@ func (c *CoreAdapter) init(raw json.RawMessage) (string, error) {
 
 func (c *CoreAdapter) isInitialized(json.RawMessage) (string, error) {
 	return replyWithErrorCheck(c.core.IsInitialized())
+}
+
+func (c *CoreAdapter) updateWallet(raw json.RawMessage) (string, error) {
+	form := new(struct {
+		AssetID uint32            `json:"assetID"`
+		Config  map[string]string `json:"config"`
+		Pass    string            `json:"pass"`
+		AppPW   string            `json:"appPass"`
+	})
+	if err := json.Unmarshal(raw, form); err != nil {
+		return "", err
+	}
+	return "", c.core.ReconfigureWallet([]byte(form.AppPW),
+		[]byte(form.Pass),
+		form.AssetID,
+		form.Config,
+	)
 }
 
 func (c *CoreAdapter) createWallet(raw json.RawMessage) (string, error) {

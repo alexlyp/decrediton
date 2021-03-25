@@ -960,15 +960,22 @@ export const createWalletDexcCall = (
     }
     try {
       const dexc = GetDexcPID();
-      const init = dexc.callDEX("CreateWallet", {
+      let init = dexc.callDEX("CreateWallet", {
         pass: pw,
         appPass: appPassphrase,
         config,
         assetID
       });
+      if (typeof init === "string" && init.indexOf("wallet already exists")) {
+          init = dexc.callDEX("UpdateWallet", {
+            pass: pw,
+            appPass: appPassphrase,
+            config,
+            assetID
+          });
+      }
       return resolve(init);
     } catch (error) {
-      console.log("create wallet error", error);
       return reject(error);
     }
   });
