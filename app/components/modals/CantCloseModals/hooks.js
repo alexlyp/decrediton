@@ -12,12 +12,10 @@ export function useCantCloseModal() {
   const purchasingTickets = useSelector(sel.purchaseTicketsRequestAttempt);
   const ticketAutoBuyerRunning = useSelector(sel.getTicketAutoBuyerRunning);
   const dexOrdersOpen = useSelector(sel.dexOrdersOpen);
-  const dexLoggedIn = useSelector(sel.loggedInDexc);
 
   const dispatch = useDispatch();
   const onHideCantCloseModal = () => dispatch(hideCantCloseModal());
   const shutdownApp = () => dispatch(da.shutdownApp());
-  const logoutDex = () => dispatch(dxa.logoutDexc());
 
   return {
     autoBuyerRunning: autoBuyerRunning || ticketAutoBuyerRunning,
@@ -27,8 +25,6 @@ export function useCantCloseModal() {
     shutdownApp,
     accountMixerRunning,
     purchasingTickets,
-    dexOrdersOpen,
-    dexLoggedIn,
-    logoutDex
+    dexOrdersOpen
   };
 }

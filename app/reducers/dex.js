@@ -284,8 +284,8 @@ export default function ln(state = {}, action) {
       return {
         ...state,
         logoutAttempt: false,
-        openOrders: action.openOrders,
-        logoutError: action.error,
+        openOrder: action.openOrder,
+        logoutError: action.error
       };
     default:
       return state;

@@ -43,7 +43,7 @@ const argv = parseArgs(process.argv.slice(1), OPTIONS);
 const debug = argv.debug || process.env.NODE_ENV === "development";
 const logger = createLogger(debug);
 
-let dex = false;
+let dex = null;
 
 let dcrdPID, dcrwPID, dcrlndPID;
 
@@ -200,12 +200,12 @@ export const closeDcrlnd = () => {
 
 export const closeDexc = () => {
   logger.log("info", "closing dexc " + dex);
-  if (dex === false) {
+  if (!dex) {
     // process is not started by decrediton
     return true;
   }
   dexc.callDEX("shutdown", {});
-  dex = false;
+  dex = null;
   return true;
 };
 
@@ -838,8 +838,8 @@ const Testnet = 1;
 
 export const launchDexc = (walletPath, testnet) =>
   new Promise((resolve, reject) => {
-    if (!dex) {
-      resolve();
+    if (dex) {
+       return resolve();
     }
     try {
       const dexcRoot = path.join(walletPath, "dexc");

@@ -17,18 +17,8 @@ const CantCloseModals = (props) => {
     shutdownApp,
     accountMixerRunning,
     purchasingTickets,
-    dexOrdersOpen,
-    dexLoggedIn,
-    logoutDex
+    dexOrdersOpen
   } = useCantCloseModal();
-
-  /*  Check if dex logged in then try to shut down?
-  useEffect(() => {
-    if (dexLoggedIn && show) {
-      logoutDex()
-    }
-  });
-  */
  
   let Component = () => <></>;
   if (autoBuyerRunning) {

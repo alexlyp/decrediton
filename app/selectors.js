@@ -1740,10 +1740,10 @@ export const getHasTicketFeeError = createSelector(
       : false;
   }
 );
-export const dexOrdersOpen = get(["dex", "orderOpen"]);
+export const dexOrdersOpen = get(["dex", "openOrder"]);
 export const loggedInDexc = bool(get(["dex", "loggedIn"]));
 
-export const getCanClose = not(or(getRunningIndicator, getHasTicketFeeError, loggedInDexc, dexOrdersOpen));
+export const getCanClose = not(or(getRunningIndicator, getHasTicketFeeError));
 // end of selectors for closing decrediton.
 
 // ln selectors

@@ -8,9 +8,9 @@ import {
 import { getVersionServiceAttempt, semverCompatible } from "./VersionActions";
 import { stopNotifcations } from "./NotificationActions";
 import { saveSettings, updateStateSettingsChanged } from "./SettingsActions";
-import { rescanCancel } from "./ControlActions";
+import { rescanCancel, showCantCloseModal } from "./ControlActions";
 import { enableTrezor } from "./TrezorActions";
-import { logoutDexc } from "./DexActions";
+import { DEXC_LOGOUT_FAILED, logoutDexc } from "./DexActions";
 import { TOGGLE_ISLEGACY, SET_REMEMBERED_VSP_HOST } from "./VSPActions";
 import * as wallet from "wallet";
 import { push as pushHistory, goBack } from "connected-react-router";
@@ -22,8 +22,7 @@ import { STANDARD_EXTERNAL_REQUESTS } from "main_dev/externalRequests";
 import {
   DIFF_CONNECTION_ERROR,
   LOCALE,
-  TESTNET,
-  DefaultWalletRPCListener
+  TESTNET
 } from "constants";
 import * as cfgConstants from "constants/config";
 
@@ -230,7 +229,7 @@ export const deleteDaemonData = () => (dispatch, getState) => {
     .catch((err) => dispatch({ err, type: DELETE_DCRD_FAILED }));
 };
 
-export const shutdownApp = () => (dispatch, getState) => {
+const finalShutdown = () => (dispatch, getState) => {
   const { currentBlockHeight } = getState().grpc;
   if (currentBlockHeight) {
     setLastHeight(currentBlockHeight);
@@ -243,6 +242,26 @@ export const shutdownApp = () => (dispatch, getState) => {
   dispatch(rescanCancel());
   dispatch(syncCancel());
   dispatch(pushHistory("/shutdown"));
+}
+
+export const shutdownApp = () => (dispatch, getState) => {
+  const { loggedIn } = getState().dex;
+  if (loggedIn) {
+    logoutDexc()
+    .then(() => {
+      dispatch(finalShutdown());
+    })
+    .catch((error) => {
+      let openOrder = false;
+      if (error.indexOf("cannot log out with active orders", 0) > -1) {
+        openOrder = true;
+      }
+      dispatch({ type: DEXC_LOGOUT_FAILED, error, openOrder });
+      dispatch(showCantCloseModal());
+    });
+  } else {
+    dispatch(finalShutdown());
+  }
 };
 
 export const cleanShutdown = () => () => wallet.cleanShutdown();
