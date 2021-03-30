@@ -1,4 +1,4 @@
-import { useSelector, useDispatch, useStore } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useCallback } from "react";
 import * as sel from "selectors";
 import * as da from "actions/DexActions";
@@ -60,17 +60,6 @@ export const useDex = () => {
     [dispatch]
   );
 
-  const onUpdateBTCConfig = useCallback(
-    (rpcuser, rpcpassword, rpcport, rpcbind) =>
-      dispatch(da.updateBTCConfig(rpcuser, rpcpassword, rpcport, rpcbind)),
-    [dispatch]
-  );
-
-  const onCheckBTCConfig = useCallback(
-    (fileLocation) => dispatch(da.checkBTCConfig(fileLocation)),
-    [dispatch]
-  );
-
   const onLoginDexc = useCallback(
     (passphrase) => dispatch(da.loginDexc(passphrase)),
     [dispatch]
@@ -111,8 +100,6 @@ export const useDex = () => {
     onGetFee,
     user,
     onLaunchDexWindow,
-    onCheckBTCConfig,
-    onUpdateBTCConfig,
     onBTCCreateWalletDexc,
     onCreateDexAccount,
     dexAccount,
@@ -120,12 +107,12 @@ export const useDex = () => {
     defaultServerAddress,
     dexGetFeeError,
     dexRegisterError,
-    dexLoginError, 
-    dexLogoutError, 
-    dexCreateWalletError, 
-    userError, 
+    dexLoginError,
+    dexLogoutError,
+    dexCreateWalletError,
+    userError,
     initError,
-    dexAccountError, 
+    dexAccountError,
     dexEnableError
   };
 };

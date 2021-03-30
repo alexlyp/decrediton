@@ -1,6 +1,5 @@
 import fs from "fs-extra";
 import parseArgs from "minimist";
-import path from "path";
 import { app, BrowserWindow, Menu, dialog } from "electron";
 import {
   getDefaultBitcoinConfig,
@@ -543,7 +542,7 @@ function createDexWindow() {
 
 ipcMain.on("check-btc-config", async (event) => {
   try {
-    event.returnValue = getDefaultBitcoinConfig();
+    event.returnValue = await getDefaultBitcoinConfig();
   } catch (error) {
     if (!(error instanceof Error)) {
       event.returnValue = new Error(error);
@@ -555,13 +554,14 @@ ipcMain.on("check-btc-config", async (event) => {
 
 ipcMain.on(
   "update-btc-config",
-  async (event, rpcuser, rpcpassword, rpcbind, rpcport) => {
+  async (event, rpcuser, rpcpassword, rpcbind, rpcport, testnet) => {
     try {
-      event.returnValue = updateDefaultBitcoinConfig(
+      event.returnValue = await updateDefaultBitcoinConfig(
         rpcuser,
         rpcpassword,
         rpcbind,
-        rpcport
+        rpcport,
+        testnet
       );
     } catch (error) {
       if (!(error instanceof Error)) {

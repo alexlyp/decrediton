@@ -34,7 +34,14 @@ import {
   CREATEDEXACCOUNT_SUCCESS,
   DEXC_LOGOUT_ATTEMPT,
   DEXC_LOGOUT_SUCCESS,
-  DEXC_LOGOUT_FAILED
+  DEXC_LOGOUT_FAILED,
+  CHECK_BTC_CONFIG_ATTEMPT,
+  CHECK_BTC_CONFIG_FAILED,
+  CHECK_BTC_CONFIG_SUCCESS,
+  CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED,
+  UPDATE_BTC_CONFIG_ATTEMPT,
+  UPDATE_BTC_CONFIG_FAILED,
+  UPDATE_BTC_CONFIG_SUCCESS
 } from "../actions/DexActions";
 
 export default function ln(state = {}, action) {
@@ -286,6 +293,48 @@ export default function ln(state = {}, action) {
         logoutAttempt: false,
         openOrder: action.openOrder,
         logoutError: action.error
+      };
+    case CHECK_BTC_CONFIG_ATTEMPT:
+      return {
+        ...state,
+        checkBtcConfigAttempt: true,
+        checkBtcConfigError: null
+      };
+    case CHECK_BTC_CONFIG_FAILED:
+      return {
+        ...state,
+        checkBtcConfigAttempt: false,
+        checkBtcConfigError: action.error
+      };
+    case CHECK_BTC_CONFIG_SUCCESS:
+      return {
+        ...state,
+        checkBtcConfigAttempt: false,
+        btcConfig: action.btcConfig
+      };
+    case CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED:
+      return {
+        ...state,
+        checkBtcConfigAttempt: false
+      };
+    case UPDATE_BTC_CONFIG_ATTEMPT:
+      return {
+        ...state,
+        updateBtcConfigAttempt: true,
+        updateBtcConfigError: null
+      };
+    case UPDATE_BTC_CONFIG_FAILED:
+      return {
+        ...state,
+        updateBtcConfigAttempt: false,
+        updateBtcConfigError: action.error
+      };
+    case UPDATE_BTC_CONFIG_SUCCESS:
+      return {
+        ...state,
+        updateBtcConfigAttempt: false,
+        updateBtcConfigError: null,
+        btcConfig: action.btcConfig
       };
     default:
       return state;

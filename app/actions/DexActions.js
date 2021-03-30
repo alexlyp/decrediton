@@ -76,7 +76,7 @@ export const DEXC_CHECKINIT_ATTEMPT = "DEXC_CHECKINIT_ATTEMPT";
 export const DEXC_CHECKINIT_FAILED = "DEXC_CHECKINIT_FAILED";
 export const DEXC_CHECKINIT_SUCCESS = "DEXC_CHECKINIT_SUCCESS";
 
-export const dexcCheckInit = () => (dispatch, getState) => {
+export const dexcCheckInit = () => (dispatch) => {
   dispatch({ type: DEXC_CHECKINIT_ATTEMPT });
   try {
     let res = ipcRenderer.sendSync("check-init-dexc");
@@ -167,7 +167,7 @@ export const DEXC_LOGOUT_ATTEMPT = "DEXC_LOGOUT_ATTEMPT";
 export const DEXC_LOGOUT_SUCCESS = "DEXC_LOGOUT_SUCCESS";
 export const DEXC_LOGOUT_FAILED = "DEXC_LOGOUT_FAILED";
 
-export const logoutDexc = () => 
+export const logoutDexc = () =>
   new Promise((resolve, reject) => {
     try {
       const res = ipcRenderer.sendSync("logout-dexc");
@@ -198,13 +198,10 @@ export const createWalletDexc = (passphrase, appPassphrase, accountName) => (
     return;
   }
   try {
-    const isTestnet = sel.isTestNet(getState());
     const {
-      daemon: { walletName },
       walletLoader: { dexRpcSettings }
     } = getState();
     const rpcCreds = dexRpcSettings;
-    const walletPath = getWalletPath(isTestnet, walletName);
     const account = accountName;
     const rpcuser = rpcCreds.rpcUser;
     const rpcpass = rpcCreds.rpcPass;
@@ -242,7 +239,7 @@ export const BTC_CREATEWALLET_ATTEMPT = "BTC_CREATEWALLET_ATTEMPT";
 export const BTC_CREATEWALLET_SUCCESS = "BTC_CREATEWALLET_SUCCESS";
 export const BTC_CREATEWALLET_FAILED = "BTC_CREATEWALLET_FAILED";
 
-export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => (
+export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => async (
   dispatch,
   getState
 ) => {
@@ -252,13 +249,14 @@ export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => (
     return;
   }
   try {
+    await dispatch(checkBTCConfig());
     const {
-      walletLoader: { dexRpcSettings }
+      dex: { btcConfig }
     } = getState();
     const account = walletName;
-    const rpcuser = "USER1";
-    const rpcpass = "USER2";
-    const rpclisten = "127.0.0.1:18332";
+    const rpcuser = btcConfig.rpcuser;
+    const rpcpass = btcConfig.rpcpassword;
+    const rpclisten = btcConfig.rpcbind + ":" + btcConfig.rpcport;
     const assetID = 0;
     const res = ipcRenderer.sendSync(
       "create-wallet-dexc",
@@ -360,7 +358,7 @@ export const registerDexc = (appPass) => (dispatch, getState) => {
       if (res.indexOf("error", 0) > -1) {
         if (res.indexOf("insufficient funds") > -1) {
           res = "Insufficient funds in dex account to pay " + fee + ". Please fund the account, and try again.";
-        } 
+        }
         throw res;
       }
     }
@@ -408,6 +406,7 @@ export const launchDexcWindow = () => (dispatch, getState) => {
 export const CHECK_BTC_CONFIG_ATTEMPT = "CHECK_BTC_CONFIG_ATTEMPT";
 export const CHECK_BTC_CONFIG_SUCCESS = "CHECK_BTC_CONFIG_SUCCESS";
 export const CHECK_BTC_CONFIG_FAILED = "CHECK_BTC_CONFIG_FAILED";
+export const CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED = "CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED";
 
 export const checkBTCConfig = () => (dispatch) => {
   dispatch({ type: CHECK_BTC_CONFIG_ATTEMPT });
@@ -421,30 +420,38 @@ export const checkBTCConfig = () => (dispatch) => {
       }
     }
     console.log(res);
-    dispatch({ type: CHECK_BTC_CONFIG_SUCCESS, btcConfig: res });
+    if (res.rpcuser && res.rpcpassword && res.rpcbind && res.rpcport && res.server) {
+      dispatch({ type: CHECK_BTC_CONFIG_SUCCESS, btcConfig: res });
+    } else {
+      dispatch({ type: CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED });
+      dispatch(updateBTCConfig());
+    }
   } catch (error) {
     dispatch({ type: CHECK_BTC_CONFIG_FAILED, error });
-    return;
+    dispatch(updateBTCConfig());
   }
+  return;
 };
 
 export const UPDATE_BTC_CONFIG_ATTEMPT = "UPDATE_BTC_CONFIG_ATTEMPT";
 export const UPDATE_BTC_CONFIG_SUCCESS = "UPDATE_BTC_CONFIG_SUCCESS";
 export const UPDATE_BTC_CONFIG_FAILED = "UPDATE_BTC_CONFIG_FAILED";
 
-export const updateBTCConfig = () => (dispatch) => {
+export const updateBTCConfig = () => (dispatch, getState) => {
   dispatch({ type: UPDATE_BTC_CONFIG_ATTEMPT });
   try {
-    const rpcuser = "USER1";
-    const rpcpassword = "USER2";
+    const rpcuser = makeRandomString(12);
+    const rpcpassword = makeRandomString(12);
     const rpcbind = "127.0.0.1";
-    const rpcport = "18332";
+    const rpcport = isTestNet(getState()) ? "8332" : "18332";
+    const testnet = isTestNet(getState());
     const res = ipcRenderer.sendSync(
       "update-btc-config",
       rpcuser,
       rpcpassword,
       rpcbind,
-      rpcport
+      rpcport,
+      testnet
     );
     if (res instanceof Error) {
       throw res;
@@ -453,8 +460,7 @@ export const updateBTCConfig = () => (dispatch) => {
         throw res;
       }
     }
-    console.log(res);
-    dispatch({ type: UPDATE_BTC_CONFIG_SUCCESS, btcConfigUpdate: res });
+    dispatch({ type: UPDATE_BTC_CONFIG_SUCCESS, btcConfig: res });
   } catch (error) {
     dispatch({ type: UPDATE_BTC_CONFIG_FAILED, error });
     return;
@@ -476,9 +482,8 @@ export const createDexAccount = (passphrase, accountName) => (
   dispatch({ type: CREATEDEXACCOUNT_ATTEMPT });
   return wallet
     .getNextAccount(sel.walletService(getState()), passphrase, accountName)
-    .then((getNextAccountResponse) => {
-      console.log(getNextAccountResponse);
-      dispatch({ dexAccount: accountName, type: CREATEDEXACCOUNT_SUCCESS })
+    .then(() => {
+      dispatch({ dexAccount: accountName, type: CREATEDEXACCOUNT_SUCCESS });
       walletConfig.set(configConstants.DEX_ACCOUNT, accountName);
     })
     .catch((error) => dispatch({ error, type: CREATEDEXACCOUNT_FAILED }));

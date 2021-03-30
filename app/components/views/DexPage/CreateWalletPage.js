@@ -1,5 +1,5 @@
 import { useDex } from "./hooks";
-import { AppPassAndPassphraseModalButton, KeyBlueButton } from "buttons";
+import { AppPassAndPassphraseModalButton } from "buttons";
 import { StandaloneHeader } from "layout";
 import { TextInput } from "inputs";
 import { useState, useCallback, useEffect } from "react";
@@ -14,8 +14,6 @@ export const CreateWalletPageContent = () => {
     onBTCCreateWalletDexc,
     dexDCRWalletRunning,
     dexBTCWalletRunning,
-    onCheckBTCConfig,
-    onUpdateBTCConfig,
     dexAccount
   } = useDex();
 
@@ -64,12 +62,6 @@ export const CreateWalletPageContent = () => {
     <div>
       {!dexBTCWalletRunning ? (
         <div>
-          <KeyBlueButton onClick={onCheckBTCConfig}>
-            <T id="dex.checkBTCConfig" m="Check Bitcoin Config" />
-          </KeyBlueButton>
-          <KeyBlueButton onClick={onUpdateBTCConfig}>
-            <T id="dex.updateBTCConfig" m="Update BTC Config" />
-          </KeyBlueButton>
           <TextInput
             required
             value={walletName}

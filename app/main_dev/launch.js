@@ -37,7 +37,6 @@ import path from "path";
 import ini from "ini";
 import { makeRandomString, makeFileBackup } from "helpers";
 import { DEX_LOCALPAGE } from "./externalRequests";
-import { server } from "sinon";
 
 const argv = parseArgs(process.argv.slice(1), OPTIONS);
 const debug = argv.debug || process.env.NODE_ENV === "development";

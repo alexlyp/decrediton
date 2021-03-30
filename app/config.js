@@ -280,16 +280,30 @@ export function newDefaultBitcoinConfig(
   rpcuser,
   rpcpassword,
   rpcbind,
-  rpcport
+  rpcport,
+  testnet
 ) {
   if (!fs.existsSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"))) {
-    const bitcoinConf = {
-      rpcuser,
-      rpcpassword,
-      rpcbind,
-      rpcport,
-      server: 1
-    };
+    let bitcoinConf = {};
+    if (testnet) {
+      bitcoinConf = {
+        "[test]": {
+          rpcuser,
+          rpcpassword,
+          rpcbind,
+          rpcport,
+          server: 1
+        }
+      };
+    } else {
+      bitcoinConf = {
+        rpcuser,
+        rpcpassword,
+        rpcbind,
+        rpcport,
+        server: 1
+      };
+    }
     fs.writeFileSync(
       path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"),
       ini.stringify(bitcoinConf)
@@ -301,14 +315,15 @@ export function updateDefaultBitcoinConfig(
   rpcuser,
   rpcpassword,
   rpcbind,
-  rpcport
+  rpcport,
+  testnet
 ) {
   try {
     // Check if default file exists, if not create a new one with args given.
     if (
       !fs.existsSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"))
     ) {
-      newDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport);
+      newDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport, testnet);
     } else {
       let fileContents;
       let needUser = true;
@@ -334,7 +349,7 @@ export function updateDefaultBitcoinConfig(
           }
           if (key == "rpcbind") {
             needBind = false;
-            if (value !== "") rpcBind = value;
+            if (value !== "") rpcbind = value;
           }
           if (key == "rpcport") {
             needPort = false;
