@@ -51,7 +51,7 @@ const Modal = ({
           autoFocus={true}
           required={!passphraseNotRequired}
           id="passphrase"
-          placeholder=""
+          placeholder= {passphraseNotRequired ? <T id="passphraseModal.NotRequired" m="(if required)" />: ""}
           value={passPhrase}
           onChange={(e) => setPassPhrase(e.target.value)}
           onKeyDownSubmit={onSubmit}

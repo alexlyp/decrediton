@@ -1,8 +1,4 @@
 import { RegisterPageContent, RegisterPageHeader } from "./RegisterPage";
-import {
-  ConnectExchangePageContent,
-  ConnectExchangePageHeader
-} from "./ConnectExchangePage";
 import { DexViewContent, DexViewHeader } from "./DexView";
 import { useDex } from "./hooks";
 import { StandalonePage, StandaloneHeader } from "layout";

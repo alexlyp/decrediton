@@ -11,6 +11,7 @@ export const CreateDexAccountPageContent = () => {
 
   return (
     <div className={style.dexContent}>
+      <T id="dex.newAccount" m="Please create a new account that will be connected to the DEX.  Transfer funds in and out of this account to deposit/withdrawal funds from what is accessible at the DEX." />
       <PassphraseModalButton
         disabled={dexAccountAttempt}
         modalTitle={<T id="dex.createDexAccount" m="Create DEX Account" />}

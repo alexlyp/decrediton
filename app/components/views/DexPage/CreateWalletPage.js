@@ -72,6 +72,7 @@ export const CreateWalletPageContent = () => {
       {!dexBTCWalletRunning ? (
         btcConfig ? (
         <div>
+          <T id="dex.connectBTCWallet" m="Please enter the name of your BTC Wallet then attempt to connect to the wallet.  ** Note ** We have found a bitcoin.conf at the default location which will be used to communicate with your BTC Wallet.  Make sure you BTC Wallet is currently running before attempting to connect." />
           <TextInput
             required
             value={walletName}
@@ -81,6 +82,7 @@ export const CreateWalletPageContent = () => {
           {error && <div className="error">{error}</div>}
           <AppPassAndPassphraseModalButton
             disabled={!isValid}
+            passphraseLabel={<T id="dex.createBTCWalletPassphrase" m="BTC Passphrase (if set)" />}
             modalTitle={<T id="dex.createBTCWallet" m="Connect BTC Wallet" />}
             loading={createWalletDexcAttempt}
             onSubmit={onBTCCreateWallet}
@@ -111,11 +113,14 @@ export const CreateWalletPageContent = () => {
               <T id="dex.checkBTCConfigButton" m="Check BTC Config" />
             </KeyBlueButton>
           </div> :
-          <KeyBlueButton
-            onClick={onCheckBTCConfig}
-          >
-            <T id="dex.checkBTCConfigButton" m="Check BTC Config" />
-          </KeyBlueButton>
+          <div>
+            <T id="dex.bTCConfigError" m="Something has gone wrong and we are unable to obtain your bitcoin.conf, please try again." />
+            <KeyBlueButton
+              onClick={onCheckBTCConfig}
+            >
+              <T id="dex.checkBTCConfigButton" m="Check BTC Config" />
+            </KeyBlueButton>
+          </div>
          )
         )
       ) : (
