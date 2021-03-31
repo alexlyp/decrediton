@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import Store from "electron-store";
 import ini from "ini";
 import path from "path";
@@ -263,18 +263,20 @@ export function checkNoLegacyWalletConfig(testnet, walletPath, noLegacyRpc) {
   }
 }
 
-export function getDefaultBitcoinConfig() {
-  try {
-    return ini.parse(
-      fs.readFileSync(
-        path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"),
-        "utf8"
-      )
-    );
-  } catch (e) {
-    console.log(e);
-  }
-}
+export const getDefaultBitcoinConfig = () => 
+  new Promise((resolve, reject) => {
+    try {
+      const config = ini.parse(
+        fs.readFileSync(
+          path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"),
+          "utf8"
+        )
+      );
+      resolve(config);
+    } catch (e) {
+      reject(e);
+    }
+  })
 
 export function newDefaultBitcoinConfig(
   rpcuser,
@@ -287,12 +289,12 @@ export function newDefaultBitcoinConfig(
     let bitcoinConf = {};
     if (testnet) {
       bitcoinConf = {
-        "[test]": {
-          rpcuser,
-          rpcpassword,
+        rpcuser,
+        rpcpassword,
+        server: 1,
+        test: {
           rpcbind,
-          rpcport,
-          server: 1
+          rpcport
         }
       };
     } else {
@@ -311,18 +313,21 @@ export function newDefaultBitcoinConfig(
   }
 }
 
-export function updateDefaultBitcoinConfig(
+export const updateDefaultBitcoinConfig = (
   rpcuser,
   rpcpassword,
   rpcbind,
   rpcport,
   testnet
-) {
+) =>
+  new Promise((resolve, reject) => {
   try {
     // Check if default file exists, if not create a new one with args given.
     if (
       !fs.existsSync(path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"))
     ) {
+      // check to see if directory exists, if not make it
+      fs.pathExistsSync(getDefaultBitcoinDirectory()) || fs.mkdirsSync(getDefaultBitcoinDirectory())
       newDefaultBitcoinConfig(rpcuser, rpcpassword, rpcbind, rpcport, testnet);
     } else {
       let fileContents;
@@ -355,6 +360,11 @@ export function updateDefaultBitcoinConfig(
             needPort = false;
             if (value !== "") rpcport = value;
           }
+          if (key == "test") {
+            if (!testnet) {
+              return null
+            }
+          }
           return [key, value];
         })
       );
@@ -363,18 +373,30 @@ export function updateDefaultBitcoinConfig(
 
       if (needPassword) fileContents.rpcpassword = rpcpassword;
 
-      if (needBind) fileContents.rpcbind = rpcbind;
-
-      if (needPort) fileContents.rpcport = rpcport;
-
       fileContents.server = 1;
+
+      if (testnet) {
+        if (needBind) fileContents['test'].rpcbind = rpcbind;
+
+        if (needPort) fileContents['test'].rpcport = rpcport;
+      } else {
+        if (needBind) fileContents.rpcbind = rpcbind;
+
+        if (needPort) fileContents.rpcport = rpcport;
+
+      }
+
       fs.writeFileSync(
         path.join(getDefaultBitcoinDirectory(), "bitcoin.conf"),
         ini.stringify(fileContents)
       );
     }
-    return { rpcuser, rpcpassword, rpcbind, rpcport };
+    if (testnet) {
+      resolve({ rpcuser, rpcpassword, test: {rpcbind, rpcport }});
+    } else {
+      resolve({ rpcuser, rpcpassword, rpcbind, rpcport });
+    }
   } catch (e) {
-    console.log(e);
+    reject(e);
   }
-}
+});

@@ -239,7 +239,7 @@ export const BTC_CREATEWALLET_ATTEMPT = "BTC_CREATEWALLET_ATTEMPT";
 export const BTC_CREATEWALLET_SUCCESS = "BTC_CREATEWALLET_SUCCESS";
 export const BTC_CREATEWALLET_FAILED = "BTC_CREATEWALLET_FAILED";
 
-export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => async (
+export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => (
   dispatch,
   getState
 ) => {
@@ -249,14 +249,14 @@ export const btcCreateWalletDexc = (passphrase, appPassphrase, walletName) => as
     return;
   }
   try {
-    await dispatch(checkBTCConfig());
     const {
       dex: { btcConfig }
     } = getState();
+    const testnet = isTestNet(getState());
     const account = walletName;
     const rpcuser = btcConfig.rpcuser;
     const rpcpass = btcConfig.rpcpassword;
-    const rpclisten = btcConfig.rpcbind + ":" + btcConfig.rpcport;
+    const rpclisten = testnet ? btcConfig.test.rpcbind + ":" + btcConfig.test.rpcport : btcConfig.rpcbind + ":" + btcConfig.rpcport;
     const assetID = 0;
     const res = ipcRenderer.sendSync(
       "create-wallet-dexc",
@@ -407,8 +407,9 @@ export const CHECK_BTC_CONFIG_ATTEMPT = "CHECK_BTC_CONFIG_ATTEMPT";
 export const CHECK_BTC_CONFIG_SUCCESS = "CHECK_BTC_CONFIG_SUCCESS";
 export const CHECK_BTC_CONFIG_FAILED = "CHECK_BTC_CONFIG_FAILED";
 export const CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED = "CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED";
+export const CHECK_BTC_CONFIG_SUCCESS_NEED_INSTALL = "CHECK_BTC_CONFIG_SUCCESS_NEED_INSTALL";
 
-export const checkBTCConfig = () => (dispatch) => {
+export const checkBTCConfig = () => (dispatch, getState) => {
   dispatch({ type: CHECK_BTC_CONFIG_ATTEMPT });
   try {
     const res = ipcRenderer.sendSync("check-btc-config");
@@ -419,16 +420,22 @@ export const checkBTCConfig = () => (dispatch) => {
         throw res;
       }
     }
-    console.log(res);
-    if (res.rpcuser && res.rpcpassword && res.rpcbind && res.rpcport && res.server) {
+    if (res.rpcuser && res.rpcpassword && 
+      ((!isTestNet(getState()) && !res.test && res.rpcbind && res.rpcport ) || 
+      (isTestNet(getState()) && res.test && res.test.rpcbind && res.test.rpcbind)) &&
+      (res.server || res.test.server)) {
       dispatch({ type: CHECK_BTC_CONFIG_SUCCESS, btcConfig: res });
     } else {
       dispatch({ type: CHECK_BTC_CONFIG_SUCCESS_UPDATE_NEEDED });
       dispatch(updateBTCConfig());
     }
   } catch (error) {
-    dispatch({ type: CHECK_BTC_CONFIG_FAILED, error });
-    dispatch(updateBTCConfig());
+    if (String(error).indexOf("no such file or directory") > -1) {
+      dispatch({ type: CHECK_BTC_CONFIG_SUCCESS_NEED_INSTALL });
+      dispatch(updateBTCConfig());
+    } else {
+      dispatch({ type: CHECK_BTC_CONFIG_FAILED, error });
+    }
   }
   return;
 };
@@ -443,7 +450,7 @@ export const updateBTCConfig = () => (dispatch, getState) => {
     const rpcuser = makeRandomString(12);
     const rpcpassword = makeRandomString(12);
     const rpcbind = "127.0.0.1";
-    const rpcport = isTestNet(getState()) ? "8332" : "18332";
+    const rpcport = isTestNet(getState()) ? "18332" : "8332";
     const testnet = isTestNet(getState());
     const res = ipcRenderer.sendSync(
       "update-btc-config",

@@ -1842,3 +1842,6 @@ export const userError = get(["dex", "userError"]);
 export const initError = get(["dex", "initError"]);
 export const dexAccountError = get(["dex", "dexAccountError"]);
 export const dexEnableError = get(["dex", "enabledError"]);
+export const btcConfig = get(["dex", "btcConfig"]);
+export const btcIntallNeeded = get(["dex", "btcIntallNeeded"]);
+export const btcConfigUpdateNeeded = get(["dex", "btcConfigUpdateNeeded"]);

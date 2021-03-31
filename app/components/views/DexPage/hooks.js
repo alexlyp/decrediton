@@ -33,6 +33,9 @@ export const useDex = () => {
   const initError = useSelector(sel.initError);
   const dexAccountError = useSelector(sel.dexAccountError);
   const dexEnableError = useSelector(sel.dexEnableError);
+  const btcConfig = useSelector(sel.btcConfig);
+  const btcIntallNeeded = useSelector(sel.btcIntallNeeded);
+  const btcConfigUpdateNeeded = useSelector(sel.btcConfigUpdateNeeded);
 
   const onLaunchDexWindow = useCallback(() => dispatch(da.launchDexcWindow()), [
     dispatch
@@ -76,6 +79,16 @@ export const useDex = () => {
     dispatch
   ]);
 
+  const onCheckBTCConfig = useCallback(
+    () => dispatch(da.checkBTCConfig()), 
+    [dispatch]
+  );
+
+  const onUpdateBTCConfig = useCallback(
+    () => dispatch(da.updateBTCConfig()), 
+    [dispatch]
+  );
+
   return {
     dexcEnabled,
     dexcActive,
@@ -113,6 +126,11 @@ export const useDex = () => {
     userError,
     initError,
     dexAccountError,
-    dexEnableError
+    dexEnableError,
+    btcConfig,
+    onCheckBTCConfig,
+    btcIntallNeeded,
+    btcConfigUpdateNeeded,
+    onUpdateBTCConfig
   };
 };
