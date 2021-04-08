@@ -1812,8 +1812,7 @@ export const dexDCRWalletRunning = compose(
     user.assets &&
     user.assets["42"] &&
     user.assets["42"].wallet &&
-    user.assets["42"].wallet.running &&
-    user.assets["42"].wallet.synced,
+    user.assets["42"].wallet.running,
   dexUser
 );
 
@@ -1823,13 +1822,12 @@ export const dexBTCWalletRunning = compose(
     user.assets &&
     user.assets["0"] &&
     user.assets["0"].wallet &&
-    user.assets["0"].wallet.running &&
-    user.assets["0"].wallet.synced,
+    user.assets["0"].wallet.running,
   dexUser
 );
 
 export const dexAddr = get(["dex", "addr"]);
-export const dexFee = get(["dex", "fee"]);
+export const dexConfig = get(["dex", "config"]);
 export const dexAccount = get(["walletLoader", "dexAccount"]);
 export const dexAccountAttempt = bool(get(["dex", "dexAccountAttempt"]));
 
@@ -1838,7 +1836,7 @@ export const defaultDEXServer = compose(
   isTestNet
 );
 
-export const dexGetFeeError = get(["dex", "getFeeError"]);
+export const dexGetFeeError = get(["dex", "getConfigError"]);
 export const dexRegisterError = get(["dex", "registerError"]);
 export const dexLoginError = get(["dex", "loginError"]);
 export const dexLogoutError = get(["dex", "logoutError"]);
