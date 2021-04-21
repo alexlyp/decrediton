@@ -44,6 +44,7 @@ const mockAvailableVsps = [
 const mockMixedAccountValue = 6;
 const mockChangeAccountValue = 6;
 const mockNumTicketsToBuy = 1;
+const mockRetryAttempt = 0;
 const mockMixedAccount = {
   hidden: false,
   label: "mixed: 249.79547928 DCR",
@@ -199,7 +200,8 @@ test("render PurchasePage", async () => {
     {
       host: mockAvailableVsps[1].host,
       pubkey: mockVspInfo.data.pubkey
-    }
+    },
+    mockRetryAttempt
   );
 
   // test amount input
