@@ -166,32 +166,35 @@ const TransactionContent = ({
             </KeyBlueButton>
           </div>
         </div>
-      ) : txType == TICKET && isSPV && (
-        <div>
-          <div className={styles.revokeBtnContainer}>
-            <RevokeModalButton
-              modalTitle={
-                <T
-                  id="tickets.revokeTicketConfirmations"
-                  m="Revoke Ticket Confirmation"
-                />
-              }
-              modalDescriptions={
-                <T
-                  id="tickets.revokeTicketDescription"
-                  m="Before continuing, please confirm that this ticket is missed or expired on dcrdata.  Any ticket that is still awaiting vote, may not be revoked and you may be left with an errored transaction that must be abandoned."
-                />
-              }
-              className={styles.revokeBtn}
-              onSubmit={revokeTicket}
-              kind="secondary"
-              buttonLabel={
-                <T id="txDetails.revokeTicket" m="Revoke Ticket" />}
-            />
+      ) : (
+        txType == TICKET &&
+        isSPV && (
+          <div>
+            <div className={styles.revokeBtnContainer}>
+              <RevokeModalButton
+                modalTitle={
+                  <T
+                    id="tickets.revokeTicketConfirmations"
+                    m="Revoke Ticket Confirmation"
+                  />
+                }
+                modalDescription={
+                  <T
+                    id="tickets.revokeTicketDescription"
+                    m="Before continuing, please confirm that this ticket is missed or expired on dcrdata.  Any ticket that is still awaiting vote, may not be revoked and you may be left with an errored transaction that must be abandoned."
+                  />
+                }
+                className={styles.revokeBtn}
+                onSubmit={revokeTicket}
+                kind="secondary"
+                buttonLabel={
+                  <T id="txDetails.revokeTicket" m="Revoke Ticket" />
+                }
+              />
+            </div>
           </div>
-        </div>
-      )
-      }
+        )
+      )}
       <div className={styles.io}>
         <div className={styles.title}>
           <T id="txDetails.io.title" m="I/O Details" />

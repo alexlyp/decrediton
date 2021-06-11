@@ -25,9 +25,7 @@ export function useTransactionPage(txHash) {
   );
   const onRevokeTicket = useCallback(
     (passphrase, ticketHash) =>
-      dispatch(
-        ca.revokeTicketAttempt(passphrase, ticketHash)
-      ),
+      dispatch(ca.revokeTicketAttempt(passphrase, ticketHash)),
     [dispatch]
   );
   const decodeRawTransactions = useCallback(
@@ -89,6 +87,7 @@ export function useTransactionPage(txHash) {
     currentBlockHeight,
     state,
     viewedTransaction,
-    decodedTx
+    decodedTx,
+    isSPV
   };
 }
