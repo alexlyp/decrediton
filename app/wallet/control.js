@@ -229,6 +229,15 @@ export const revokeTickets = (walletService) =>
     );
   });
 
+export const revokeTicket = (walletService, ticketHash) =>
+  new Promise((ok, fail) => {
+    const request = new api.RevokeTicketRequest();
+    request.setTicketHash(ticketHash);
+    getClient(walletService).revokeTicket(request, (err, res) =>
+      err ? fail(err) : ok(res.toObject())
+    );
+  });
+
 export const constructTransaction = (
   walletService,
   accountNum,

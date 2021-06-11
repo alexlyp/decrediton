@@ -8,6 +8,7 @@ import * as ta from "actions/TransactionActions";
 import * as clia from "actions/ClientActions";
 
 export function useTransactionPage(txHash) {
+  const isSPV = useSelector(sel.isSPV);
   const regularTxs = useSelector(sel.regularTransactions);
   const stakeTxs = useSelector(sel.stakeTransactions);
   const decodedTransactions = useSelector(sel.decodedTransactions);
@@ -20,6 +21,13 @@ export function useTransactionPage(txHash) {
   const dispatch = useDispatch();
   const abandonTransaction = useCallback(
     (txHash) => dispatch(clia.abandonTransactionAttempt(txHash)),
+    [dispatch]
+  );
+  const onRevokeTicket = useCallback(
+    (passphrase, ticketHash) =>
+      dispatch(
+        ca.revokeTicketAttempt(passphrase, ticketHash)
+      ),
     [dispatch]
   );
   const decodeRawTransactions = useCallback(
@@ -76,6 +84,7 @@ export function useTransactionPage(txHash) {
 
   return {
     abandonTransaction,
+    onRevokeTicket,
     publishUnminedTransactions,
     currentBlockHeight,
     state,
