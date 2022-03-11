@@ -330,7 +330,7 @@
   },
   "optionalDependencies": {
     "google-proto-files": "^2.5.0",
-    "grpc-tools": "^1.11.1",
+    "grpc-tools": "^1.11.2",
     "win32ipc": "./modules/win32ipc"
   },
   "engines": {

@@ -5,49 +5,49 @@
 # installed for this to run properly
 
 
-./../../../node_modules/grpc-tools/bin/protoc \
+./../../../node_modules/.bin/grpc_tools_node_protoc \
   -I/usr/local/include \
   -I. \
   -I../../../node_modules/google-proto-files \
   --js_out=import_style=commonjs_strict,binary:./ \
   --grpc_out=generate_package_definition:./ \
-  --plugin=protoc-gen-grpc=./../../../node_modules/grpc-tools/bin/grpc_node_plugin \
+  --plugin=protoc-gen-grpc=./../../../node_modules/.bin/grpc_tools_node_protoc_plugin \
   ./rpc.proto
 
-./../../../node_modules/grpc-tools/bin/protoc \
+./../../../node_modules/.bin/grpc_tools_node_protoc \
   -I/usr/local/include \
   -I. \
   -I../../../node_modules/google-proto-files \
   --js_out=import_style=commonjs_strict,binary:./ \
   --grpc_out=generate_package_definition:./ \
-  --plugin=protoc-gen-grpc=./../../../node_modules/grpc-tools/bin/grpc_node_plugin \
+  --plugin=protoc-gen-grpc=./../../../node_modules/.bin/grpc_tools_node_protoc_plugin \
   ./walletunlocker.proto
 
-./../../../node_modules/grpc-tools/bin/protoc \
+./../../../node_modules/.bin/grpc_tools_node_protoc \
   -I/usr/local/include \
   -I. \
   -I../../../node_modules/google-proto-files \
   --js_out=import_style=commonjs_strict,binary:./ \
   --grpc_out=generate_package_definition:./ \
-  --plugin=protoc-gen-grpc=./../../../node_modules/grpc-tools/bin/grpc_node_plugin \
+  --plugin=protoc-gen-grpc=./../../../node_modules/.bin/grpc_tools_node_protoc_plugin \
   ./invoices.proto
 
-./../../../node_modules/grpc-tools/bin/protoc \
+./../../../node_modules/.bin/grpc_tools_node_protoc \
   -I/usr/local/include \
   -I. \
   -I../../../node_modules/google-proto-files \
   --js_out=import_style=commonjs_strict,binary:./ \
   --grpc_out=generate_package_definition:./ \
-  --plugin=protoc-gen-grpc=./../../../node_modules/grpc-tools/bin/grpc_node_plugin \
+  --plugin=protoc-gen-grpc=./../../../node_modules/.bin/grpc_tools_node_protoc_plugin \
   ./wtclient.proto
 
-./../../../node_modules/grpc-tools/bin/protoc \
+./../../../node_modules/.bin/grpc_tools_node_protoc \
   -I/usr/local/include \
   -I. \
   -I../../../node_modules/google-proto-files \
   --js_out=import_style=commonjs_strict,binary:./ \
   --grpc_out=generate_package_definition:./ \
-  --plugin=protoc-gen-grpc=./../../../node_modules/grpc-tools/bin/grpc_node_plugin \
+  --plugin=protoc-gen-grpc=./../../../node_modules/.bin/grpc_tools_node_protoc_plugin \
   ./autopilot.proto
 
 # commonjs_strict is broken (see https://github.com/grpc/grpc-node/issues/1445).
