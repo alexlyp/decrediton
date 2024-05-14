@@ -50,6 +50,7 @@ export const setDaemonRemoteCredentials = (
 });
 
 // Wallet config constants
+export const MIXING = "mixing";
 export const ENABLE_TICKET_BUYER = "enableticketbuyer";
 export const CURRENCY_DISPLAY = "currency_display";
 export const HIDDEN_ACCOUNTS = "hiddenaccounts";
@@ -90,6 +91,7 @@ export const SHOW_STAKING_WARNING = "show_staking_warning";
 export const DISPLAY_WALLET_GRADIENT = "display_wallet_gradient";
 
 export const WALLET_INITIAL_VALUE = {
+  [MIXING]: false,
   [ENABLE_TICKET_BUYER]: false,
   [CURRENCY_DISPLAY]: DCR,
   [HIDDEN_ACCOUNTS]: [],
