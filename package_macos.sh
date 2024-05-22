@@ -3,11 +3,8 @@
 # submit a package to be notarized
 # returns: notarization uuid
 notary_submit() {
-	xcrun altool -f release/decrediton-${VERSION}.zip \
-		--notarize-app \
-		--primary-bundle-id org.Electron.Decrediton \
-		--asc-provider ${IDENTITY} \
-		-p @keychain:${KEYCHAIN} 2>&1 \
+	xcrun notarytool submit release/decrediton-${VERSION}.zip \
+	    --keychain-profile ${IDENTITY} 2>&1 \
 	| perl -ne 'print if s/^RequestUUID = //'
 }
 
@@ -16,7 +13,8 @@ notary_submit() {
 # returns: altool output
 notary_status() {
 	local _uuid=$1
-	xcrun altool --notarization-info ${_uuid} -p @keychain:${KEYCHAIN} 2>&1
+	xcrun notarytool info ${_uuid} \
+	    --keychain-profile ${IDENTITY} 2>&1 \
 }
 
 [ $(uname) = Darwin ] || {
@@ -31,7 +29,6 @@ notary_status() {
 VERSION=$1
 IDENTITY=$2
 ARCH=$3
-KEYCHAIN=${KEYCHAIN:-signer}
 NODE_MODULES=node_modules
 YARNCACHE=.yarncache
 
@@ -41,7 +38,7 @@ set -ex
 mkdir -p ${YARNCACHE}
 
 # prepare directory with package files
-yarn install --cache-folder ${YARNCACHE}
+yarn install --cache-folder ${YARNCACHE} --network-concurrency
 yarn rebuild-natives
 yarn package-mac-${ARCH}
 
