@@ -208,6 +208,7 @@ export const purchaseTickets = (
     } else {
       request.setChangeAccount(accountNum.value);
     }
+    request.setRequiredConfirmations(1);
     request.setAccount(accountNum.value);
     request.setNumTickets(numTickets);
     request.setDontSignTx(!signTx);
